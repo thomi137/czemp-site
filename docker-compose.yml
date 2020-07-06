@@ -13,13 +13,21 @@ services:
       MYSQL_USER: wordpress_user
       MYSQL_PASSWORD: wordpress
 
+  phpmyadmin:
+    container_name: 'admin-tool'
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+
   wordpress:
     container_name: 'local-wordpress'
     depends_on:
       - db
     image: 'wordpress:latest'
     ports:
-      - '80:80'
+      - 80:80
     environment:
       WORDPRESS_DB_HOST: 'db:3306'
       WORDPRESS_DB_USER: wordpress_user
