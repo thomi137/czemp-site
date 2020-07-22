@@ -26,7 +26,7 @@ data
 wordpress/wp-admin
 
 wordpress/wp-content/*
-!wordpress/wp-content/plugins
-!wordpress/wp-content/themes
+!wordpress/wp-content/plugins/cz-gallery
+!wordpress/wp-content/themes/sparkling-child
 
 wordpress/wp-includes/*
