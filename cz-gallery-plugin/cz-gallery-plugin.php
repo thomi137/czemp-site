@@ -22,9 +22,19 @@ add_action('wp_print_styles', 'cz_remove_old_bootstrap');
  */
 function cz_add_new_bootstrap(){
   wp_enqueue_style('cz_bootstrap_version', plugin_dir_url(__FILE__).'css/bootstrap.min.css');
-  wp_enqueue_script('cz_bootstrap_scripts', plugin_dir_url(__FILE__).'js/bootstrap.bundle.min.js');
+  wp_enqueue_script('cz_bootstrap_scripts', plugin_dir_url(__FILE__).'js/bootstrap.bundle.min.js', array('jquery'));
+  wp_enqueue_script('cz_main_scripts', plugin_dir_url(__FILE__).'js/main.js', array(), false, false);
+
 }
 add_action('wp_enqueue_scripts', 'cz_add_new_bootstrap');
+
+/**
+ * Add main.js script for plugin
+ */
+function cz_add_main_bundle_script(){
+  wp_enqueue_script('cz_main_scripts', plugin_dir_url(__FILE__).'js/main.js', array(), false, true);
+}
+add_action('wq_enqueue_scripts', 'cz_add_main_bundle_script');
 
 function create_posttype() {
 
