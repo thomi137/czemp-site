@@ -33,7 +33,9 @@ services:
       WORDPRESS_DB_USER: wordpress_user
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress_db
+      WORDPRESS_DEBUG: 1
     volumes:
-      - "./wordpress:/var/www/html"
-      - "./wordpress/wp-content/plugins:/var/www/html/wp-content/plugins"
-      - "./wordpress/wp-content/themes:/var/www/html/wp-content/themes"
+      - "./cz-gallery-plugin:/var/www/html/wp-content/plugins/cz-gallery-plugin"
+      - "./cz-theme:/var/www/html/wp-content/themes/cz-theme"
+      - "./sparkling:/var/www/html/wp-content/themes/sparkling"
+      - "./uploads:/var/www/html/wp-content/uploads"
