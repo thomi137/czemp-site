@@ -1,0 +1,373 @@
+.post-navigation a,
+.page-numbers,
+.pagination .prev,
+.pagination .next {
+  border: 1px solid #DADADA;
+  background-color: #FFF;
+  padding: 8px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  margin: 0 0 1.5em;
+  overflow: hidden;
+}
+
+.post-navigation a {
+  display: block;
+}
+
+.post-navigation a:hover,
+.post-navigation a:focus,
+.pagination .prev:hover,
+.pagination .prev:focus,
+.pagination .next:hover,
+.pagination .next:focus {
+  color: #FFF;
+  background: #DA4453;
+  text-decoration: none;
+}
+
+.pagination {
+  text-transform: uppercase;
+  display: block;
+}
+
+.post-navigation .nav-previous,
+.pagination .prev {
+  float: left;
+}
+
+.post-navigation .nav-next,
+.pagination .next {
+  float: right;
+  text-align: right;
+}
+
+.more-link {
+  float: right;
+  margin: 10px 0;
+}
+
+.single .nav-links {
+  margin-top: 30px;
+}
+
+.nav > li > a {
+  text-transform: uppercase;
+}
+
+.navbar.navbar-default {
+  background-color: #363636;
+  font-family: 'Open Sans', serif;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #F5F7FA;
+  line-height: 40px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.navbar > .container .navbar-brand {
+  color: #DADADA;
+  font-size: 20px;
+  margin: 10px 0;
+  font-family: 'Roboto Slab', serif;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  border-right: none;
+  border-left: none;
+}
+
+.navbar {
+  border-radius: 0;
+}
+
+.navbar-default {
+  border: none;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > .caret,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li:hover > a,
+.navbar-default .navbar-nav > li:focus-within > a,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #DA4453;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav .dropdown-menu > li:hover,
+.navbar-default .navbar-nav .dropdown-menu > li:focus-within {
+  color: #fff;
+  /*background-color: transparent;*/
+  background-color: #DA4453;
+}
+
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li:hover > a,
+.dropdown-menu > li:focus-within > a,
+.dropdown-menu > li:hover > .caret,
+.dropdown-menu > li:focus-within > .caret {
+  background-color: transparent;
+  color: #fff;
+}
+
+.dropdown-menu > li > .caret {
+  color: #636467;
+}
+
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:hover > ul.dropdown-menu {
+  display: none;
+}
+
+.navbar-default .navbar-nav.sparkling-mobile-menu > li.open > ul.dropdown-menu {
+  display: block;
+}
+
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:hover > a,
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:focus-within > a {
+  color: #777;
+}
+
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:hover > a,
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:focus-within > a,
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:hover > .caret,
+.navbar-default .navbar-nav.sparkling-mobile-menu > li:focus-within > .caret {
+  color: #fff;
+}
+
+.navbar-default .navbar-nav.sparkling-mobile-menu > li.open > a,
+.navbar-default .navbar-nav.sparkling-mobile-menu > li.open > .caret {
+  color: #DA4453;
+}
+
+.dropdown-menu {
+  font-size: 13px;
+}
+
+.navbar-default .navbar-nav .current-menu-ancestor a.dropdown-toggle {
+  color: #DA4453;
+  background-color: transparent;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a {
+  color: #fff;
+}
+
+@media (min-width: 769px) {
+  .dropdown-menu .caret {
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid;
+    float: right;
+    top: 7px;
+    position: relative;
+  }
+
+  .dropdown-menu > li > a {
+    display: inline-block;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-default {
+    z-index:99999;
+  }
+
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover {
+    background-color: transparent;
+  }
+
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    display: inline-block;
+    background-color: transparent;
+    color: #fff;
+  }
+
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .dropdown-menu > li.active > .caret,
+  .navbar-default .navbar-nav .dropdown-menu > li.open > a {
+    color: #da4453;
+  }
+
+  .navbar-default .navbar-nav > li:hover > a,
+  .navbar-default .navbar-nav > li:focus-within > a,
+  .navbar-default .navbar-nav > li:hover > .caret,
+  .navbar-default .navbar-nav > li:focus-within > .caret,
+  .dropdown-menu > li > .caret {
+    color: #fff;
+  }
+
+  .navbar-default .navbar-nav li.open > a,
+  .navbar-default .navbar-nav li.open > .caret {
+    color: #DA4453;
+  }
+
+  .site-navigation-inner .dropdown-menu > .active,
+  .navbar-default .navbar-nav .dropdown-menu > li:hover,
+  .navbar-default .navbar-nav .dropdown-menu > li:focus-within {
+    background-color: transparent;
+  }
+
+  .dropdown-menu > li.dropdown.open {
+    padding-bottom: 0;
+  }
+
+  .navbar-nav > li > .caret {
+    float:right;
+    position: relative;
+    top:18px;
+    height:10px;
+    width:10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  ul.nav li.dropdown:hover > ul.dropdown-menu,
+  ul.nav li.dropdown:focus-within > ul.dropdown-menu {
+    display: block;
+  }
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  /*border-left: 1px solid rgba(0, 0, 0, 0.1);*/
+}
+
+.dropdown-menu > li > a {
+  color: #636467;
+  padding: 0;
+}
+
+.dropdown-menu > li {
+  padding: 10px 15px;
+}
+
+.dropdown-menu,
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  border: none;
+}
+
+.dropdown-menu > .active {
+  background-color: #DA4453;
+  color: #fff;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > .caret {
+  color: #fff;
+  background-color: transparent;
+}
+
+.dropdown-menu .divider {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu ul.dropdown-menu {
+  top: -2px;
+  left: 100%;
+  border-radius: 0;
+  padding: 0;
+}
+
+.navbar-nav > li > .dropdown-menu {
+  padding: 0;
+}
+
+.navbar-nav > li {
+  padding: 15px;
+  color: #F5F7FA;
+}
+
+.navbar-nav > li > a {
+  padding: 0;
+  display: inline-block;
+}
+
+.navbar-nav > li > .caret {
+  margin-left: 10px;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.navbar-nav > li:hover > .caret {
+  color: #DA4453;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #363636;
+}
+
+.navbar-default .navbar-toggle:focus span {
+  background: #fff;
+}
+
+.nav.navbar-nav {
+  float: right;
+}
+
+@media (max-width: 767px) {
+  .nav.navbar-nav {
+    float: none;
+  }
+
+  .navbar > .container .navbar-brand {
+    margin: 0;
+  }
+
+  .navbar-default .navbar-nav > li > a {
+    line-height: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+.navigation .wp-pagenavi-pagination a {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.navigation .wp-pagenavi-pagination span {
+  font-size: 12px;
+}
+
+.navigation .wp-pagenavi-pagination span.current,
+.navigation .wp-pagenavi-pagination a:hover,
+.navigation .wp-pagenavi-pagination a:focus {
+  background-color: #DA4453;
+  border-color: #DA4453;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.pagination > li > a,
+.pagination > li > span,
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus-within,
+.pagination > li > span:hover {
+  color: #DA4453;
+}
+
+.nav-links {
+  text-align: center;
+}

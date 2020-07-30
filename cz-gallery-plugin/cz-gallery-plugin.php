@@ -21,8 +21,8 @@ add_action('wp_print_styles', 'cz_remove_old_bootstrap');
  * Add shiny new Bootstrap
  */
 function cz_add_new_bootstrap(){
-  wp_enqueue_style('cz_bootstrap_version', plugin_dir_url(__FILE__).'css/bootstrap.min.css');
-  wp_enqueue_script('cz_bootstrap_scripts', plugin_dir_url(__FILE__).'js/bootstrap.bundle.min.js', array('jquery'));
+  // wp_enqueue_style('cz_bootstrap_version', plugin_dir_url(__FILE__).'scss/bootstrap.min.scss');
+  // wp_enqueue_script('cz_bootstrap_scripts', plugin_dir_url(__FILE__).'js/bootstrap.bundle.min.js', array('jquery'));
   wp_enqueue_script('cz_main_scripts', plugin_dir_url(__FILE__).'js/main.js', array(), false, false);
 
 }

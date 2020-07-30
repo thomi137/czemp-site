@@ -49,45 +49,48 @@ if ( isset( $_SERVER['HTTP_USER_AGENT'] ) && ( strpos( $_SERVER['HTTP_USER_AGENT
 <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 <div id="page" class="hfeed site">
     <header id="masthead" class="site-header" role="banner">
-        <nav class="navbar navbar-expand-lg
-          <?php
-          if ( of_get_option( 'sticky_header' ) ) {
-              echo 'navbar-fixed-top';
-          }
-          ?>
-    " role="navigation">
-            <div class="container">
-                <div class="row">
-                        <div class="navbar-header">
-                            <div id="logo">
-                              <?php if ( get_header_image() != '' ) { ?>
-                                  <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php header_image(); ?>"  height="<?php echo get_custom_header()->height; ?>" width="<?php echo get_custom_header()->width; ?>" alt="<?php bloginfo( 'name' ); ?>"/></a>
-                                <?php if ( is_home() ) { ?>
-                                      <h1 class="site-name hide-site-name"><a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-                                  <?php }
-                              } else {
-                                  echo is_home() ? '<h1 class="site-name">' : '<p class="site-name">';
-                                  ?>
-                                  <a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-                                <?php echo is_home() ? '</h1>' : '</p>'; ?>
-                              <?php } ?>
-                            </div><!-- end of #logo -->
-						</div>
-                        <button class="navbar-toggler"
-                                type="button"
-                                id="main-manu-toggler"
-                                data-toggle="collapse"
-                                data-target="#main-menu-toggler"
-                                aria-controls="navbarSupportedContent"
-                                aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <?php cz_header_menu(); // main navigation ?>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark
+              <?php if ( of_get_option( 'sticky_header' ) ) echo 'navbar-fixed-top'; ?>" role="navigation">
 
-				</div>
-			</div>
-		</nav><!-- .site-navigation -->
+                <!-- navbar-brand -->
+                  <?php if ( get_header_image() != '' ) { ?>
+                      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="navbar-brand">
+                          <img src="<?php header_image(); ?>"  height="<?php echo get_custom_header()->height; ?>" width="<?php echo get_custom_header()->width; ?>" alt="<?php bloginfo( 'name' ); ?>"/>
+                      </a>
+                    <?php if ( is_home() ) { ?>
+                          <h1 class="site-name hide-site-name"><a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+                    <?php }
+                  } else {
+                    ?>
+                      <a class="navbar-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+                  <?php } ?>
+                <!-- navbar-brand -->
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbarToggle" aria-controls="mainNavbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                  <?php wp_nav_menu( array(
+                          'menu_class'      => 'navbar-nav ml-auto',
+                          'container'       => 'div',
+                          'container_class' => 'collapse navbar-collapse',
+                          'container_id'    => 'mainNavbarToggle',
+                          'fallback_cb'     => 'WP_Bootstrap_Navwalker::fallback',
+                          'walker'          => new WP_Bootstrap_Navwalker(),
+                  )); ?>
+
+
+
+
+
+                            <!-- <?php cz_header_menu(); // main navigation ?>-->
+                            <!-- <?php wp_nav_menu(); ?> -->
+
+
+            </nav><!-- .site-navigation -->
+        </div>
 	</header><!-- #masthead -->
 
 	<div id="content" class="site-content">
