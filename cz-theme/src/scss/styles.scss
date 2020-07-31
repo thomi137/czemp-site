@@ -17,7 +17,8 @@
 14. Social icons
 15. Call For Action
 */
-
+@import "variables";
+@import "~bootstrap";
 
 /* =Global
 ----------------------------------------------- */
@@ -1951,4 +1952,3 @@ button[type=submit],
   width: auto;
 }
 
-@import "~bootstrap";

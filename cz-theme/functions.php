@@ -1,5 +1,10 @@
 <?php
 
+function cz_add_main_styles() {
+	wp_enqueue_style('cz-main-stylesheet', get_stylesheet_directory_uri() . '/dist/main.css');
+}
+add_action('wp_enqueue_scripts', 'cz_add_main_styles');
+
 function cz_add_main_scripts() {
     wp_enqueue_script( 'cz_boostrap_js', get_stylesheet_directory_uri() . '/dist/bootstrap.bundle.min.js', array('jquery'), false, true);
     wp_enqueue_script( 'cz_main_script', get_stylesheet_directory_uri() . '/dist/main.js', array('jquery'), false, true );
@@ -19,3 +24,12 @@ function cz_register_navwalker(){
   }
 }
 add_action( 'after_setup_theme', 'cz_register_navwalker' );
+
+
+function cz_active_nav_class ($classes, $item) {
+	if (in_array('current-menu-item', $classes) ){
+		$classes[] = 'active ';
+	}
+	return $classes;
+}
+add_filter('nav_menu_css_class' , 'cz_active_nav_class' , 10 , 2);

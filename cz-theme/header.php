@@ -81,14 +81,6 @@ if ( isset( $_SERVER['HTTP_USER_AGENT'] ) && ( strpos( $_SERVER['HTTP_USER_AGENT
                           'walker'          => new WP_Bootstrap_Navwalker(),
                   )); ?>
 
-
-
-
-
-                            <!-- <?php cz_header_menu(); // main navigation ?>-->
-                            <!-- <?php wp_nav_menu(); ?> -->
-
-
             </nav><!-- .site-navigation -->
         </div>
 	</header><!-- #masthead -->

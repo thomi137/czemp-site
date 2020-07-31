@@ -1,1 +1,11 @@
+/* Custom Colors */
+$cz-nav-link-color: rgba(#fff, .75);
 $cz-header-color: #343a40;
+$cz-highlight-color: #da4453;
+
+/* Bootstrap Overrides */
+$navbar-dark-color: $cz-nav-link-color;
+$navbar-dark-active-color: $cz-highlight-color;
+$navbar-dark-brand-color: $cz-nav-link-color;
+
+;

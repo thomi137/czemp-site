@@ -1,15 +1,20 @@
 @import "variables";
 
+html {
+  height: 100%;
+}
+
 body {
   color: #6B6B6B;
   background-color: #F2F2F2;
   word-wrap: break-word;
   font-family: 'Open Sans', sans-serif;
   line-height: 1.7;
+  height: 100%;
 }
 
 header {
-  background-color: $cz-header-color !important;
+  background-color: $cz-header-color;
 }
 
 a {
@@ -253,4 +258,14 @@ textarea {
 .site-footer:after,
 .home-widget-area:before {
   clear: both;
+}
+
+#page {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+
+  .site-content {
+    flex: 1 1 auto;
+  }
 }
