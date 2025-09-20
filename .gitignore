@@ -7,5 +7,12 @@ data
 # Webpack
 dist
 
+plugins
+
 # Node
 node_modules
+
+# Apple
+../.DS_Store
+.DS_Store
+

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+  "version": 2,
+  "settings": {
+    "typography": {
+      "dropCap": false,
+      "fontFamilies": [
+        {
+          "fontFace": [
+            {
+              "fontFamily": "Prompt",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "400",
+              "src": [
+                "file:./assets/fonts/prompt/Prompt-Regular.ttf"
+              ]
+            },
+            {
+              "fontFamily": "Prompt",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "700",
+              "src": [
+                "file:./assets/fonts/prompt/Prompt-Bold.ttf"
+              ]
+            },
+            {
+              "fontFamily": "Prompt",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "300",
+              "src": [
+                "file:./assets/fonts/prompt/Prompt-Light.ttf"
+              ]
+            }
+          ],
+          "fontFamily": "Prompt, sans-serif",
+          "name": "Prompt",
+          "slug": "prompt"
+        },
+        {
+          "fontFace": [
+            {
+              "fontFamily": "Roboto",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "400",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf.ttf"
+              ]
+            },
+            {
+              "fontFamily": "Roboto",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "700",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf"
+              ]
+            },
+            {
+              "fontFamily": "Roboto",
+              "fontStretch": "normal",
+              "fontStyle": "normal",
+              "fontWeight": "300",
+              "src": [
+                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf"
+              ]
+            }
+          ],
+          "fontFamily": "Roboto, sans-serif",
+          "name": "Roboto",
+          "slug": "roboto"
+        }
+      ],
+
+      "fontSizes": [
+        {
+          "name": "Small",
+          "slug": "small",
+          "size": "13px"
+        },
+        {
+          "name": "Medium",
+          "slug": "medium",
+          "size": "20px"
+        },
+        {
+          "name": "Large",
+          "slug": "large",
+          "size": "36px"
+        },
+        {
+          "name": "Extra Large",
+          "slug": "x-large",
+          "size": "42px"
+        }
+      ]
+    }
+  },
+  "styles": {
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--roboto)"
+    },
+    "blocks": {
+      "core/site-title": {
+        "elements": {
+          "link": {
+            "typography": {
+              "textDecoration": "none",
+              "fontFamily": "var(--wp--preset--font-family--prompt)",
+              "fontWeight": "300",
+              "fontSize": "x-large"
+            }
+          }
+        }
+      }
+    }
+  }
+}

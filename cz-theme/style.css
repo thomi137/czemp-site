@@ -1,12 +1,12 @@
 /*
  Theme Name:   Claudia Zemp Theme
- Description:  Theme for claudia-zemp.ch derived from Sparkling theme
+ Tested up to: 6.8
+ Requires PHP: 7.2
+ Description:  Theme for claudia-zemp.ch derived from twentytwentyfive
  Author:       Thomas Prosser
  Author URI:   http://thomit.com
- Template:     sparkling
+ Template:     twentytwentyfive
  Version:      1.0.0
  License:      GNU General Public License v2 or later
  License URI:  http://www.gnu.org/licenses/gpl-2.0.html
-
- CSS added via Webpack.
-*/
+*
