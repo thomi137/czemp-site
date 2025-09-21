@@ -101,12 +101,17 @@
     }
   },
   "templateParts": [
-      {
-        "area": "header",
-        "name": "header",
-        "title": "Header with logo"
-      }
-    ],
+    {
+      "area": "header",
+      "name": "header",
+      "title": "Header with logo"
+    },
+    {
+      "area": "footer",
+      "name": "footer",
+      "title": "Footer with logo"
+    }
+  ],
   "styles": {
     "typography": {
       "fontFamily": "var(--wp--preset--font-family--roboto)"
