@@ -36,7 +36,7 @@ and
 
     docker-compose down
 
-to get rid of it.
+to get rid of it. You can access the site at `localhost:80` or whichever port you think is ok, the admin tool fo mysql is at port `8081`.
 
 Note that there are some volumes linked to the local hard drive. This is so that changes in the current code
 are directly linked into the docker container. Although this is very convenient, it does only provide some sort of poor man's
@@ -46,7 +46,7 @@ Since the author sees that as a minor inconvenience, he did not further fine tun
 However, again, any PR or Email to the [author](mailto:thomas@rosser.ch) on how to improve is greatly appreciated.
 
 Note that the `plugins` and `data`directories of the wordpress image have been mapped to local disk so they are persisted  
-between restarts.
+between restarts. This ensures you do not have to reinitiate every time you restart the Docker images.
 
 ## Theme Files
 
