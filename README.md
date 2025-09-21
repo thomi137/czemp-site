@@ -26,7 +26,7 @@ The current `docker-compose.yml` uses standard [Dockerhub](https://hub.docker.co
 Note that you should configure images according to your target environment. It may be even worthwhile to create you own `Dockerfile`s. 
 Any improvement and comment on this setup is greatly appreciated (as are corresponding PRs, BTW 😉).
 
-#### Startup
+#### Usage
 
 Out of the box, this is easy:
 
@@ -38,14 +38,15 @@ and
 
 to get rid of it.
 
-#### Usage
-
 Note that there are some volumes linked to the local hard drive. This is so that changes in the current code
 are directly linked into the docker container. Although this is very convenient, it does only provide some sort of poor man's
 hot reload in that the browser needs to be refreshed manually.
 Since the author sees that as a minor inconvenience, he did not further fine tune.
 
 However, again, any PR or Email to the [author](mailto:thomas@rosser.ch) on how to improve is greatly appreciated.
+
+Note that the `plugins` and `data`directories of the wordpress image have been mapped to local disk so they are persisted  
+between restarts.
 
 ## Theme Files
 
