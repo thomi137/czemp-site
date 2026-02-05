@@ -21,3 +21,28 @@ if ( ! function_exists( 'set_custom_default_logo' ) ) :
 	add_filter('get_custom_logo', 'set_custom_default_logo');
 endif;
 */
+
+add_action('init', function() {
+
+	register_block_type( get_stylesheet_directory() . '/blocks/gallery-item' );
+
+	// Load block editor JS
+	wp_register_script(
+		'czemp-blocks',
+		get_stylesheet_directory_uri() . '/build/index.js',
+		[
+			'wp-blocks',
+			'wp-element',
+			'wp-block-editor',
+			'wp-components'
+		],
+		filemtime(get_stylesheet_directory() . '/build/index.js')
+	);
+
+
+	wp_register_style(
+		'czemp-style',
+		get_stylesheet_uri()
+	);
+
+});

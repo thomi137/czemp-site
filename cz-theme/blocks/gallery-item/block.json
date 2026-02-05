@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/gallery-item",
+  "title": "Gallery Item",
+  "category": "widgets",
+  "icon": "format-image",
+  "description": "A gallery item with hover overlay",
+  "supports": { "html": false },
+  "editorScript": "file:../../build/index.js",
+  "editorStyle": "file:../../style.css",
+  "style": "file:../../style.css",
+  "attributes": {
+    "imageUrl": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "Title" },
+    "description": { "type": "string", "default": "Description" },
+    "overlayColor": { "type": "string", "default": "rgba(0,0,0,0.6)" },
+    "overlayOpacity": { "type": "number", "default": 0.6 },
+    "textAlign": { "type": "string", "default": "center" },
+    "verticalAlign": { "type": "string", "default": "center" },
+    "fontSize": { "type": "string", "default": "16px" }
+  }
+}

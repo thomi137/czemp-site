@@ -45,7 +45,7 @@ Since the author sees that as a minor inconvenience, he did not further fine tun
 
 However, again, any PR or Email to the [author](mailto:thomas@rosser.ch) on how to improve is greatly appreciated.
 
-Note that the `plugins` and `data`directories of the wordpress image have been mapped to local disk so they are persisted  
+Note that the `plugins` and `data` directories of the wordpress image have been mapped to local disk so they are persisted  
 between restarts. This ensures you do not have to reinitiate every time you restart the Docker images.
 
 ## Theme Files

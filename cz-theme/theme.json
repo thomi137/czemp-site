@@ -98,6 +98,13 @@
           "size": "42px"
         }
       ]
+    },
+    "blocks": {
+      "core/cover": {
+        "color": {
+          "custom": true
+        }
+      }
     }
   },
   "templateParts": [
