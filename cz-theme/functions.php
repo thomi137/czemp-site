@@ -3,6 +3,8 @@
  * Claudia Zemp functions and definitions.
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ * 
+ * @author Thomas Prosser
  *
  * @package czemp
  * @since 1.0
@@ -24,7 +26,11 @@ endif;
 
 add_action('init', function() {
 
+	// Tile with overlay
 	register_block_type( get_stylesheet_directory() . '/blocks/gallery-item' );
+
+	// List item with menu type.
+	register_block_type( get_template_directory() . '/blocks/post-list-item');
 
 	// Load block editor JS
 	wp_register_script(

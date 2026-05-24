@@ -21,8 +21,8 @@
     }
   },
   "editorScript": "file:../../build/index.js",
-  "editorStyle": "file:../../style.css",
-  "style": "file:../../style.css",
+  "editorStyle": "file:./src/style.css",
+  "style": "file:.src/style.css",
   "attributes": {
     "height": {
       "type": "number",
