@@ -12,14 +12,17 @@
  License:      GNU General Public License v2 or later
  License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 */
+
 .gallery-item {
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 
 .gallery-item img {
     width: 100%;
-    display: block;
+    height: 100%;
+    object-fit: cover;
 }
 
 .gallery-item .overlay {
@@ -42,4 +45,9 @@
 .gallery-item .overlay h3,
 .gallery-item .overlay p {
     margin: 0.2em 0;
+}
+
+.overlay {
+    display: flex;
+    flex-direction: column;
 }

@@ -1,15 +1,33 @@
-import { RichText, InspectorControls, PanelColorSettings, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import {PanelBody, SelectControl, Button, RangeControl} from '@wordpress/components';
-import { useState } from 'react';
+import { 
+    RichText, 
+    InspectorControls, 
+    PanelColorSettings, 
+    MediaUpload, 
+    MediaUploadCheck, 
+    FocalPointPicker,
+} from '@wordpress/block-editor';
+import { 
+    PanelBody, 
+    SelectControl, 
+    Button, 
+    RangeControl 
+} from '@wordpress/components';
 import { hexToRgba } from "./utils";
 
 export default function Edit({ attributes, setAttributes }) {
-    const { imageUrl, title, description, overlayColor, overlayOpacity, textAlign, verticalAlign, fontSize } = attributes;
+    const { 
+        imageUrl, 
+        title, 
+        description, 
+        overlayColor, 
+        overlayOpacity, 
+        textAlign, 
+        verticalAlign, 
+        fontSize,
+        height,
+        focalPoint
+    } = attributes;
 
-    const [ localTitle, setLocalTitle ] = useState(title);
-    const [ localDescription, setLocalDescription ] = useState(description);
-    const [ localOverlayColor, setLocalOverlayColor ] = useState(overlayColor);
-    const [ localOverlayOpacity, setLocalOverlayOpacity ] = useState(overlayOpacity)
 
     return (
         <>
@@ -20,9 +38,21 @@ export default function Edit({ attributes, setAttributes }) {
                             onSelect={ media => setAttributes({ imageUrl: media.url }) }
                             allowedTypes={['image']}
                             render={({ open }) => (
-                                <Button onClick={open}>
-                                    {imageUrl ? 'Change Image' : 'Select Image'}
-                                </Button>
+                                <>
+                                    <Button onClick={open}>
+                                        {imageUrl ? 'Change Image' : 'Select Image'}
+                                    </Button>
+                                    { imageUrl && (
+                                        <FocalPointPicker
+                                            url={imageUrl}
+                                            value={focalPoint}
+                                            onChange={(value) =>
+                                                setAttributes({ focalPoint: value })
+                                            }
+                                        />
+                                    )}
+                                </>
+
                             )}
                         />
                     </MediaUploadCheck>
@@ -42,10 +72,9 @@ export default function Edit({ attributes, setAttributes }) {
 
                     <RangeControl
                         label="Overlay Opacity"
-                        value={attributes.overlayOpacity}
-                        onChange={(value) => {
-                            setLocalOverlayOpacity(value)
-                            setAttributes({ overlayOpacity: value })}
+                        value={overlayOpacity}
+                        onChange={(value) =>
+                            setAttributes({ overlayOpacity: value })
                         }
                         min={0}
                         max={1}
@@ -54,8 +83,8 @@ export default function Edit({ attributes, setAttributes }) {
 
                 </PanelBody>
 
-
                 <PanelBody title="Text Settings">
+
                     <SelectControl
                         label="Horizontal Alignment"
                         value={textAlign}
@@ -66,6 +95,18 @@ export default function Edit({ attributes, setAttributes }) {
                         ]}
                         onChange={(value) => setAttributes({ textAlign: value })}
                     />
+
+                    <RangeControl
+                        label="Block Height"
+                        value={height}
+                        onChange={(value) =>
+                            setAttributes({ height: value })
+                        }
+                        min={200}
+                        max={1000}
+                        step={10}
+                    />
+
                     <SelectControl
                         label="Vertical Alignment"
                         value={verticalAlign}
@@ -76,6 +117,7 @@ export default function Edit({ attributes, setAttributes }) {
                         ]}
                         onChange={(value) => setAttributes({ verticalAlign: value })}
                     />
+
                     <SelectControl
                         label="Font Size"
                         value={fontSize}
@@ -88,34 +130,56 @@ export default function Edit({ attributes, setAttributes }) {
                         onChange={(value) => setAttributes({ fontSize: value })}
                     />
                 </PanelBody>
+
             </InspectorControls>
 
+            // Start of HTML
+
             <div className="gallery-item">
-                {imageUrl && <img src={imageUrl} alt={title} />}
+                {imageUrl && <img
+                    src={imageUrl}
+                    alt={title}
+                    style={{
+                        objectPosition: `${
+                            (focalPoint?.x ?? 0.5) * 100
+                        }% ${
+                            (focalPoint?.y ?? 0.5) * 100
+                        }%`
+                    }}/>
+                }
                 <div className="overlay"
                      style={{
-                         backgroundColor: hexToRgba(attributes.overlayColor, attributes.overlayOpacity),
-                         justifyContent: attributes.verticalAlign,
-                         alignItems: attributes.textAlign,
-                         fontSize: attributes.fontSize,
-                         pointerEvents: 'auto'   // allow clicks
-
+                        backgroundColor: hexToRgba(overlayColor, overlayOpacity),
+                        justifyContent: verticalAlign,
+                        textAlign,
+                        fontSize,
+                        pointerEvents: 'auto',   // allow clicks
+                        height: `${height}px`
                      }}
-                >
+                    >
+
                     <RichText
                         tagName="h3"
-                        value={attributes.title}
+                        value={title}
                         onChange={(value) => setAttributes({ title: value })}
                         placeholder="Title"
-                        formattingControls={['bold', 'italic', 'underline']}
-                        allowedFormats={['core/bold','core/italic','core/underline']}
+                        allowedFormats={[
+                            'core/bold',
+                            'core/italic',
+                            'core/underline'
+                        ]}
                     />
+
                     <RichText
                         tagName="p"
-                        value={attributes.description}
+                        value={description}
                         onChange={(value) => setAttributes({ description: value })}
                         placeholder="Description"
-                        formattingControls={['bold', 'italic', 'strikethrough']}
+                        allowedFormats={[
+                            'core/bold',
+                            'core/italic',
+                            'core/underline'
+                        ]}
                     />
                 </div>
             </div>
