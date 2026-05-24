@@ -6,14 +6,27 @@
   "category": "widgets",
   "icon": "format-image",
   "description": "A gallery item with hover overlay",
-  "supports": { "html": false },
+  "supports": { 
+    "html": false,
+    "spacing": {
+    "padding": true,
+    "margin": true
+    },
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
   "editorScript": "file:../../build/index.js",
   "editorStyle": "file:../../style.css",
   "style": "file:../../style.css",
   "attributes": {
     "height": {
       "type": "number",
-      "default": "400"
+      "default": "400px"
     },
     "imageUrl": { "type": "string", "default": "" },
     "title": { "type": "string", "default": "Title" },
@@ -23,7 +36,7 @@
     "textAlign": { "type": "string", "default": "center" },
     "verticalAlign": { "type": "string", "default": "center" },
     "fontSize": { "type": "string", "default": "16px" },
-    "focalPoint": { "type": "object", "default": { "x": 0.5, "y": 0.5} },
+    "focalPoint": { "type": "object", "default": { "x": 0.5, "y": 0.5 } },
     "padding": {
       "type": "string",
       "default": "2rem"

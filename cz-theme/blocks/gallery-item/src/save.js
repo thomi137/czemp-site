@@ -1,23 +1,64 @@
-import {hexToRgba} from "./utils"
+import {
+    InnerBlocks,
+    useBlockProps
+} from '@wordpress/block-editor';
 
-export default function Save({ attributes }) {
-    const { imageUrl, title, description, overlayColor, overlayOpacity, textAlign, verticalAlign, fontSize } = attributes;
+import { hexToRgba } from './utils';
+
+export default function save({ attributes }) {
+
+    const {
+        imageUrl,
+        overlayColor,
+        overlayOpacity,
+        textAlign,
+        verticalAlign,
+        fontSize,
+        height,
+        focalPoint
+    } = attributes;
+
+    const blockProps = useBlockProps.save({
+        className: 'gallery-item',
+        style: {
+            height: `${height}px`
+        }
+    });
 
     return (
-        <div className="gallery-item">
-            {imageUrl && <img src={imageUrl} alt={title} />}
+        <div {...blockProps}>
+
+            {imageUrl && (
+                <img
+                    src={imageUrl}
+                    alt=""
+                    style={{
+                        objectPosition: `${
+                            (focalPoint?.x ?? 0.5) * 100
+                        }% ${
+                            (focalPoint?.y ?? 0.5) * 100
+                        }%`
+                    }}
+                />
+            )}
+
             <div
                 className="overlay"
                 style={{
-                    backgroundColor: hexToRgba(attributes.overlayColor, attributes.overlayOpacity),
+                    backgroundColor: hexToRgba(
+                        overlayColor,
+                        overlayOpacity
+                    ),
                     justifyContent: verticalAlign,
-                    alignItems: textAlign,
+                    textAlign,
                     fontSize
                 }}
             >
-                <h3>{title}</h3>
-                <p>{description}</p>
+
+                <InnerBlocks.Content />
+
             </div>
+
         </div>
     );
 }

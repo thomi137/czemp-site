@@ -1,10 +1,10 @@
 import { 
-    RichText, 
     InspectorControls, 
     PanelColorSettings, 
     MediaUpload, 
     MediaUploadCheck, 
     FocalPointPicker,
+    InnerBlocks,
 } from '@wordpress/block-editor';
 import { 
     PanelBody, 
@@ -17,8 +17,6 @@ import { hexToRgba } from "./utils";
 export default function Edit({ attributes, setAttributes }) {
     const { 
         imageUrl, 
-        title, 
-        description, 
         overlayColor, 
         overlayOpacity, 
         textAlign, 
@@ -89,9 +87,9 @@ export default function Edit({ attributes, setAttributes }) {
                         label="Horizontal Alignment"
                         value={textAlign}
                         options={[
-                            { label: 'Left', value: 'flex-start' },
+                            { label: 'Left', value: 'left' },
                             { label: 'Center', value: 'center' },
-                            { label: 'Right', value: 'flex-end' }
+                            { label: 'Right', value: 'right' }
                         ]}
                         onChange={(value) => setAttributes({ textAlign: value })}
                     />
@@ -111,7 +109,7 @@ export default function Edit({ attributes, setAttributes }) {
                         label="Vertical Alignment"
                         value={verticalAlign}
                         options={[
-                            { label: 'Top', value: 'flex-start' },
+                            { label: 'Top', value: 'flex-left' },
                             { label: 'Middle', value: 'center' },
                             { label: 'Bottom', value: 'flex-end' }
                         ]}
@@ -133,19 +131,22 @@ export default function Edit({ attributes, setAttributes }) {
 
             </InspectorControls>
 
-            // Start of HTML
+            {/* Start of HTML */}
 
-            <div className="gallery-item">
-                {imageUrl && <img
-                    src={imageUrl}
-                    alt={title}
-                    style={{
+            <div className="gallery-item"
+                 style={{
+                        height: `${height}px`,
                         objectPosition: `${
                             (focalPoint?.x ?? 0.5) * 100
                         }% ${
                             (focalPoint?.y ?? 0.5) * 100
                         }%`
-                    }}/>
+                    }}
+            >
+                {imageUrl && <img
+                    src={imageUrl}
+                    alt={title}
+                />
                 }
                 <div className="overlay"
                      style={{
@@ -154,33 +155,22 @@ export default function Edit({ attributes, setAttributes }) {
                         textAlign,
                         fontSize,
                         pointerEvents: 'auto',   // allow clicks
-                        height: `${height}px`
                      }}
                     >
-
-                    <RichText
-                        tagName="h3"
-                        value={title}
-                        onChange={(value) => setAttributes({ title: value })}
-                        placeholder="Title"
-                        allowedFormats={[
-                            'core/bold',
-                            'core/italic',
-                            'core/underline'
+                     <InnerBlocks    
+                        allowedBlocks={[
+                            'core/heading',
+                            'core/paragraph',
+                            'core/buttons',
+                            'core/button',
+                            'core/list'
                         ]}
-                    />
-
-                    <RichText
-                        tagName="p"
-                        value={description}
-                        onChange={(value) => setAttributes({ description: value })}
-                        placeholder="Description"
-                        allowedFormats={[
-                            'core/bold',
-                            'core/italic',
-                            'core/underline'
+                        template={[
+                            ['core/heading', { level: 3, placeholder: 'Title' }],
+                            ['core/paragraph', { placeholder: 'Description...' }]
                         ]}
-                    />
+                     />
+    
                 </div>
             </div>
         </>
