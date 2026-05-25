@@ -5,6 +5,8 @@ import {
     MediaUploadCheck, 
     FocalPointPicker,
     InnerBlocks,
+    TextControl,
+    ToggleControl,
 } from '@wordpress/block-editor';
 import { 
     PanelBody, 
@@ -127,6 +129,26 @@ export default function Edit({ attributes, setAttributes }) {
                         ]}
                         onChange={(value) => setAttributes({ fontSize: value })}
                     />
+                </PanelBody>
+
+                <PanelBody title="Link Settings">
+
+                    <TextControl
+                        label="Link URL"
+                        value={linkUrl}
+                        onChange={(value) =>
+                            setAttributes({ linkUrl: value })
+                        }
+                    />
+
+                    <ToggleControl
+                        label="Open in new tab"
+                        checked={openInNewTab}
+                        onChange={(value) =>
+                            setAttributes({ openInNewTab: value })
+                        }
+                    />
+
                 </PanelBody>
 
             </InspectorControls>

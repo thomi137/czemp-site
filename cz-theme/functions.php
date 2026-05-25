@@ -26,11 +26,14 @@ endif;
 
 add_action('init', function() {
 
+	// Custom Post Type
+	register_post_type('artwork');
+
 	// Tile with overlay
 	register_block_type( get_stylesheet_directory() . '/blocks/gallery-item' );
 
 	// List item with menu type.
-	register_block_type( get_template_directory() . '/blocks/post-list-item');
+	register_block_type( get_template_directory() . '/blocks/artwork-list-item');
 
 	// Load block editor JS
 	wp_register_script(

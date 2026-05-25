@@ -22,7 +22,7 @@
   },
   "editorScript": "file:../../build/index.js",
   "editorStyle": "file:./src/style.css",
-  "style": "file:.src/style.css",
+  "style": ".src/style.css",
   "attributes": {
     "height": {
       "type": "number",
@@ -40,6 +40,15 @@
     "padding": {
       "type": "string",
       "default": "2rem"
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
