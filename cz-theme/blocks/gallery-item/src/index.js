@@ -1,8 +1,10 @@
-import edit from './edit';
-import save from './save';
 import { registerBlockType } from '@wordpress/blocks';
+import metadata from '../block.json';
 
-registerBlockType('czemp-theme/gallery-item', {
-    edit,
-    save,
+import Edit from './edit';
+import Save from './save';
+
+registerBlockType(metadata.name, {
+	edit: Edit,
+	save: Save,
 });

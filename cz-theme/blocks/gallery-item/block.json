@@ -22,7 +22,7 @@
   },
   "editorScript": "file:../../build/index.js",
   "editorStyle": "file:./src/style.css",
-  "style": ".src/style.css",
+  "style": "file:./style.css",
   "attributes": {
     "height": {
       "type": "number",

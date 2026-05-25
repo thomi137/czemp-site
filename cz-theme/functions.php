@@ -24,34 +24,38 @@ if ( ! function_exists( 'set_custom_default_logo' ) ) :
 endif;
 */
 
+
+add_action('init', function () {
+
+	register_block_type(
+		get_template_directory() . '/blocks/gallery-item'
+	);
+
+	register_block_type(
+		get_template_directory() . '/blocks/artwork-list-item'
+	);
+
+});
+
 add_action('init', function() {
 
-	// Custom Post Type
-	register_post_type('artwork');
-
-	// Tile with overlay
-	register_block_type( get_stylesheet_directory() . '/blocks/gallery-item' );
-
-	// List item with menu type.
-	register_block_type( get_template_directory() . '/blocks/artwork-list-item');
-
-	// Load block editor JS
-	wp_register_script(
-		'czemp-blocks',
-		get_stylesheet_directory_uri() . '/build/index.js',
-		[
-			'wp-blocks',
-			'wp-element',
-			'wp-block-editor',
-			'wp-components'
+	register_post_type('artwork', [
+		'labels' => [
+			'name' => 'Artworks',
+			'singular_name' => 'Artwork',
 		],
-		filemtime(get_stylesheet_directory() . '/build/index.js')
-	);
-
-
-	wp_register_style(
-		'czemp-style',
-		get_stylesheet_uri()
-	);
+		'public' => true,
+		'show_in_rest' => true,
+		'supports' => [
+			'title',
+			'editor',
+			'thumbnail',
+			'excerpt'
+		],
+		'has_archive' => true,
+		'rewrite' => [
+			'slug' => 'artworks'
+		],
+	]);
 
 });
