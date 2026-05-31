@@ -21,12 +21,12 @@
     }
   },
   "editorScript": "file:../../build/index.js",
-  "editorStyle": "file:./src/style.css",
+  "editorStyle": "file:./style.css",
   "style": "file:./style.css",
   "attributes": {
     "height": {
       "type": "number",
-      "default": "400px"
+      "default": 400
     },
     "imageUrl": { "type": "string", "default": "" },
     "title": { "type": "string", "default": "Title" },
@@ -45,7 +45,6 @@
       "type": "string",
       "default": ""
     },
-
     "openInNewTab": {
       "type": "boolean",
       "default": false

@@ -17,15 +17,17 @@ import {
 import { hexToRgba } from "./utils";
 
 export default function Edit({ attributes, setAttributes }) {
-    const { 
-        imageUrl, 
-        overlayColor, 
-        overlayOpacity, 
-        textAlign, 
-        verticalAlign, 
+    const {
+        imageUrl,
+        overlayColor,
+        overlayOpacity,
+        textAlign,
+        verticalAlign,
         fontSize,
         height,
-        focalPoint
+        focalPoint,
+        linkUrl,
+        openInNewTab
     } = attributes;
 
 

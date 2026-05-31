@@ -27,14 +27,21 @@ endif;
 
 add_action('init', function () {
 
-	register_block_type(
-		get_template_directory() . '/blocks/gallery-item'
-	);
+    global $wp_block_types;
 
-	register_block_type(
-		get_template_directory() . '/blocks/artwork-list-item'
-	);
+    register_block_type(
+        get_stylesheet_directory() . '/blocks/gallery-item'
+    );
 
+    register_block_type(
+        get_stylesheet_directory() . '/blocks/artwork-list-item'
+    );
+
+    error_log('=== REGISTERED BLOCKS ===');
+
+    foreach ( WP_Block_Type_Registry::get_instance()->get_all_registered() as $name => $block ) {
+        error_log($name);
+    }
 });
 
 add_action('init', function() {
