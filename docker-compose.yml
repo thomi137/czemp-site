@@ -38,3 +38,4 @@ services:
       - "./wp-content:/var/www/html/wp-content"
       - "./plugins:/var/www/html/wp-content/plugins"
       - "./cz-theme:/var/www/html/wp-content/themes/cz-theme"
+      - "./wp-config.php:/var/www/html/wp-config.php"
