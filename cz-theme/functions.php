@@ -65,4 +65,22 @@ add_action('init', function() {
 		],
 	]);
 
+	register_taxonomy(
+        'collection',
+        ['artwork'],
+        [
+            'labels' => [
+                'name' => 'Collections',
+                'singular_name' => 'Collection',
+            ],
+            'public' => true,
+            'hierarchical' => true,
+            'show_in_rest' => true,
+            'rewrite' => [
+                'slug' => 'collection',
+            ],
+        ]
+    );
+
+
 });
