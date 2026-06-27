@@ -30,16 +30,6 @@ add_action('after_setup_theme', function () {
     add_editor_style('assets/css/global.css');
 });
 
-// Enqueue styles
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style(
-        'czemp-global',
-        get_stylesheet_directory_uri() . '/assets/css/global.css',
-        [],
-        wp_get_theme()->get('Version')
-    );
-});
-
 // Register custom blocks
 add_action('init', function () {
     register_block_type(

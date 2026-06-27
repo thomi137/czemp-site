@@ -2,9 +2,7 @@ import {
     InspectorControls,
     MediaUpload,
     MediaUploadCheck,
-    FocalPointPicker,
     InnerBlocks,
-    PanelColorSettings,
     useBlockProps,
 } from '@wordpress/block-editor';
 
@@ -12,7 +10,14 @@ import {
     PanelBody,
     Button,
     RangeControl,
+    ColorPalette,
+    FocalPointPicker,
+    SelectControl,
 } from '@wordpress/components';
+
+import { useSelect } from '@wordpress/data';
+
+import '@wordpress/media-utils';
 
 import { hexToRgba } from './utils';
 
@@ -22,10 +27,19 @@ export default function Edit({ attributes, setAttributes }) {
         overlayColor,
         overlayOpacity,
         focalPoint,
+        linkUrl,
     } = attributes;
 
     const blockProps = useBlockProps({
         className: 'gallery-item',
+    });
+
+    const safeFocalPoint = focalPoint ?? { x: 0.5, y: 0.5 };
+    const safeOverlayColor = overlayColor ?? '#000000';
+    const safeOverlayOpacity = overlayOpacity ?? 0.6;
+
+    const collections = useSelect((select) => {
+        return select('core').getEntityRecords('taxonomy', 'collection', { per_page: -1 });
     });
 
     return (
@@ -35,31 +49,23 @@ export default function Edit({ attributes, setAttributes }) {
                     <MediaUploadCheck>
                         <MediaUpload
                             allowedTypes={['image']}
-                            onSelect={(media) =>
-                                setAttributes({
-                                    imageUrl: media.url,
-                                })
-                            }
+                            onSelect={(media) => setAttributes({
+                                imageUrl: media.url,
+                                imageAlt: media.alt || '',
+                            })}
                             render={({ open }) => (
                                 <>
                                     <Button
                                         variant="secondary"
                                         onClick={open}
                                     >
-                                        {imageUrl
-                                            ? 'Replace Image'
-                                            : 'Select Image'}
+                                        {imageUrl ? 'Replace Image' : 'Select Image'}
                                     </Button>
-
                                     {imageUrl && (
                                         <FocalPointPicker
                                             url={imageUrl}
-                                            value={focalPoint}
-                                            onChange={(value) =>
-                                                setAttributes({
-                                                    focalPoint: value,
-                                                })
-                                            }
+                                            value={safeFocalPoint}
+                                            onChange={(value) => setAttributes({ focalPoint: value })}
                                         />
                                     )}
                                 </>
@@ -69,31 +75,33 @@ export default function Edit({ attributes, setAttributes }) {
                 </PanelBody>
 
                 <PanelBody title="Overlay">
-                    <PanelColorSettings
-                        colorSettings={[
-                            {
-                                value: overlayColor,
-                                onChange: (color) =>
-                                    setAttributes({
-                                        overlayColor: color,
-                                    }),
-                                label: 'Overlay Color',
-                            },
-                        ]}
+                    <ColorPalette
+                        value={safeOverlayColor}
+                        onChange={(color) => setAttributes({ overlayColor: color ?? '#000000' })}
                     />
-
                     <RangeControl
                         __next40pxDefaultSize
                         label="Overlay Opacity"
-                        value={overlayOpacity}
-                        onChange={(value) =>
-                            setAttributes({
-                                overlayOpacity: value,
-                            })
-                        }
+                        value={safeOverlayOpacity}
+                        onChange={(value) => setAttributes({ overlayOpacity: value })}
                         min={0}
                         max={1}
                         step={0.05}
+                    />
+                </PanelBody>
+
+                <PanelBody title="Link">
+                    <SelectControl
+                        label="Kollektion"
+                        value={linkUrl ?? ''}
+                        options={[
+                            { label: '— keine —', value: '' },
+                            ...(collections ?? []).map((c) => ({
+                                label: c.name,
+                                value: c.link,
+                            })),
+                        ]}
+                        onChange={(val) => setAttributes({ linkUrl: val })}
                     />
                 </PanelBody>
             </InspectorControls>
@@ -104,22 +112,15 @@ export default function Edit({ attributes, setAttributes }) {
                         src={imageUrl}
                         alt=""
                         style={{
-                            objectPosition: `${
-                                (focalPoint?.x ?? 0.5) * 100
-                            }% ${
-                                (focalPoint?.y ?? 0.5) * 100
-                            }%`,
+                            objectFit: 'cover',
+                            objectPosition: `${safeFocalPoint.x * 100}% ${safeFocalPoint.y * 100}%`,
                         }}
                     />
                 )}
-
                 <div
                     className="overlay"
                     style={{
-                        backgroundColor: hexToRgba(
-                            overlayColor,
-                            overlayOpacity
-                        ),
+                        backgroundColor: hexToRgba(safeOverlayColor, safeOverlayOpacity),
                     }}
                 >
                     <InnerBlocks
@@ -132,19 +133,8 @@ export default function Edit({ attributes, setAttributes }) {
                             'core/image',
                         ]}
                         template={[
-                            [
-                                'core/heading',
-                                {
-                                    placeholder: 'Title',
-                                },
-                            ],
-                            [
-                                'core/paragraph',
-                                {
-                                    placeholder:
-                                        'Description...',
-                                },
-                            ],
+                            ['core/heading', { placeholder: 'Title' }],
+                            ['core/paragraph', { placeholder: 'Description...' }],
                         ]}
                     />
                 </div>

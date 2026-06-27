@@ -114,6 +114,7 @@ $table_prefix = getenv_docker('WORDPRESS_TABLE_PREFIX', 'wp_');
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
 define( 'WP_DEBUG', !!getenv_docker('WORDPRESS_DEBUG', '') );
+define( 'SCRIPT_DEBUG', true );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
@@ -142,6 +143,7 @@ define('WP_ENVIRONMENT_TYPE', 'local');
 define('AUTOMATIC_UPDATER_DISABLED', true);
 define('WP_AUTO_UPDATE_CORE', false);
 define('DISALLOW_FILE_MODS', true);
+
 
 // Prevent background cron from stacking admin requests
 define('DISABLE_WP_CRON', true);
