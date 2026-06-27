@@ -7,7 +7,7 @@
  * Description: Site header with site title, navigation and logo.
  *
  * @author Thomas Prosser
- * @package czewmp
+ * @package czemp
  * @since 1.0
  */
 ?>
@@ -15,7 +15,12 @@
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
 
-    <!-- wp:site-logo {"width":108} /-->
+    <!-- wp:image {"url":"\/wp-content\/themes\/cz-theme\/assets\/images\/cz_Logo_without_text.webp","alt":"Claudia Zemp","width":80,"sizeSlug":"full"} -->
+    <figure class="wp-block-image size-full">
+        <img src="/wp-content/themes/cz-theme/assets/images/cz_Logo_without_text.webp" alt="Claudia Zemp" width="80"/>
+    </figure>
+    <!-- /wp:image -->
 
 </div>
 <!-- /wp:group -->
+ 

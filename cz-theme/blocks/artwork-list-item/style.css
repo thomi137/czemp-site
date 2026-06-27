@@ -1,4 +1,4 @@
-post-list-item {
+.post-list-item {
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
