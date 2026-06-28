@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/gallery-item",
+  "title": "Gallery Item",
+  "category": "widgets",
+  "icon": "format-image",
+  "description": "A gallery item with hover overlay",
+  "supports": { 
+    "html": false,
+    "spacing": {
+    "padding": true,
+    "margin": true
+    },
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "editorScript": "file:../../build/index.js",
+  "editorStyle": "file:./style.css",
+  "style": "file:./style.css",
+  "attributes": {
+    "height": {
+      "type": "number",
+      "default": 400
+    },
+    "imageUrl": { "type": "string", "default": "" },
+    "imageAlt": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "Title" },
+    "description": { "type": "string", "default": "Description" },
+    "overlayColor": { "type": "string", "default": "000000" },
+    "overlayOpacity": { "type": "number", "default": 0.6 },
+    "textAlign": { "type": "string", "default": "center" },
+    "verticalAlign": { "type": "string", "default": "center" },
+    "fontSize": { "type": "string", "default": "16px" },
+    "focalPoint": { "type": "object", "default": { "x": 0.5, "y": 0.5 } },
+    "padding": {
+      "type": "string",
+      "default": "2rem"
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

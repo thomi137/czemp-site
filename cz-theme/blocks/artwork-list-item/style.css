@@ -1,0 +1,36 @@
+.post-list-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.post-list-item__image {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+.post-list-item__content {
+    flex: 1;
+}
+
+.post-list-item__title {
+    margin-top: 0;
+}
+
+.post-list-item__title a {
+    text-decoration: none;
+}
+
+.post-list-item__excerpt {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+
+    .post-list-item {
+        flex-direction: column;
+    }
+
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/artwork-list-item",
+  "title": "Artwork List Item",
+  "category": "widgets",
+  "icon": "index-card",
+  "description": "Loop-aware post list item for Claudia Zemp Theme",
+  "supports": {
+    "html": false
+  },
+  "usesContext": [
+    "postId",
+    "postType"
+  ],
+  "editorScript": "file:../../build/index.js",
+  "style": "file:./style.css",
+  "editorStyle": "file:./style.css",
+  "render": "file:./render.php",
+
+  "attributes": {
+    "showExcerpt": {
+      "type": "boolean",
+      "default": true
+    },
+
+    "showImage": {
+      "type": "boolean",
+      "default": true
+    },
+
+    "imageSize": {
+      "type": "number",
+      "default": 120
+    }
+  }
+}

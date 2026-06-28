@@ -2,7 +2,27 @@
   "$schema": "https://schemas.wp.org/wp/6.7/theme.json",
   "version": 3,
   "settings": {
+
+    "spacing": {
+        "spacingScale": {
+            "steps": 0
+        },
+        "spacingSizes": [
+            {
+                "name": "Page margin",
+                "slug": "page-margin",
+                "size": "6rem"
+            }
+        ]
+    },
+
     "appearanceTools": true,
+
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1400px"
+    },
+
     "typography": {
       "dropCap": false,
       "fontFamilies": [
@@ -10,8 +30,6 @@
           "fontFace": [
             {
               "fontFamily": "Prompt",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
               "fontWeight": "400",
               "src": [
                 "file:./assets/fonts/prompt/Prompt-Regular.ttf"
@@ -19,8 +37,6 @@
             },
             {
               "fontFamily": "Prompt",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
               "fontWeight": "700",
               "src": [
                 "file:./assets/fonts/prompt/Prompt-Bold.ttf"
@@ -28,8 +44,6 @@
             },
             {
               "fontFamily": "Prompt",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
               "fontWeight": "300",
               "src": [
                 "file:./assets/fonts/prompt/Prompt-Light.ttf"
@@ -44,27 +58,7 @@
           "fontFace": [
             {
               "fontFamily": "Roboto",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
               "fontWeight": "400",
-              "src": [
-                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf.ttf"
-              ]
-            },
-            {
-              "fontFamily": "Roboto",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
-              "fontWeight": "700",
-              "src": [
-                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf"
-              ]
-            },
-            {
-              "fontFamily": "Roboto",
-              "fontStretch": "normal",
-              "fontStyle": "normal",
-              "fontWeight": "300",
               "src": [
                 "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf"
               ]
@@ -98,24 +92,36 @@
           "size": "42px"
         }
       ]
+    },
+
+    "blocks": {
+      "core/cover": {
+        "color": {
+          "custom": true
+        }
+      }
     }
   },
+
   "templateParts": [
     {
       "area": "header",
       "name": "header",
-      "title": "Header with logo"
+      "title": "Header"
     },
     {
       "area": "footer",
       "name": "footer",
-      "title": "Footer with logo"
+      "title": "Footer"
     }
   ],
+
   "styles": {
+
     "typography": {
-      "fontFamily": "var(--wp--preset--font-family--roboto)"
+      "fontFamily": "var(--wp--preset--font-family--prompt)"
     },
+
     "blocks": {
       "core/site-title": {
         "elements": {
