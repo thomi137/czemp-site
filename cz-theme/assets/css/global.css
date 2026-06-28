@@ -1,0 +1,24 @@
+.wp-site-blocks {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body .wp-site-blocks > main.wp-block-group {
+    flex: 1;
+    min-height: calc(100vh - 60px);
+}
+
+.footer-nav {
+    margin-top: auto;
+    margin-block-start: 0;
+}
+
+.wp-site-blocks > footer.wp-block-group {
+    margin-block-start: 0;
+}
+
+.wp-site-blocks > .wp-block-group:first-child {
+    padding-top: 24px;
+    padding-bottom: 0;
+}

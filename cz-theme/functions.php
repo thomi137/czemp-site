@@ -80,3 +80,12 @@ add_action('after_switch_theme', function () {
     // Post type & taxonomy are registered via 'init'; flush after.
     flush_rewrite_rules();
 });
+
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_style(
+        'czemp-global',
+        get_stylesheet_directory_uri() . '/assets/css/global.css',
+        [],
+        wp_get_theme()->get('Version')
+    );
+});
