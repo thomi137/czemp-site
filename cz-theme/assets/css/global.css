@@ -62,12 +62,22 @@ body .wp-site-blocks > main.wp-block-group {
 
 /* ── Slide-in Overlay ─────────────────────────────────── */
 
+/*
+ * WP 7.0 always sets display:flex on this container (Interactivity API).
+ * We use visibility + pointer-events to hide it, so CSS transitions
+ * can animate opacity and transform smoothly when WP toggles is-menu-open.
+ *
+ * visibility transition: delay hide until after the slide-out finishes (500ms),
+ * but show instantly on open (0s delay on is-menu-open).
+ */
 .footer-nav .wp-block-navigation__responsive-container {
+  visibility: hidden;
+  pointer-events: none;
   transform: translateX(-100%);
   opacity: 0;
-  transition: transform 500ms cubic-bezier(.2,.9,.2,1), opacity 500ms ease;
+  /* !important overrides WP's inline transition:none set by initMenu callback */
+  transition: transform 3000ms cubic-bezier(.2,.9,.2,1), opacity 3000ms ease, visibility 0s linear 3000ms !important;
   will-change: transform, opacity;
-  /* display is controlled entirely by JS (flex when open, none when closed) */
   position: fixed;
   right: 0;
   top: 0;
@@ -80,16 +90,13 @@ body .wp-site-blocks > main.wp-block-group {
   z-index: 9999;
 }
 
-/* Open state: everything (container + children) slides in together */
 .footer-nav .wp-block-navigation__responsive-container.is-menu-open {
+  visibility: visible;
+  pointer-events: auto;
   transform: translateX(0);
   opacity: 1;
   overflow: hidden;
-}
-
-/* Optional: children can still fade or stagger but will ride the parent's translate */
-.footer-nav .wp-block-navigation__responsive-container .wp-block-navigation__container .wp-block-navigation-item__content {
-  transition: opacity 350ms ease;
+  transition: transform 3000ms cubic-bezier(.2,.9,.2,1), opacity 3000ms ease, visibility 0s linear 0s !important;
 }
 
 /* ── Dialog ───────────────────────────────────────────── */
@@ -116,69 +123,43 @@ body .wp-site-blocks > main.wp-block-group {
     order: 2;
 }
 
-/* ── Schliessen Button als Auge ───────────────────────── */
+/* ── Schliessen Button (WP 7.0: .wp-block-navigation-overlay-close) ── */
 
-.wp-block-navigation__responsive-container-close {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    align-self: flex-start;
+.wp-block-navigation-overlay-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    flex-shrink: 0;
-    order: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.wp-block-navigation__responsive-container-close svg {
+.wp-block-navigation-overlay-close svg {
     display: none;
 }
 
-.wp-block-navigation__responsive-container-close::before {
+.wp-block-navigation-overlay-close::before,
+.wp-block-navigation-overlay-close::after {
     content: '';
     position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
+    width: 24px;
     height: 2px;
     background: #fff;
     border-radius: 2px;
-    box-shadow: 0 -9px 0 #fff, 0 9px 0 #fff;
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.wp-block-navigation__responsive-container-close::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    background: #fff;
-    border-radius: 50%;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: all 0.6s ease 0.9s;
+.wp-block-navigation-overlay-close::before {
+    transform: rotate(45deg);
 }
 
-.wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__responsive-container-close::before {
-    height: 18px;
-    background: transparent;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    box-shadow: none;
-    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.wp-block-navigation__responsive-container.is-menu-open
-.wp-block-navigation__responsive-container-close::after {
-    width: 7px;
-    height: 7px;
-    opacity: 1;
-    transition: all 0.6s ease 1.0s;
+.wp-block-navigation-overlay-close::after {
+    transform: rotate(-45deg);
 }
 
 /* ── Nav Links ────────────────────────────────────────── */
@@ -208,7 +189,11 @@ body .wp-site-blocks > main.wp-block-group {
         display: none;
     }
     .footer-nav .wp-block-navigation__responsive-container {
+        visibility: visible;
+        pointer-events: auto;
+        opacity: 1;
         transform: none;
+        transition: none;
         width: auto;
         height: auto;
         position: relative;

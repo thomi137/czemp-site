@@ -1,88 +1,31 @@
 /**
- * Custom slide-in/out animation for the WP Navigation overlay.
+ * WP 7.0 uses the Interactivity API (data-wp-on--click directives) to manage
+ * the navigation overlay — traditional event-listener interception doesn't
+ * work. We let WP own the is-menu-open class and state; CSS handles the
+ * slide animation via visibility + transform transitions.
  *
- * Uses capture-phase listeners on WP's own open/close buttons so our code
- * fires BEFORE WordPress's handler. We manage `is-menu-open` ourselves;
- * the MutationObserver catches any state WP sneaks through anyway.
+ * This script only adds conveniences WP doesn't provide out of the box.
  */
 (function () {
   function init() {
-    const nav     = document.querySelector('.footer-nav .wp-block-navigation');
-    if (!nav) return;
-
-    const overlay  = nav.querySelector('.wp-block-navigation__responsive-container');
-    const openBtn  = nav.querySelector('.wp-block-navigation__responsive-container-open');
-    const closeBtn = nav.querySelector('.wp-block-navigation__responsive-container-close');
-
+    const overlay = document.querySelector(
+      '.footer-nav .wp-block-navigation__responsive-container'
+    );
     if (!overlay) return;
 
-    // Ensure overlay starts hidden without any inline display from WP
-    overlay.style.display = 'none';
-    overlay.classList.remove('is-menu-open');
-
-    function openMenu() {
-      overlay.style.display = 'flex'; // must be flex before transition starts
-      void overlay.offsetHeight;      // force reflow so transition fires
-      overlay.classList.add('is-menu-open');
-    }
-
-    function closeMenu() {
-      overlay.classList.remove('is-menu-open');
-
-      function onEnd(e) {
-        if (e.propertyName === 'transform') {
-          overlay.style.display = 'none';
-          overlay.removeEventListener('transitionend', onEnd);
-        }
-      }
-      overlay.addEventListener('transitionend', onEnd);
-
-      // Fallback: hide after transition duration even if transitionend doesn't fire
-      setTimeout(() => {
-        if (!overlay.classList.contains('is-menu-open')) {
-          overlay.style.display = 'none';
-        }
-      }, 600);
-    }
-
-    // Capture phase: intercept clicks before WP's own listeners
-    if (openBtn) {
-      openBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        openMenu();
-      }, true);
-    }
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        closeMenu();
-      }, true);
-    }
-
-    // Safety net: if WP manages to set display:none while open, animate out instead
-    const obs = new MutationObserver(function (mutations) {
-      for (const m of mutations) {
-        if (m.type === 'attributes' && m.attributeName === 'style') {
-          if (overlay.style.display === 'none' && overlay.classList.contains('is-menu-open')) {
-            overlay.style.display = 'flex';
-            void overlay.offsetHeight;
-            closeMenu();
-          }
-        }
-      }
-    });
-    obs.observe(overlay, { attributes: true, attributeFilter: ['style'] });
-
-    // Close on backdrop click (area outside the dialog content)
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) closeMenu();
-    });
-
-    // Close on Escape key
+    // Escape key: trigger WP's own close button so Interactivity API state stays in sync
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('is-menu-open')) {
-        closeMenu();
+        const closeBtn = overlay.querySelector('.wp-block-navigation-overlay-close');
+        if (closeBtn) closeBtn.click();
+      }
+    });
+
+    // Backdrop click (tap outside the inner dialog panel)
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) {
+        const closeBtn = overlay.querySelector('.wp-block-navigation-overlay-close');
+        if (closeBtn) closeBtn.click();
       }
     });
   }
