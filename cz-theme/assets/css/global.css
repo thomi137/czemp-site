@@ -1,3 +1,11 @@
+/*
+ * @package: czemp
+ * @version: 1.0
+ * @since: 1.0
+*/
+
+/* ── Layout ───────────────────────────────────────────── */
+
 .wp-site-blocks {
     min-height: 100vh;
     display: flex;
@@ -21,4 +29,217 @@ body .wp-site-blocks > main.wp-block-group {
 .wp-site-blocks > .wp-block-group:first-child {
     padding-top: 24px;
     padding-bottom: 0;
+}
+
+/* ── Hamburger Button ─────────────────────────────────── */
+
+.wp-block-navigation__responsive-container-open {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.wp-block-navigation__responsive-container-open svg {
+    display: none;
+}
+
+.wp-block-navigation__responsive-container-open::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 20px;
+    width: 28px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 -9px 0 #fff, 0 9px 0 #fff;
+}
+
+
+/* ── Slide-in Overlay ─────────────────────────────────── */
+
+.footer-nav .wp-block-navigation__responsive-container {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 500ms cubic-bezier(.2,.9,.2,1), opacity 500ms ease;
+  will-change: transform, opacity;
+  /* display is controlled entirely by JS (flex when open, none when closed) */
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80vw;
+  height: 100vh;
+  background: #000;
+  flex-direction: column;
+  padding: 0;
+  z-index: 9999;
+}
+
+/* Open state: everything (container + children) slides in together */
+.footer-nav .wp-block-navigation__responsive-container.is-menu-open {
+  transform: translateX(0);
+  opacity: 1;
+  overflow: hidden;
+}
+
+/* Optional: children can still fade or stagger but will ride the parent's translate */
+.footer-nav .wp-block-navigation__responsive-container .wp-block-navigation__container .wp-block-navigation-item__content {
+  transition: opacity 350ms ease;
+}
+
+/* ── Dialog ───────────────────────────────────────────── */
+
+.wp-block-navigation__responsive-close {
+    width: 100%;
+    height: 100%;
+}
+
+.wp-block-navigation__responsive-dialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 48px;
+}
+
+.wp-block-navigation__responsive-container-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 32px;
+    order: 2;
+}
+
+/* ── Schliessen Button als Auge ───────────────────────── */
+
+.wp-block-navigation__responsive-container-close {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.wp-block-navigation__responsive-container-close svg {
+    display: none;
+}
+
+.wp-block-navigation__responsive-container-close::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 -9px 0 #fff, 0 9px 0 #fff;
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wp-block-navigation__responsive-container-close::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: #fff;
+    border-radius: 50%;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.6s ease 0.9s;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__responsive-container-close::before {
+    height: 18px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: none;
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wp-block-navigation__responsive-container.is-menu-open
+.wp-block-navigation__responsive-container-close::after {
+    width: 7px;
+    height: 7px;
+    opacity: 1;
+    transition: all 0.6s ease 1.0s;
+}
+
+/* ── Nav Links ────────────────────────────────────────── */
+
+.wp-block-navigation__responsive-container .wp-block-navigation__container {
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+}
+
+.wp-block-navigation__responsive-container .wp-block-navigation-item__content {
+    font-size: 24px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 16px 0;
+    display: block;
+    text-align: left !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* ── Desktop ──────────────────────────────────────────── */
+
+@media (min-width: 600px) {
+    .wp-block-navigation__responsive-container-open {
+        display: none;
+    }
+    .footer-nav .wp-block-navigation__responsive-container {
+        transform: none;
+        width: auto;
+        height: auto;
+        position: relative;
+        background: transparent;
+        padding: 0;
+    }
+    .wp-block-navigation__responsive-container .wp-block-navigation__container {
+        flex-direction: row;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .wp-block-navigation__responsive-container-content {
+        padding-top: 0px;
+        order: unset;
+    }
+    .wp-block-navigation__responsive-dialog {
+        display: block;
+        height: auto;
+        padding: 0;
+        width: auto;
+    }
+    .wp-block-navigation__responsive-close {
+        width: auto;
+        height: auto;
+    }
+    .wp-block-navigation__responsive-container-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        order: unset;
+    }
 }
