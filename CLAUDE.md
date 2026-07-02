@@ -23,7 +23,7 @@ docker-compose down
 - WordPress: http://localhost:80
 - phpMyAdmin: http://localhost:8081
 
-The `cz-theme/`, `plugins/`, and `wp-content/` directories are volume-mounted into the container — file changes are live without rebuilding the container, but you must refresh the browser manually.
+The `cz-theme/`, `plugins/`, and `wp-content/` directories are volume-mounted into the container — file changes are live without rebuilding the container, but you must refresh the browser manually. plugins/ does not contain any specific code now, as plugins are not yet planned. wp-Content/ is here so the coede can be directly copied to the docker container
 
 ## Theme Build (Custom Blocks)
 
@@ -70,7 +70,7 @@ Both blocks are registered server-side via `register_block_type()` in `functions
 
 - **`czemp-theme/gallery-item`** (`blocks/gallery-item/`) — Image card with configurable hover overlay, focal point, link, title, description, opacity. Has a `save.js` (static save).
 - **`czemp-theme/artwork-list-item`** (`blocks/artwork-list-item/`) — Loop-aware post list item using `usesContext: [postId, postType]`. Server-side rendered via `render.php`.
-
+- ** czemp-theme/sticky-nav ** [blocks/sticky-nav] - navigation block that circumpasses WP quirks when animating a slide in-out menu on smaaller screens. It is a container for a `core/navigation` menu.
 ### Plugin (`plugins/toms-image-slider/`)
 
 A custom Gutenberg image slider block (pre-built — no source compilation in this repo).
