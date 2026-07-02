@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/sticky-nav",
+  "title": "Sticky Navigation",
+  "category": "layout",
+  "icon": "menu",
+  "description": "Sticky footer nav bar. On mobile slides in from the left.",
+  "supports": {
+    "html": false,
+    "color": { "background": true, "text": true }
+  },
+  "allowedBlocks": ["core/navigation"],
+  "render": "file:./render.php",
+  "editorScript": "file:../../build/index.js",
+  "viewScriptModule": "file:./view.js",
+  "style": "file:./style.css"
+}

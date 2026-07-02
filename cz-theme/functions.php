@@ -32,12 +32,9 @@ add_action('after_setup_theme', function () {
 
 // Register custom blocks
 add_action('init', function () {
-    register_block_type(
-        get_stylesheet_directory() . '/blocks/gallery-item'
-    );
-    register_block_type(
-        get_stylesheet_directory() . '/blocks/artwork-list-item'
-    );
+    register_block_type(get_stylesheet_directory() . '/blocks/gallery-item');
+    register_block_type(get_stylesheet_directory() . '/blocks/artwork-list-item');
+    register_block_type(get_stylesheet_directory() . '/blocks/sticky-nav');
 });
 
 //  Register custom post type: Artwork
@@ -85,7 +82,8 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style(
         'czemp-global',
         get_stylesheet_directory_uri() . '/assets/css/global.css',
-        [],
-        wp_get_theme()->get('Version')
+        ['wp-block-library'],
+        filemtime(get_stylesheet_directory() . '/assets/css/global.css')
     );
+
 });
