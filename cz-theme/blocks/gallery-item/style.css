@@ -3,6 +3,13 @@
     overflow: hidden;
     width: 100%;
     aspect-ratio: 1 / 1;
+    border-radius: 12px;
+}
+
+a:has(> .gallery-item) {
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .gallery-item img {

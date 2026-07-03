@@ -6,6 +6,9 @@ const linksEl  = panel?.querySelector('.cz-sticky-nav__links');
 const desktopNav = document.querySelector('.cz-sticky-nav__inner .wp-block-navigation__container');
 if (desktopNav && linksEl) {
     linksEl.innerHTML = desktopNav.innerHTML;
+    linksEl.querySelectorAll('li, .wp-block-navigation-item').forEach((item, i) => {
+        item.style.transitionDelay = `${200 + i * 80}ms`;
+    });
 }
 
 const open = () => {
