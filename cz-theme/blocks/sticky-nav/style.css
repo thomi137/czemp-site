@@ -107,7 +107,6 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    transform: translateX(100%);
 }
 
 .cz-sticky-nav__panel.is-open .cz-sticky-nav__drawer {
