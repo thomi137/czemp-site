@@ -37,6 +37,23 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/sticky-nav');
 });
 
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_script(
+        'cz-sticky-nav-view',
+        get_stylesheet_directory_uri() . '/blocks/sticky-nav/view.js',
+        [],
+        filemtime(get_stylesheet_directory() . '/blocks/sticky-nav/view.js'),
+        true
+    );
+});
+
+add_filter('script_loader_tag', function ($tag, $handle) {
+    if ($handle === 'cz-sticky-nav-view') {
+        return str_replace('<script ', '<script type="module" ', $tag);
+    }
+    return $tag;
+}, 10, 2);
+
 //  Register custom post type: Artwork
 add_action('init', function () {
     register_post_type('artwork', [

@@ -1,7 +1,7 @@
-const panel    = document.getElementById('cz-sticky-nav-panel');
-const openBtn  = document.querySelector('.cz-sticky-nav__open');
-const closeBtn = panel?.querySelector('.cz-sticky-nav__close');
-const linksEl  = panel?.querySelector('.cz-sticky-nav__links');
+const panel   = document.getElementById('cz-sticky-nav-panel');
+const openBtn = document.querySelector('.cz-sticky-nav__open');
+const drawer  = panel?.querySelector('.cz-sticky-nav__drawer');
+const linksEl = panel?.querySelector('.cz-sticky-nav__links');
 
 const desktopNav = document.querySelector('.cz-sticky-nav__inner .wp-block-navigation__container');
 if (desktopNav && linksEl) {
@@ -19,17 +19,17 @@ const open = () => {
 };
 
 const close = () => {
+    if (!panel.classList.contains('is-open')) return;
     panel.classList.replace('is-open', 'is-closing');
     openBtn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
-    panel.querySelector('.cz-sticky-nav__drawer').addEventListener(
-        'animationend',
-        () => panel.classList.remove('is-closing'),
-        { once: true }
-    );
+    drawer.addEventListener('animationend', () => {
+        panel.classList.remove('is-closing');
+    }, { once: true });
 };
 
-openBtn?.addEventListener('click', open);
-closeBtn?.addEventListener('click', close);
-panel?.addEventListener('click', e => { if (e.target === panel) close(); });
+openBtn?.addEventListener('click', () => {
+    panel.classList.contains('is-open') ? close() : open();
+});
+
 document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });

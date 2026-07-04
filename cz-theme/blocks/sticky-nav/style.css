@@ -3,21 +3,22 @@
 .cz-sticky-nav {
     position: sticky;
     bottom: 0;
-    z-index: 100;
+    z-index: 30;
     background: #000;
     margin-block-start: 0 !important;
     margin-top: 0 !important;
 }
 
 .cz-sticky-nav__bar {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px 16px;
-    position: relative;
 }
 
-/* ── Hamburger (mobile only) ────────────────────────────── */
+/* ── Hamburger ──────────────────────────────────────────── */
 
 .cz-sticky-nav__open {
     display: none;
@@ -54,7 +55,7 @@
     transform: rotate(-45deg) translateY(1px);
 }
 
-/* ── Desktop nav links ──────────────────────────────────── */
+/* ── Desktop nav ────────────────────────────────────────── */
 
 .cz-sticky-nav__inner {
     display: flex;
@@ -80,21 +81,8 @@
     from { transform: translateX(0); }
     to   { transform: translateX(100%); }
 }
-@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
 
-/* ── Backdrop ───────────────────────────────────────────── */
-
-.cz-sticky-nav__backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, .5);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 999;
-}
-
-/* ── Slide Panel ────────────────────────────────────────── */
+/* ── Panel (wrapper, no visual) ─────────────────────────── */
 
 .cz-sticky-nav__panel {
     visibility: hidden;
@@ -105,6 +93,8 @@
     visibility: visible;
 }
 
+/* ── Drawer ─────────────────────────────────────────────── */
+
 .cz-sticky-nav__drawer {
     position: fixed;
     top: 0;
@@ -112,7 +102,7 @@
     width: min(360px, 85vw);
     height: 100vh;
     background: #000;
-    z-index: 1000;
+    z-index: 1;
     padding: 48px 40px;
     box-sizing: border-box;
     display: flex;
@@ -123,47 +113,12 @@
 .cz-sticky-nav__panel.is-open .cz-sticky-nav__drawer {
     animation: drawer-in 480ms cubic-bezier(.2, .9, .2, 1) forwards;
 }
+
 .cz-sticky-nav__panel.is-closing .cz-sticky-nav__drawer {
     animation: drawer-out 480ms cubic-bezier(.2, .9, .2, 1) forwards;
 }
 
-.cz-sticky-nav__panel.is-open .cz-sticky-nav__backdrop {
-    animation: fade-in 400ms ease forwards;
-    pointer-events: auto;
-}
-.cz-sticky-nav__panel.is-closing .cz-sticky-nav__backdrop {
-    animation: fade-out 400ms ease forwards;
-}
-
-/* ── Close Button ───────────────────────────────────────── */
-
-.cz-sticky-nav__close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cz-sticky-nav__close span {
-    position: absolute;
-    width: 22px;
-    height: 2px;
-    background: #fff;
-    border-radius: 2px;
-}
-
-.cz-sticky-nav__close span:nth-child(1) { transform: rotate(45deg); }
-.cz-sticky-nav__close span:nth-child(2) { transform: rotate(-45deg); }
-
-/* ── Nav Links in Panel ─────────────────────────────────── */
+/* ── Nav Links ──────────────────────────────────────────── */
 
 .cz-sticky-nav__links {
     margin-top: 64px;
@@ -171,7 +126,6 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
 }
 
 .cz-sticky-nav__links li,
@@ -186,7 +140,6 @@
     opacity: 1;
     transform: translateX(0);
 }
-
 
 .cz-sticky-nav__links a,
 .cz-sticky-nav__links .wp-block-navigation-item__content {
@@ -205,15 +158,11 @@
     opacity: .6;
 }
 
-/* ── Mobile breakpoint ──────────────────────────────────── */
+/* ── Mobile / Desktop breakpoints ──────────────────────── */
 
 @media (max-width: 599px) {
-    .cz-sticky-nav__open {
-        display: flex;
-    }
-    .cz-sticky-nav__inner {
-        display: none;
-    }
+    .cz-sticky-nav__open  { display: flex; }
+    .cz-sticky-nav__inner { display: none; }
 }
 
 @media (min-width: 600px) {

@@ -122,6 +122,24 @@
       "fontFamily": "var(--wp--preset--font-family--prompt)"
     },
 
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--prompt)",
+          "fontWeight": "300"
+        }
+      },
+      "h1": {
+        "typography": { "fontWeight": "300" }
+      },
+      "h2": {
+        "typography": { "fontWeight": "300" }
+      },
+      "h3": {
+        "typography": { "fontWeight": "300" }
+      }
+    },
+
     "blocks": {
       "core/site-title": {
         "elements": {

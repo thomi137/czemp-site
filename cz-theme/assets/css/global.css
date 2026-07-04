@@ -42,6 +42,12 @@ body .wp-site-blocks > main.wp-block-group {
     }
 }
 
+/* ── Images ───────────────────────────────────────────── */
+
+.wp-block-image img {
+    border-radius: 12px;
+}
+
 /* ── Utilities ────────────────────────────────────────── */
 
 @media (max-width: 599px) {
@@ -144,5 +150,3 @@ body .wp-site-blocks > main.wp-block-group {
         flex-basis: 100% !important;
     }
 }
-
-
