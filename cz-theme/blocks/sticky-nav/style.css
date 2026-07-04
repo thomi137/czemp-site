@@ -71,6 +71,16 @@
     letter-spacing: 0.08em;
 }
 
+.cz-sticky-nav__inner .wp-block-navigation-item__content {
+    opacity: 0.5;
+    transition: opacity 300ms ease;
+}
+
+.cz-sticky-nav__inner .wp-block-navigation-item__content:hover,
+.cz-sticky-nav__inner .current-menu-item .wp-block-navigation-item__content {
+    opacity: 1;
+}
+
 /* ── Keyframes ──────────────────────────────────────────── */
 
 @keyframes drawer-in {
@@ -153,11 +163,15 @@
     text-decoration: none;
     padding: 20px 0;
     border-bottom: 1px solid rgba(255,255,255,.1);
+    opacity: 0.5;
+    transition: opacity 300ms ease;
 }
 
 .cz-sticky-nav__links a:hover,
-.cz-sticky-nav__links .wp-block-navigation-item__content:hover {
-    opacity: .6;
+.cz-sticky-nav__links .wp-block-navigation-item__content:hover,
+.cz-sticky-nav__links .current-menu-item a,
+.cz-sticky-nav__links .current-menu-item .wp-block-navigation-item__content {
+    opacity: 1;
 }
 
 /* ── Spinner overlay ────────────────────────────────────── */
