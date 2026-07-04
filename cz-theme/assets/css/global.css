@@ -12,18 +12,28 @@
     flex-direction: column;
 }
 
-body .wp-site-blocks > main.wp-block-group {
+body .wp-site-blocks > main.wp-block-group,
+body .wp-site-blocks > main.wp-block-cover {
     flex: 1;
     min-height: calc(100vh - 60px);
+    padding-top: 128px;
 }
 
 .wp-site-blocks > footer.wp-block-group {
     margin-block-start: 0;
 }
 
-.wp-site-blocks > .wp-block-group:first-child {
-    padding-top: 24px;
-    padding-bottom: 0;
+/* ── Header ───────────────────────────────────────────── */
+
+.cz-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: #fff;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
 }
 
 /* ── Mobile padding ───────────────────────────────────── */

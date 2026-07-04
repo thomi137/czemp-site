@@ -74,12 +74,12 @@
 /* ── Keyframes ──────────────────────────────────────────── */
 
 @keyframes drawer-in {
-    from { transform: translateX(100%); }
-    to   { transform: translateX(0); }
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
 }
 @keyframes drawer-out {
-    from { transform: translateX(0); }
-    to   { transform: translateX(100%); }
+    from { transform: translateY(0); }
+    to   { transform: translateY(100%); }
 }
 
 /* ── Panel (wrapper, no visual) ─────────────────────────── */
@@ -97,13 +97,14 @@
 
 .cz-sticky-nav__drawer {
     position: fixed;
-    top: 0;
+    bottom: 0;
+    left: 0;
     right: 0;
-    width: min(360px, 85vw);
-    height: 100vh;
+    width: 100%;
+    height: 75vh;
     background: #000;
     z-index: 1;
-    padding: 48px 40px;
+    padding: 48px 40px 100px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -120,11 +121,13 @@
 /* ── Nav Links ──────────────────────────────────────────── */
 
 .cz-sticky-nav__links {
-    margin-top: 64px;
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    flex: 1;
 }
 
 .cz-sticky-nav__links li,

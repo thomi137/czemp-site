@@ -4,7 +4,7 @@
  * Slug: czemp/header
  * Categories: header
  * Block Types: core/template-part/header
- * Description: Site header with site title, navigation and logo.
+ * Description: Site header with logo.
  *
  * @author Thomas Prosser
  * @package czemp
@@ -12,8 +12,8 @@
  */
 ?>
 
-<!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group">
+<!-- wp:group {"tagName":"header","className":"cz-header","layout":{"type":"constrained"}} -->
+<header class="wp-block-group cz-header">
 
     <!-- wp:image {"url":"\/wp-content\/themes\/cz-theme\/assets\/images\/cz_Logo_without_text.webp","alt":"Claudia Zemp","width":80,"sizeSlug":"full"} -->
     <figure class="wp-block-image size-full">
@@ -21,5 +21,5 @@
     </figure>
     <!-- /wp:image -->
 
-</div>
+</header>
 <!-- /wp:group -->
