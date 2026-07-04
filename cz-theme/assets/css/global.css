@@ -4,6 +4,12 @@
  * @since: 1.0
 */
 
+/* ── Global variables ─────────────────────────────────── */
+
+:root {
+    --cz-header-height: 160px;
+}
+
 /* ── Layout ───────────────────────────────────────────── */
 
 .wp-site-blocks {
@@ -16,7 +22,11 @@ body .wp-site-blocks > main.wp-block-group,
 body .wp-site-blocks > main.wp-block-cover {
     flex: 1;
     min-height: calc(100vh - 60px);
-    padding-top: 128px;
+}
+
+main.wp-block-group,
+main.wp-block-cover {
+    padding-top: var(--cz-header-height) !important;
 }
 
 .wp-site-blocks > footer.wp-block-group {
@@ -31,24 +41,20 @@ body .wp-site-blocks > main.wp-block-cover {
     left: 0;
     right: 0;
     z-index: 20;
-    background: #fff;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    background: #fff; 
 }
 
 /* ── Mobile padding ───────────────────────────────────── */
 
 @media (max-width: 599px) {
-    main.wp-block-group,
-    .cz-header {
+    main.wp-block-group {
         padding-left: 20px;
         padding-right: 20px;
     }
 }
 
 @media (min-width: 600px) and (max-width: 1279px) {
-    main.wp-block-group,
-    .cz-header {
+    main.wp-block-group {
         padding-left: 48px;
         padding-right: 48px;
     }

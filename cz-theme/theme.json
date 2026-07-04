@@ -119,7 +119,9 @@
   "styles": {
 
     "typography": {
-      "fontFamily": "var(--wp--preset--font-family--prompt)"
+      "fontFamily": "var(--wp--preset--font-family--prompt)",
+      "fontSize": "18px",
+      "fontWeight": "300"
     },
 
     "elements": {
