@@ -2,6 +2,7 @@ const panel   = document.getElementById('cz-sticky-nav-panel');
 const openBtn = document.querySelector('.cz-sticky-nav__open');
 const drawer  = panel?.querySelector('.cz-sticky-nav__drawer');
 const linksEl = panel?.querySelector('.cz-sticky-nav__links');
+const spinner = document.querySelector('.cz-spinner-overlay');
 
 const desktopNav = document.querySelector('.cz-sticky-nav__inner .wp-block-navigation__container');
 if (desktopNav && linksEl) {
@@ -42,6 +43,7 @@ linksEl?.addEventListener('click', e => {
     document.body.style.overflow = '';
     drawer.addEventListener('animationend', () => {
         panel.classList.remove('is-closing');
+        spinner?.classList.add('is-visible');
         window.location.href = href;
     }, { once: true });
 });

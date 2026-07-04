@@ -111,11 +111,11 @@
 }
 
 .cz-sticky-nav__panel.is-open .cz-sticky-nav__drawer {
-    animation: drawer-in 480ms cubic-bezier(.2, .9, .2, 1) forwards;
+    animation: drawer-in 380ms cubic-bezier(.2, .9, .2, 1) forwards;
 }
 
 .cz-sticky-nav__panel.is-closing .cz-sticky-nav__drawer {
-    animation: drawer-out 480ms cubic-bezier(.2, .9, .2, 1) forwards;
+    animation: drawer-out 280ms cubic-bezier(.4, 0, .6, 1) forwards;
 }
 
 /* ── Nav Links ──────────────────────────────────────────── */
@@ -158,6 +158,39 @@
 .cz-sticky-nav__links a:hover,
 .cz-sticky-nav__links .wp-block-navigation-item__content:hover {
     opacity: .6;
+}
+
+/* ── Spinner overlay ────────────────────────────────────── */
+
+.cz-spinner-overlay {
+    position: fixed;
+    inset: 0;
+    background: #151414;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+}
+
+.cz-spinner-overlay.is-visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.cz-spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgba(255,255,255,.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
 }
 
 /* ── Mobile / Desktop breakpoints ──────────────────────── */

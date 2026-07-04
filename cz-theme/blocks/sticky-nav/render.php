@@ -15,4 +15,7 @@ $wrapper = get_block_wrapper_attributes(['class' => 'cz-sticky-nav']);
             <nav class="cz-sticky-nav__links"></nav>
         </div>
     </div>
+    <div class="cz-spinner-overlay" aria-hidden="true">
+        <div class="cz-spinner"></div>
+    </div>
 </div>

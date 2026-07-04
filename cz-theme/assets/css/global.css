@@ -32,23 +32,23 @@ body .wp-site-blocks > main.wp-block-cover {
     right: 0;
     z-index: 20;
     background: #fff;
-    padding-top: 24px !important;
-    padding-bottom: 24px !important;
+    padding-top: 24px;
+    padding-bottom: 24px;
 }
 
 /* ── Mobile padding ───────────────────────────────────── */
 
 @media (max-width: 599px) {
     main.wp-block-group {
-        padding-left: 20px !important;
-        padding-right: 20px !important;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 }
 
-@media (min-width: 600px) and (max-width: 899px) {
+@media (min-width: 600px) and (max-width: 1279px) {
     main.wp-block-group {
-        padding-left: 32px !important;
-        padding-right: 32px !important;
+        padding-left: 48px;
+        padding-right: 48px;
     }
 }
 
@@ -61,7 +61,7 @@ body .wp-site-blocks > main.wp-block-cover {
 /* ── Utilities ────────────────────────────────────────── */
 
 @media (max-width: 599px) {
-    .cz-hide-mobile { display: none !important; }
+    .cz-hide-mobile { display: none; }
 }
 
 /* ── Gallery page grid ────────────────────────────────── */
@@ -87,7 +87,7 @@ body .wp-site-blocks > main.wp-block-cover {
 /* ── Artwork archive grid ─────────────────────────────── */
 
 .cz-artwork-grid .wp-block-post-template {
-    display: grid !important;
+    display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
 }
@@ -157,6 +157,6 @@ body .wp-site-blocks > main.wp-block-cover {
         flex-direction: column;
     }
     .single-artwork .wp-block-column {
-        flex-basis: 100% !important;
+        flex-basis: 100%;
     }
 }
