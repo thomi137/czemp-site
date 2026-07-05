@@ -4,6 +4,7 @@
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  * @author Thomas Prosser
  * @package czemp
+ * @version 1.0
  * @since 1.0
  */
 
