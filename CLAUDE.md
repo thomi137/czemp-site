@@ -71,9 +71,6 @@ Both blocks are registered server-side via `register_block_type()` in `functions
 - **`czemp-theme/gallery-item`** (`blocks/gallery-item/`) — Image card with configurable hover overlay, focal point, link, title, description, opacity. Has a `save.js` (static save).
 - **`czemp-theme/artwork-list-item`** (`blocks/artwork-list-item/`) — Loop-aware post list item using `usesContext: [postId, postType]`. Server-side rendered via `render.php`.
 - **`czemp-theme/sticky-nav`** (`blocks/sticky-nav/`) - navigation block that circumpasses WP quirks when animating a slide in-out menu on smaaller screens. It is a container for a `core/navigation` menu.
-### Plugin (`plugins/toms-image-slider/`)
-
-A custom Gutenberg image slider block (pre-built — no source compilation in this repo).
 
 ### FSE Template Hierarchy
 
