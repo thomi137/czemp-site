@@ -195,5 +195,28 @@ add_action('wp_enqueue_scripts', function () {
         ['wp-block-library'],
         filemtime(get_stylesheet_directory() . '/assets/css/global.css')
     );
-
 });
+
+// Mark "Galerie" nav item as active on artwork and collection pages
+// Mark "Galerie" nav item as active on artwork and collection pages
+add_filter('render_block', function (string $block_content, array $block) {
+    if ($block['blockName'] !== 'core/navigation-link') {
+        return $block_content;
+    }
+    if (!is_singular('artwork') && !is_post_type_archive('artwork') && !is_tax('collection')) {
+        return $block_content;
+    }
+    $url          = trailingslashit($block['attrs']['url'] ?? '');
+    $gallery_page = get_page_by_path('gallery');
+    if (!$gallery_page || empty($url)) {
+        return $block_content;
+    }
+    if (trailingslashit(get_permalink($gallery_page->ID)) === $url) {
+        $block_content = str_replace(
+            'class="wp-block-navigation-item ',
+            'class="wp-block-navigation-item current-menu-item ',
+            $block_content
+        );
+    }
+    return $block_content;
+}, 10, 2);

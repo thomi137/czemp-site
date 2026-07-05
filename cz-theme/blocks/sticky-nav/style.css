@@ -7,6 +7,8 @@
     background: #000;
     margin-block-start: 0 !important;
     margin-top: 0 !important;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
 }
 
 .cz-sticky-nav__bar {
@@ -15,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
+    padding: 24px 0;
 }
 
 /* ── Hamburger ──────────────────────────────────────────── */
@@ -69,6 +71,8 @@
     font-size: 18px !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .cz-sticky-nav__inner .wp-block-navigation-item__content {
