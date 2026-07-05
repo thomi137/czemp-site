@@ -83,10 +83,11 @@ add_action('init', function () {
             'add_new_item'  => 'Neue Kollektion',
             'edit_item'     => 'Kollektion bearbeiten',
         ],
-        'public'       => true,
-        'hierarchical' => true,
-        'show_in_rest' => true,
-        'rewrite'      => ['slug' => 'kollektion'],
+        'public'            => true,
+        'hierarchical'      => true,
+        'show_in_rest'      => true,
+        'show_admin_column' => true,
+        'rewrite'           => ['slug' => 'kollektion'],
         'capabilities' => [
             'manage_terms' => 'edit_posts',
             'edit_terms'   => 'edit_posts',
@@ -196,6 +197,23 @@ add_action('wp_enqueue_scripts', function () {
         ['wp-block-library'],
         filemtime(get_stylesheet_directory() . '/assets/css/global.css')
     );
+});
+
+// Kollektion-Dropdown-Filter in der Werke-Liste
+add_action('restrict_manage_posts', function ($post_type) {
+    if ($post_type !== 'artwork') return;
+    $terms = get_terms(['taxonomy' => 'collection', 'hide_empty' => false]);
+    if (empty($terms) || is_wp_error($terms)) return;
+    $selected = $_GET['collection'] ?? '';
+    echo '<select name="collection"><option value="">Alle Kollektionen</option>';
+    foreach ($terms as $term) {
+        printf('<option value="%s"%s>%s</option>',
+            esc_attr($term->slug),
+            selected($selected, $term->slug, false),
+            esc_html($term->name)
+        );
+    }
+    echo '</select>';
 });
 
 // Mark "Galerie" nav item as active on artwork and collection pages

@@ -55,18 +55,18 @@ html {
 }
 
 .cz-header .wp-block-site-title a {
-    font-size: 11pt;
+    font-size: 12pt;
 }
 
 @media (min-width: 600px) {
     .cz-header .wp-block-site-title a {
-        font-size: 11pt;
+        font-size: 14pt;
     }
 }
 
 @media (min-width: 1280px) {
     .cz-header .wp-block-site-title a {
-        font-size: 16pt;
+        font-size: 18pt;
     }
 }
 
