@@ -198,7 +198,6 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 // Mark "Galerie" nav item as active on artwork and collection pages
-// Mark "Galerie" nav item as active on artwork and collection pages
 add_filter('render_block', function (string $block_content, array $block) {
     if ($block['blockName'] !== 'core/navigation-link') {
         return $block_content;
