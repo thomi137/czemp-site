@@ -18,3 +18,8 @@ node_modules
 
 /cz-theme/build/
 /wp-content/
+
+# Migration
+scripts/migrate/.env
+scripts/migrate/images/
+artworks.json
