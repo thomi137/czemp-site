@@ -40,6 +40,13 @@ add_action('init', function () {
 
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script(
+        'cz-gallery-item-view',
+        get_stylesheet_directory_uri() . '/blocks/gallery-item/view.js',
+        [],
+        filemtime(get_stylesheet_directory() . '/blocks/gallery-item/view.js'),
+        true
+    );
+    wp_enqueue_script(
         'cz-sticky-nav-view',
         get_stylesheet_directory_uri() . '/blocks/sticky-nav/view.js',
         [],

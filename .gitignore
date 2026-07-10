@@ -21,5 +21,4 @@ node_modules
 
 # Migration
 scripts/migrate/.env
-scripts/migrate/images/
 artworks.json
