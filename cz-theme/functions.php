@@ -206,6 +206,27 @@ add_action('wp_enqueue_scripts', function () {
     );
 });
 
+// Vorschaubild-Spalte in der Werke-Liste
+add_filter('manage_artwork_posts_columns', function ($columns) {
+    $new = ['cb' => $columns['cb'], 'artwork_thumb' => ''];
+    unset($columns['cb']);
+    return array_merge($new, $columns);
+});
+
+add_action('manage_artwork_posts_custom_column', function ($column, $post_id) {
+    if ($column !== 'artwork_thumb') return;
+    $thumb = get_the_post_thumbnail($post_id, [60, 60]);
+    if ($thumb) {
+        echo '<div style="width:60px;height:60px;overflow:hidden;border-radius:4px">' . $thumb . '</div>';
+    }
+}, 10, 2);
+
+add_action('admin_head', function () {
+    $screen = get_current_screen();
+    if (!$screen || $screen->post_type !== 'artwork') return;
+    echo '<style>.column-artwork_thumb { width: 70px; }</style>';
+});
+
 // Kollektion-Dropdown-Filter in der Werke-Liste
 add_action('restrict_manage_posts', function ($post_type) {
     if ($post_type !== 'artwork') return;
