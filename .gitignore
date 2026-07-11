@@ -22,3 +22,7 @@ node_modules
 # Migration
 scripts/migrate/.env
 artworks.json
+
+# Claude
+CLAUDE.md
+.claude
