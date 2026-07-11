@@ -191,6 +191,14 @@ add_action('init', function () {
     ]);
 });
 
+// WebP-Ausgabe für alle neu generierten Bildgrössen
+add_filter('image_editor_output_format', function ($formats) {
+    $formats['image/jpeg'] = 'image/webp';
+    $formats['image/png']  = 'image/webp';
+    $formats['image/gif']  = 'image/webp';
+    return $formats;
+});
+
 // Flush rewrite rules once after activation
 add_action('after_switch_theme', function () {
     // Post type & taxonomy are registered via 'init'; flush after.
