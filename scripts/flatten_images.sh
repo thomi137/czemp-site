@@ -4,7 +4,7 @@ DST="/Users/tprosser/Projects/czemp-site/scripts/migrate/images/images_flat"
 
 mkdir -p "$DST"
 
-find "$SRC" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.heic" \) | while read -r file; do
+find "$SRC" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" -o -iname "*.heic" \) | grep -Ev -- '-[0-9]+x[0-9]+\.' | while read -r file; do
     base=$(basename "$file")
     dest="$DST/$base"
     if [ -e "$dest" ]; then

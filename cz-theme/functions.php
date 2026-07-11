@@ -180,6 +180,69 @@ add_action('rest_api_init', function () {
             return ['id' => $id, 'url' => wp_get_attachment_url($id)];
         },
     ]);
+
+    // Gallery-Item-Block zur Galerie-Seite hinzufügen
+    register_rest_route('czemp/v1', '/gallery-item', [
+        'methods'             => 'POST',
+        'permission_callback' => $token_check,
+        'callback'            => function (WP_REST_Request $req) {
+            $page = get_page_by_path('gallery');
+            if (!$page) {
+                return new WP_Error('no_page', 'Galerie-Seite nicht gefunden.', ['status' => 404]);
+            }
+
+            $image_url   = esc_url_raw($req->get_param('image_url'));
+            $image_alt   = sanitize_text_field($req->get_param('image_alt') ?: '');
+            $link_url    = esc_url_raw($req->get_param('link_url'));
+            $title       = sanitize_text_field($req->get_param('title'));
+            $description = sanitize_text_field($req->get_param('description') ?: '');
+            $overlay_color = sanitize_hex_color($req->get_param('overlay_color') ?: '#000000');
+            $focal_x     = floatval($req->get_param('focal_x') ?? 0.5);
+            $focal_y     = floatval($req->get_param('focal_y') ?? 0.5);
+
+            $desc_block = $description
+                ? "\n<!-- wp:paragraph -->\n<p class=\"wp-block-paragraph\">" . esc_html($description) . "</p>\n<!-- /wp:paragraph -->"
+                : '';
+
+            $new_block = sprintf(
+                "\n<!-- wp:czemp-theme/gallery-item {\"imageUrl\":\"%s\",\"imageAlt\":\"%s\",\"linkUrl\":\"%s\",\"overlayColor\":\"%s\",\"focalPoint\":{\"x\":%s,\"y\":%s}} -->\n" .
+                "<a href=\"%s\"><div class=\"wp-block-czemp-theme-gallery-item gallery-item\">" .
+                "<img src=\"%s\" alt=\"%s\" style=\"object-fit:cover;object-position:%s%% %s%%\"/>" .
+                "<div class=\"overlay\" style=\"background-color:%s\">\n" .
+                "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">%s</h2>\n<!-- /wp:heading -->%s\n" .
+                "</div></div></a>\n<!-- /wp:czemp-theme/gallery-item -->",
+                $image_url, $image_alt, $link_url, $overlay_color,
+                $focal_x, $focal_y,
+                $link_url, $image_url, $image_alt,
+                round($focal_x * 100), round($focal_y * 100),
+                $overlay_color,
+                $title, $desc_block
+            );
+
+            $content = $page->post_content;
+
+            // In bestehendes Grid einfügen, sonst neues erstellen
+            if (strpos($content, 'is-layout-grid') !== false) {
+                $content = preg_replace(
+                    '/(<\/div>\s*<!-- \/wp:group -->)(?!.*<\/div>\s*<!-- \/wp:group -->)/s',
+                    $new_block . "\n$1",
+                    $content,
+                    1
+                );
+            } else {
+                $content .= "\n<!-- wp:group {\"layout\":{\"type\":\"grid\",\"columnCount\":3}} -->\n" .
+                            "<div class=\"wp-block-group is-layout-grid\">" .
+                            $new_block .
+                            "\n</div>\n<!-- /wp:group -->";
+            }
+
+            $result = wp_update_post(['ID' => $page->ID, 'post_content' => $content], true);
+            if (is_wp_error($result)) {
+                return new WP_Error('update_error', $result->get_error_message(), ['status' => 500]);
+            }
+            return ['success' => true, 'page_id' => $page->ID];
+        },
+    ]);
 });
 
 // Register price meta for artwork
