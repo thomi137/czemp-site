@@ -37,6 +37,7 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-list-item');
     register_block_type(get_stylesheet_directory() . '/blocks/sticky-nav');
     register_block_type(get_stylesheet_directory() . '/blocks/collection-subcategories');
+    register_block_type(get_stylesheet_directory() . '/blocks/breadcrumbs');
 });
 
 add_action('wp_enqueue_scripts', function () {
@@ -52,6 +53,13 @@ add_action('wp_enqueue_scripts', function () {
         get_stylesheet_directory_uri() . '/blocks/sticky-nav/view.js',
         [],
         filemtime(get_stylesheet_directory() . '/blocks/sticky-nav/view.js'),
+        true
+    );
+    wp_enqueue_script(
+        'cz-header-height',
+        get_stylesheet_directory_uri() . '/assets/js/header-height.js',
+        [],
+        filemtime(get_stylesheet_directory() . '/assets/js/header-height.js'),
         true
     );
 });
@@ -118,13 +126,18 @@ add_action('rest_api_init', function () {
         'methods'             => 'POST',
         'permission_callback' => $token_check,
         'callback'            => function (WP_REST_Request $req) {
-            $name = sanitize_text_field($req->get_param('name'));
-            $slug = sanitize_title($req->get_param('slug') ?: $name);
-            $term = wp_insert_term($name, 'collection', ['slug' => $slug]);
+            $name   = sanitize_text_field($req->get_param('name'));
+            $slug   = sanitize_title($req->get_param('slug') ?: $name);
+            $parent = intval($req->get_param('parent'));
+            $args   = ['slug' => $slug];
+            if ($parent) {
+                $args['parent'] = $parent;
+            }
+            $term = wp_insert_term($name, 'collection', $args);
             if (is_wp_error($term)) {
                 return new WP_Error('term_error', $term->get_error_message(), ['status' => 400]);
             }
-            return ['id' => $term['term_id'], 'name' => $name, 'slug' => $slug];
+            return ['id' => $term['term_id'], 'name' => $name, 'slug' => $slug, 'parent' => $parent];
         },
     ]);
 
@@ -404,4 +417,28 @@ add_filter('render_block', function (string $block_content, array $block) {
         );
     }
     return $block_content;
+}, 10, 2);
+
+// Cap query-pagination-numbers to at most 3 page-number links, centered on the current page
+add_filter('render_block', function (string $block_content, array $block) {
+    if ($block['blockName'] !== 'core/query-pagination-numbers') {
+        return $block_content;
+    }
+    if (!preg_match('/class="[^"]*page-numbers current[^"]*"[^>]*>(\d+)</', $block_content, $m)) {
+        return $block_content;
+    }
+    $current    = (int) $m[1];
+    $max_shown  = 3;
+    $half       = (int) floor(($max_shown - 1) / 2);
+    $min        = max(1, $current - $half);
+    $max        = $min + $max_shown - 1;
+
+    return preg_replace_callback(
+        '/<(a|span)\b[^>]*class="[^"]*page-numbers[^"]*"[^>]*>(\d+)<\/\1>/',
+        function ($el) use ($min, $max) {
+            $num = (int) $el[2];
+            return ($num >= $min && $num <= $max) ? $el[0] : '';
+        },
+        $block_content
+    );
 }, 10, 2);

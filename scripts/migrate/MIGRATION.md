@@ -114,3 +114,137 @@ chronological with no gaps bridged by any of the "extra" files above.
 the 2 unillustrated artworks, and confirmation on the 6 unassigned extra
 files. Full migration run is blocked on this until resolved (or until we
 decide to run it now and backfill featured images later).
+
+### 2026-08-02 — first delivery reconciled, new extras flagged
+
+Claudia's first-delivery batch arrived and was dropped into
+`migrate/images_first_del/` (252 files) for comparison against
+`images.csv` (254 unique `name` stems) and the working `migrate/images/`
+(243 files at the time).
+
+Compared `images.csv` name stems against `images/`: 19 referenced files
+were missing. All 19 were found in `images_first_del/` and copied over —
+nothing ended up missing from both. Recovered: `Bildschirmfoto 2026-07-29
+um 10.12.38.png`, `IMG_1665`, `IMG_3352`, `IMG_3569`, `IMG_4796`,
+`IMG_5593`, `IMG_5598`, `IMG_6847`, `IMG_6893`, `IMG_7829`, `IMG_7830`,
+`IMG_7985`, `IMG_7987`, `IMG_7989`, `IMG_8003`, `IMG_8008`, `IMG_8042`,
+`IMG_8112`, `Mein Film 1.mov`.
+
+`images/` now has 262 files against 254 CSV stems (`images_first_del/`
+was a temporary staging folder and has since been deleted). Re-running
+the same comparison the other way — files in `images/` not referenced by
+any CSV row — surfaces a new set of 8 unreferenced extras (supersedes the
+2026-08-01 list above, which is resolved):
+
+- `IMG_1303.jpeg`
+- `IMG_2121.jpeg`
+- `IMG_3126.jpeg`
+- `IMG_3174.JPG`
+- `IMG_3612.jpeg`
+- `IMG_4449.jpeg`
+- `IMG_4456.MOV`
+- `IMG_8132.jpeg`
+
+Sent to Claudia for confirmation on where these belong (or whether they
+can be discarded).
+
+**Open / waiting on:** Claudia's reply on the 8 unreferenced extras above.
+
+### 2026-08-02 — migrate.sh rewritten, one data gap found
+
+`migrate.sh` had a real parsing bug: it read the CSV with `IFS=';' read`
+(7 fields) while `images.csv` is comma-delimited with quoted fields and 8
+columns (`subcollection` was added at some point without updating the
+script) — every field after `collection` was silently shifting by one.
+Also hit a second bug while testing: `slugify()`'s `iconv -f utf-8 -t
+ascii//TRANSLIT` is unreliable on macOS' BSD `iconv` for German umlauts —
+it mangles the character *and* trips the `|| echo "$1"` fallback, which
+then leaks the untransliterated original name into the "slug". Both
+fixed: CSV is now parsed via a Python preprocessing step (proper
+quoting/embedded-newline handling), and `slugify()` does manual ä/ö/ü/ß
+transliteration instead of relying on iconv.
+
+`migrate.sh` now also creates `subcollection` as a child term under
+`collection` (both are just `collection` taxonomy terms, subcollection
+has the parent's term id) and creates one gallery-item per term that
+actually has artworks — parent collections *and* subcollections both get
+their own card, image = first successfully-matched image for that exact
+term.
+
+Dry-run (fake IDs, no network) against the current `images.csv` +
+`images/`: 297 real rows (45 fully-blank rows correctly skipped), 22
+distinct collection/subcollection terms, only 1 row without a resolvable
+image.
+
+**New data gap found:** `BLITZGEDANKEN` has two legitimate rows (once
+under collection *Strukturiert*, once under *ART SALE COLLECTION* — same
+artwork, two collection memberships, matches how this CSV already models
+multi-collection pieces) plus two bare rows (lines 35 and 328, exact
+duplicates of each other) with only `title` and `name` (`IMG_6847.HEIC`)
+filled in — `collection` is empty. As-is these two rows will fail during
+migration (`get_or_create_collection("")` errors on an empty term name)
+rather than crash the run, but the row is effectively a lost row unless
+resolved. Looks like an incomplete CSV entry (a second photo added
+without a collection) rather than intentional — flagged for Claudia/
+Thomas to fill in or delete before the real migration run.
+
+## Prod cut-over runbook
+
+**Before the maintenance window** (no prod impact yet):
+
+1. Resolve the `BLITZGEDANKEN` gap above (fill in a `collection` for the
+   two bare rows, or delete them from `images.csv`).
+2. In prod `wp-config.php`, add, right before
+   `require_once(ABSPATH."wp-settings.php");`:
+   ```php
+   define('CZ_MIGRATE_TOKEN', 'g7fKmuaNdWiY80OuAFJiIfxCYGSD4KZdZTh6k5l3');
+   ```
+   This value was generated for this migration only — treat it as already
+   "used" since it's now in this file. Delete the `define()` line (and
+   clear `MIGRATE_TOKEN` from `.env`) as soon as the migration run in
+   step 8 below is done; don't leave a standing backdoor into the write
+   endpoints.
+3. In WP-Admin on prod: Users → Profile → Application Passwords → create
+   one (e.g. name `migrate-backup`). Put the username and the generated
+   password into `scripts/migrate/.env` as `WP_USER` / `WP_APP_PASSWORD`
+   (see `.env.example`). Revoke it again after step 4.
+4. Set `WP_URL="https://claudia-zemp.ch"` in `scripts/migrate/.env`
+   (currently points at the `neu.` staging site).
+
+**Maintenance window:**
+
+1. `cd scripts/migrate && ./download.sh media` — downloads every media
+   item (any status) from prod and zips it locally
+   (`media_backup_<date>.zip`, already covered by the blanket
+   `scripts/migrate/**` gitignore rule). Sanity-check the zip's file
+   count before continuing.
+2. Export the prod database (hosting control panel / phpMyAdmin → Export
+   → SQL) and store the dump somewhere outside the repo. This is the one
+   step that makes step 4 below reversible — don't skip it.
+3. Turn on Seedprod maintenance mode.
+4. WP-Admin → Media → list view, select all → Delete Permanently
+   (repeat per page — Media list defaults to 20/page; append
+   `?mode=list&paged=1` and bump `per_page` via Screen Options to cut
+   down on repeats).
+5. Deactivate and delete all plugins except Seedprod (leave it running
+   until step 12).
+6. Deploy `cz-theme/` (built — `npm run build` first) and `wp-content/`
+   to prod, activate the theme in WP-Admin → Appearance.
+7. Confirm `CZ_MIGRATE_TOKEN` from the pre-flight step is live (re-check
+   `wp-config.php` made it to prod with the deploy).
+8. From `scripts/migrate/`: `./migrate.sh images.csv images/`. Watch the
+   per-row `✓`/`✗` output — failures are expected only for the
+   unresolved `BLITZGEDANKEN` rows if you didn't fix them in step 1.
+9. Spot-check in WP-Admin: a handful of artworks (featured image +
+   collection assigned), a subcollection term's parent is correct, and
+   the gallery-item cards on the Galerie page for both a top-level
+   collection and a subcollection.
+10. Copy the front page content from `neu.claudia-zemp.ch` (open both in
+    the block editor, copy blocks across, or export/import the
+    `front-page` template if it was customized on staging).
+11. Remove the `CZ_MIGRATE_TOKEN` define from `wp-config.php`, clear
+    `MIGRATE_TOKEN`/`WP_USER`/`WP_APP_PASSWORD` from `.env`, revoke the
+    Application Password in WP-Admin.
+12. Turn off Seedprod maintenance mode.
+13. Smoke-test the live site (homepage, gallery archive, a collection
+    and a subcollection page, a single artwork page, mobile menu).
