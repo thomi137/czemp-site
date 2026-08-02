@@ -1,0 +1,26 @@
+.cz-focal-point-picker {
+    position: relative;
+    display: inline-block;
+    max-width: 300px;
+    margin-bottom: 0.5em;
+    cursor: crosshair;
+    user-select: none;
+}
+
+.cz-focal-point-picker img {
+    display: block;
+    max-width: 300px;
+    height: auto;
+}
+
+.cz-focal-point-marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: rgba(34, 113, 177, 0.8);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}

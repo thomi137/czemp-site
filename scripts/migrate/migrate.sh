@@ -113,8 +113,15 @@ tail -n +2 "$CSV" | while IFS=';' read -r title excerpt content collection folde
 
     media_id="null"; media_url=""
     if [[ -n "$name" ]]; then
-        local_path="${IMAGES_DIR}/${name}"
-        if [[ -f "$local_path" ]]; then
+        # Claudia liefert HEIC, iCloud exportiert oft als JPEG/JPG/PNG,
+        # daher nicht auf die exakte Endung aus dem CSV verlassen,
+        # sondern per Dateiname ohne Endung suchen.
+        stem="${name%.*}"
+        local_path=""
+        for candidate in "${IMAGES_DIR}/${stem}".*; do
+            [[ -f "$candidate" ]] && { local_path="$candidate"; break; }
+        done
+        if [[ -n "$local_path" ]]; then
             result=$(upload_image "$local_path")
             media_id=$(echo "$result" | jq -r '.id')
             media_url=$(echo "$result" | jq -r '.url')

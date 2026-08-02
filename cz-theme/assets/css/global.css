@@ -139,6 +139,27 @@ html {
     }
 }
 
+/* ── Collection subcategory grid ──────────────────────── */
+
+.cz-subcollection-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 600px) {
+    .cz-subcollection-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 900px) {
+    .cz-subcollection-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
 /* ── Artwork list item (card) ─────────────────────────── */
 
 .post-list-item {

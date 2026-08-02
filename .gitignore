@@ -20,7 +20,11 @@ node_modules
 /wp-content/
 
 # Migration
-scripts/migrate/.env
+scripts/migrate/**
+!scripts/migrate/example.csv
+!scripts/migrate/MIGRATION.md
+!scripts/migrate/.env.example
+!scripts/migrate/*.sh
 artworks.json
 
 # Claude

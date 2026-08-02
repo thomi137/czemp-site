@@ -1,4 +1,9 @@
 #!/bin/sh
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "${SCRIPT_DIR}/.."
+
 REMOTE_USER="claudize"
 REMOTE_HOST="claudia-zemp.ch"
 REMOTE_PATH="/home/claudize/www/neu.claudia-zemp.ch/wp-content/themes/cz-theme"

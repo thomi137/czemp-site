@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/collection-subcategories",
+  "title": "Collection Subcategories",
+  "category": "widgets",
+  "icon": "category",
+  "description": "Renders one card per child term of the currently viewed collection, linking into each. Renders nothing on leaf (childless) terms.",
+  "supports": { "html": false },
+  "render": "file:./render.php",
+  "style": "file:./style.css"
+}
