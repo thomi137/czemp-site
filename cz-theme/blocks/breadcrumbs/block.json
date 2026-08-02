@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/breadcrumbs",
+  "title": "Breadcrumbs",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "Renders a Home / Galerie / Kollektion / ... breadcrumb trail based on the current page.",
+  "supports": { "html": false },
+  "render": "file:./render.php",
+  "style": "file:./style.css"
+}
