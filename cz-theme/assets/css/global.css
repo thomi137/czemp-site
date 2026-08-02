@@ -50,6 +50,17 @@ main.wp-block-group {
     box-shadow: 0 1px 0 rgba(0,0,0,.06);
 }
 
+/* Sit below the WP admin bar instead of overlapping it when logged in */
+.admin-bar .cz-header {
+    top: 32px;
+}
+
+@media (max-width: 782px) {
+    .admin-bar .cz-header {
+        top: 46px;
+    }
+}
+
 html {
     scroll-padding-top: var(--cz-header-height);
 }
@@ -220,4 +231,18 @@ html {
     .single-artwork .wp-block-column {
         flex-basis: 100%;
     }
+}
+
+/* ── Pagination ───────────────────────────────────────── */
+
+.wp-block-query-pagination {
+    justify-content: center;
+    text-align: center;
+    font-size: 8pt;
+    text-transform: uppercase;
+}
+
+.wp-block-query-pagination a,
+.wp-block-query-pagination .page-numbers {
+    text-decoration: none;
 }

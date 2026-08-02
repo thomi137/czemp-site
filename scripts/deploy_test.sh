@@ -6,7 +6,7 @@ cd "${SCRIPT_DIR}/.."
 
 REMOTE_USER="claudize"
 REMOTE_HOST="claudia-zemp.ch"
-REMOTE_PATH="/home/claudize/www/neu.claudia-zemp.ch/wp-content/themes/cz-theme"
+REMOTE_PATH="/home/claudize/www/claudia-zemp.ch/wp-content/themes/cz-theme"
 SSH_KEY="$HOME/.ssh/claudize"
 
 echo "Deploy to ${REMOTE_HOST}? (y/n)"
