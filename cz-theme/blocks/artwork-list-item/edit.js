@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
+
 import {
     useBlockProps,
     InspectorControls

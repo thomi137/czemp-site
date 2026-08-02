@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 /**
  * Title: Header
  * Slug: czemp/header

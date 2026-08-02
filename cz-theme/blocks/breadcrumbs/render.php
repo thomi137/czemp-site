@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 
 function cz_breadcrumb_gallery_link() {
     $page = get_page_by_path( 'gallery' );

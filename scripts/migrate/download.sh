@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# Copyright (c) 2026 Thomas Prosser. All rights reserved.
 # Zwei Modi:
 #   ./download.sh [data] [output.json]   Werke+Kollektionen als JSON exportieren (Standard)
 #   ./download.sh media [output.zip]     ALLE Mediendateien (jeder Status) herunterladen und zippen
