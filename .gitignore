@@ -25,6 +25,7 @@ scripts/migrate/**
 !scripts/migrate/MIGRATION.md
 !scripts/migrate/.env.example
 !scripts/migrate/*.sh
+
 artworks.json
 
 # Claude
