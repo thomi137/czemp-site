@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
+
 if (window.matchMedia('(hover: none)').matches) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

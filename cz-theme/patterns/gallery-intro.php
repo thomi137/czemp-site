@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 /**
  * Title: Gallery Intro
  * Slug: czemp/gallery-intro

@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 $wrapper = get_block_wrapper_attributes(['class' => 'cz-sticky-nav']);
 ?>
 <div <?php echo $wrapper; ?>>

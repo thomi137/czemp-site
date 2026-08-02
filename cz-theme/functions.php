@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 /**
  * Claudia Zemp functions and definitions.
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
