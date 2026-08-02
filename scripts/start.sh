@@ -1,4 +1,5 @@
 #!/bin/sh
+# Copyright (c) 2026 Thomas Prosser. All rights reserved.
 
 cleanup() {
     echo "Stopping Docker..."

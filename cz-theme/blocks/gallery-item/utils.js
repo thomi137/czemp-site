@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
+
 export function hexToRgba(hex, opacity = 1) {
     let c;
     if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){

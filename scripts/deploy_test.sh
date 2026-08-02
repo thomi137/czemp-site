@@ -1,4 +1,5 @@
 #!/bin/sh
+# Copyright (c) 2026 Thomas Prosser. All rights reserved.
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

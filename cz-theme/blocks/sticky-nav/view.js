@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
+
 const panel   = document.getElementById('cz-sticky-nav-panel');
 const openBtn = document.querySelector('.cz-sticky-nav__open');
 const drawer  = panel?.querySelector('.cz-sticky-nav__drawer');

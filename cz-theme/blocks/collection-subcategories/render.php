@@ -1,4 +1,5 @@
 <?php
+// Copyright (c) 2026 Thomas Prosser. All rights reserved.
 
 $term = get_queried_object();
 
