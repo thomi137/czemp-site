@@ -1,4 +1,4 @@
-// Copyright (c) 2026 Thomas Prosser. All rights reserved.
+// Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 
 const panel   = document.getElementById('cz-sticky-nav-panel');
 const openBtn = document.querySelector('.cz-sticky-nav__open');

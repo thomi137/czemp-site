@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2026 Thomas Prosser. All rights reserved.
+# Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

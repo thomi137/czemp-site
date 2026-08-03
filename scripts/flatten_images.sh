@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2026 Thomas Prosser. All rights reserved.
+# Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 SRC="/Users/tprosser/Projects/czemp-site/scripts/migrate/images/images_original"
 DST="/Users/tprosser/Projects/czemp-site/scripts/migrate/images/images_flat"
 
