@@ -93,7 +93,7 @@ add_action('init', function () {
         'rewrite'      => ['slug' => 'galerie'],
     ]);
 
-    register_taxonomy('collection', ['artwork'], [
+    register_taxonomy('collection', ['artwork', 'attachment'], [
         'labels' => [
             'name'          => 'Kollektionen',
             'singular_name' => 'Kollektion',
@@ -112,6 +112,53 @@ add_action('init', function () {
             'assign_terms' => 'edit_posts',
         ],
     ]);
+});
+
+// Werk-Titel und -Kollektion auf sein Beitragsbild übertragen und es dort
+// anhängen ("Attached to"), damit die Media-Bibliothek nutzbar bleibt statt
+// 254 gleich benannter Dateien ohne erkennbaren Bezug zum Werk zu zeigen
+function cz_sync_artwork_thumbnail($artwork_id) {
+    $thumbnail_id = get_post_thumbnail_id($artwork_id);
+    if (!$thumbnail_id) {
+        return;
+    }
+
+    wp_update_post([
+        'ID'          => $thumbnail_id,
+        'post_title'  => get_the_title($artwork_id),
+        'post_parent' => $artwork_id,
+    ]);
+
+    $term_ids = wp_get_post_terms($artwork_id, 'collection', ['fields' => 'ids']);
+    if (is_wp_error($term_ids)) {
+        return;
+    }
+    wp_set_object_terms($thumbnail_id, $term_ids, 'collection');
+}
+
+add_action('set_object_terms', function ($object_id, $terms, $tt_ids, $taxonomy) {
+    if ($taxonomy !== 'collection' || get_post_type($object_id) !== 'artwork') {
+        return;
+    }
+    cz_sync_artwork_thumbnail($object_id);
+}, 10, 4);
+
+foreach (['added_post_meta', 'updated_post_meta'] as $hook) {
+    add_action($hook, function ($meta_id, $post_id, $meta_key) {
+        if ($meta_key !== '_thumbnail_id' || get_post_type($post_id) !== 'artwork') {
+            return;
+        }
+        cz_sync_artwork_thumbnail($post_id);
+    }, 10, 3);
+}
+
+// Titeländerungen am Werk selbst (ohne dass sich das Beitragsbild ändert)
+// ebenfalls auf das Bild übertragen
+add_action('save_post_artwork', function ($post_id) {
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+    cz_sync_artwork_thumbnail($post_id);
 });
 
 // Migration REST endpoints — token-geschützt, kein Basic Auth nötig
@@ -193,6 +240,36 @@ add_action('rest_api_init', function () {
                 return new WP_Error('media_error', $id->get_error_message(), ['status' => 400]);
             }
             return ['id' => $id, 'url' => wp_get_attachment_url($id)];
+        },
+    ]);
+
+    // Einmaliger Abgleich: bestehende Werke-Beitragsbilder rückwirkend mit
+    // Titel, Kollektion und Attachment-Verknüpfung des Werks versehen
+    // (für Werke aus der CSV-Migration)
+    register_rest_route('czemp/v1', '/backfill-media-metadata', [
+        'methods'             => 'POST',
+        'permission_callback' => $token_check,
+        'callback'            => function () {
+            $artwork_ids = get_posts([
+                'post_type'      => 'artwork',
+                'post_status'    => 'any',
+                'posts_per_page' => -1,
+                'fields'         => 'ids',
+            ]);
+
+            $updated = 0;
+            $skipped = 0;
+            foreach ($artwork_ids as $artwork_id) {
+                $before = get_post_thumbnail_id($artwork_id);
+                if (!$before) {
+                    $skipped++;
+                    continue;
+                }
+                cz_sync_artwork_thumbnail($artwork_id);
+                $updated++;
+            }
+
+            return ['updated' => $updated, 'skipped' => $skipped, 'total' => count($artwork_ids)];
         },
     ]);
 });
@@ -380,9 +457,9 @@ add_action('admin_head', function () {
     echo '<style>.column-artwork_thumb { width: 70px; }</style>';
 });
 
-// Kollektion-Dropdown-Filter in der Werke-Liste
+// Kollektion-Dropdown-Filter in der Werke-Liste und der Media-Bibliothek
 add_action('restrict_manage_posts', function ($post_type) {
-    if ($post_type !== 'artwork') return;
+    if (!in_array($post_type, ['artwork', 'attachment'], true)) return;
     $terms = get_terms(['taxonomy' => 'collection', 'hide_empty' => false]);
     if (empty($terms) || is_wp_error($terms)) return;
     $selected = $_GET['collection'] ?? '';
@@ -395,6 +472,14 @@ add_action('restrict_manage_posts', function ($post_type) {
         );
     }
     echo '</select>';
+});
+
+// Media-Bibliothek standardmässig in der Listenansicht öffnen (mit
+// Kollektions-Spalte/Filter statt der unsortierten Kachel-Ansicht).
+// Greift nur, solange der Nutzer nicht selbst zur Kachelansicht gewechselt
+// hat — dieser Wahl wird dann als echte user option gespeichert.
+add_filter('get_user_option_media_library_mode', function ($result) {
+    return $result ?: 'list';
 });
 
 // Mark "Galerie" nav item as active on artwork and collection pages
