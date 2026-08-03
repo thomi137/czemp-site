@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Copyright (c) 2026 Thomas Prosser. All rights reserved.
+# Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 # Upload artworks from CSV to WordPress via REST API
 # Usage: ./upload.sh artworks.csv
 # Requires: curl, jq
