@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Copyright (c) 2026 Thomas Prosser. All rights reserved.
+# Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 # Migrations-Script: CSV → WordPress (Medien, Kollektionen, Artworks, Gallery-Items)
 #
 # CSV-Format (Komma-getrennt, korrekt gequotet, erste Zeile = Header):
