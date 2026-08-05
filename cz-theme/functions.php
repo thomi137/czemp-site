@@ -9,20 +9,6 @@
  * @since 1.0
  */
 
-/*
-if ( ! function_exists( 'set_custom_default_logo' ) ) :
-	function set_custom_default_logo() {
-		if (!has_custom_logo()) {
-			// Replace 'default-logo.png' with the correct path or URL to your default logo
-			$default_logo = get_stylesheet_directory_uri() . '/assets/images/cz_Logo_without_text.webp';
-			return '<img src="' . esc_url($default_logo) . '" alt="Default Logo" "width=100">';
-		}
-		return '';
-	}
-	add_filter('get_custom_logo', 'set_custom_default_logo');
-endif;
-*/
-
 // Theme support
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -406,7 +392,7 @@ add_action('pre_get_posts', function ($query) {
         'relation' => 'AND',
         [
             'taxonomy'         => 'collection',
-            'field'            => 'term_id',
+            'field'             => 'term_id',
             'terms'            => [get_queried_object_id()],
             'include_children' => false,
         ],
@@ -462,8 +448,11 @@ add_action('restrict_manage_posts', function ($post_type) {
     if (!in_array($post_type, ['artwork', 'attachment'], true)) return;
     $terms = get_terms(['taxonomy' => 'collection', 'hide_empty' => false]);
     if (empty($terms) || is_wp_error($terms)) return;
-    $selected = $_GET['collection'] ?? '';
-    echo '<select name="collection"><option value="">Alle Kollektionen</option>';
+
+    $default  = ($post_type === 'attachment') ? get_user_meta(get_current_user_id(), 'cz_default_collection', true) : '';
+    $selected = $_GET['collection'] ?? ($default ?: 'all');
+
+    echo '<select name="collection"><option value="all"' . selected($selected, 'all', false) . '>Alle Kollektionen</option>';
     foreach ($terms as $term) {
         printf('<option value="%s"%s>%s</option>',
             esc_attr($term->slug),
@@ -474,12 +463,95 @@ add_action('restrict_manage_posts', function ($post_type) {
     echo '</select>';
 });
 
+// "Alle Kollektionen" (Sentinel-Wert "all") darf nie als echter Term-Slug
+// gefiltert werden — sonst liefert die Liste 0 Treffer statt aller. Die
+// Standard-Kollektion des Nutzers wird nur in der Media-Bibliothek
+// angewendet, solange er den Filter nicht selbst gesetzt hat.
+add_action('pre_get_posts', function ($query) {
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+    $post_type = $query->get('post_type');
+    if (!in_array($post_type, ['artwork', 'attachment'], true)) {
+        return;
+    }
+
+    if (isset($_GET['collection'])) {
+        if ($_GET['collection'] === 'all') {
+            $query->set('collection', '');
+        }
+        return;
+    }
+
+    if ($post_type !== 'attachment') {
+        return;
+    }
+
+    $default = get_user_meta(get_current_user_id(), 'cz_default_collection', true);
+    if ($default) {
+        $query->set('collection', $default);
+    }
+});
+
+// Standard-Kollektion für die Media-Bibliothek: Feld im eigenen Profil
+// (Benutzer > Profil), nicht in einer separaten Einstellungsseite —
+// jeder Nutzer kann seine eigene Vorauswahl setzen
+foreach (['show_user_profile', 'edit_user_profile'] as $hook) {
+    add_action($hook, function ($user) {
+        $terms   = get_terms(['taxonomy' => 'collection', 'hide_empty' => false]);
+        $current = get_user_meta($user->ID, 'cz_default_collection', true);
+        ?>
+        <h2>Media-Bibliothek</h2>
+        <table class="form-table">
+            <tr>
+                <th><label for="cz-default-collection">Standard-Kollektion</label></th>
+                <td>
+                    <select name="cz_default_collection" id="cz-default-collection">
+                        <option value="">— Keine (alle anzeigen) —</option>
+                        <?php if (!is_wp_error($terms)) foreach ($terms as $term) : ?>
+                            <option value="<?php echo esc_attr($term->slug); ?>" <?php selected($current, $term->slug); ?>>
+                                <?php echo esc_html($term->name); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description">Wird beim Öffnen der Media-Bibliothek als Filter vorausgewählt.</p>
+                </td>
+            </tr>
+        </table>
+        <?php
+    });
+}
+
+foreach (['personal_options_update', 'edit_user_profile_update'] as $hook) {
+    add_action($hook, function ($user_id) {
+        if (!current_user_can('edit_user', $user_id)) {
+            return;
+        }
+        update_user_meta($user_id, 'cz_default_collection', sanitize_title($_POST['cz_default_collection'] ?? ''));
+    });
+}
+
 // Media-Bibliothek standardmässig in der Listenansicht öffnen (mit
 // Kollektions-Spalte/Filter statt der unsortierten Kachel-Ansicht).
 // Greift nur, solange der Nutzer nicht selbst zur Kachelansicht gewechselt
 // hat — dieser Wahl wird dann als echte user option gespeichert.
 add_filter('get_user_option_media_library_mode', function ($result) {
     return $result ?: 'list';
+});
+
+// /galerie/ (das rohe Werke-Archiv, ungruppiert) leitet dauerhaft auf
+// /gallery/ (die Kollektions-Übersicht) um — die flache Liste aller Werke
+// soll nicht mehr direkt erreichbar sein
+add_action('template_redirect', function () {
+    if (!is_post_type_archive('artwork')) {
+        return;
+    }
+    $gallery_page = get_page_by_path('gallery');
+    if (!$gallery_page) {
+        return;
+    }
+    wp_safe_redirect(get_permalink($gallery_page->ID), 301);
+    exit;
 });
 
 // Mark "Galerie" nav item as active on artwork and collection pages
