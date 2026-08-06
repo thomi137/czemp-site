@@ -50,5 +50,67 @@ between restarts. This ensures you do not have to reinitiate every time you rest
 
 ## Theme Files
 
-WIP
+The theme lives in `cz-theme/` and is a WordPress **block theme** (Full Site Editing / FSE) — templates and template
+parts are HTML block markup, not classic PHP template files.
+
+```
+cz-theme/
+├── functions.php          # thin loader — requires everything under inc/
+├── inc/                    # theme logic, split by concern
+├── theme.json              # global styles, typography, color palette, spacing
+├── templates/               # full-page FSE templates (HTML)
+├── parts/                   # reusable template parts (header, footer, overlay)
+├── patterns/                 # PHP block patterns (can use dynamic PHP values)
+├── blocks/                    # custom Gutenberg blocks (source)
+├── build/                      # compiled block JS output — do not edit directly
+└── assets/                      # global CSS/JS (not part of the block build)
+```
+
+### `inc/`
+
+`functions.php` itself only requires the files below, in order — each covers one concern:
+
+| File | Purpose |
+|---|---|
+| `setup.php` | Theme support, block registration, script/style enqueues, WebP image output |
+| `post-types.php` | `artwork` post type + `collection` taxonomy registration, artwork↔image sync |
+| `rest-api.php` | Token-protected `czemp/v1` REST routes used by the migration scripts |
+| `collection-thumbnail.php` | Term-meta + focal-point picker admin UI for collection thumbnails |
+| `admin.php` | wp-admin list-table columns/filters, Media Library defaults, the per-user default-collection profile field |
+| `frontend.php` | Subcollection query scoping, `/galerie/` → `/gallery/` redirect, nav active-state, pagination cap |
+
+### Custom Post Type & Taxonomy
+
+- **`artwork`** ("Werke") — the artwork custom post type. Archive at `/galerie/`, which redirects to the `/gallery/`
+  page (a hand-built collection overview) rather than showing a flat, uncategorized dump.
+- **`collection`** ("Kollektionen") — hierarchical taxonomy on `artwork`, and also on `attachment` (Media Library),
+  so images can be filtered/browsed by collection too. Slug `/kollektion/`.
+
+Templates for these live in `templates/`: `archive-artwork.html`, `single-artwork.html`, `taxonomy-collection.html`.
+
+### Custom Blocks
+
+Registered server-side via `register_block_type()` in `inc/setup.php`, compiled via `@wordpress/scripts`:
+
+- **`czemp-theme/gallery-item`** — image card with configurable hover overlay, focal point, link, title, description.
+- **`czemp-theme/artwork-list-item`** — loop-aware post list item (`usesContext: [postId, postType]`), server-rendered.
+- **`czemp-theme/sticky-nav`** — wraps `core/navigation` to work around WordPress quirks with the slide-in mobile menu.
+- **`czemp-theme/collection-subcategories`** — renders a collection's child-collection tiles.
+- **`czemp-theme/breadcrumbs`** — Home / Galerie / Collection / Subcollection / Title trail.
+
+### Building blocks
+
+```bash
+cd cz-theme
+npm install       # first time
+npm run build     # production build — required before blocks appear in the editor
+npm start         # watch mode for development
+```
+
+## Migration & Deployment
+
+- `scripts/migrate/` — CSV-to-WordPress migration tooling (collections, artworks, media) via the `czemp/v1` REST
+  routes; see `scripts/migrate/MIGRATION.md` for the full runbook and status log.
+- `scripts/deploy_test.sh` — builds the theme and ships it to the server over SSH/SCP. Prompts for confirmation
+  before deploying.
 
