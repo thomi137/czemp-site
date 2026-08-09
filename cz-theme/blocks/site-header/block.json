@@ -6,8 +6,11 @@
   "category": "theme",
   "icon": "admin-home",
   "description": "Fixed site header: logo linking home, and the site title. Not editable per-page — change the logo file or the Site Title setting instead.",
-  "supports": { "html": false },
+  "supports": {
+    "html": false
+  },
   "render": "file:./render.php",
   "editorScript": "file:../../build/index.js",
-  "style": "file:./style.css"
+  "style": "file:./style.css",
+  "example": {}
 }
