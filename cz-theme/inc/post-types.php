@@ -14,12 +14,13 @@ add_action('init', function () {
             'not_found'          => 'Keine Werke gefunden',
             'not_found_in_trash' => 'Keine Werke im Papierkorb',
         ],
-        'public'       => true,
-        'show_in_rest' => true,
-        'menu_icon'    => 'dashicons-art',
-        'supports'     => ['title', 'editor', 'thumbnail', 'excerpt'],
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'galerie'],
+        'public'        => true,
+        'show_in_rest'  => true,
+        'menu_icon'     => 'dashicons-art',
+        'menu_position' => 4,
+        'supports'      => ['title', 'editor', 'thumbnail', 'excerpt'],
+        'has_archive'   => true,
+        'rewrite'       => ['slug' => 'galerie'],
     ]);
 
     register_taxonomy('collection', ['artwork', 'attachment'], [
