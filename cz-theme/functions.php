@@ -15,6 +15,7 @@ foreach ([
     'inc/post-dates.php',
     'inc/rest-api.php',
     'inc/collection-thumbnail.php',
+    'inc/maintenance.php',
     'inc/admin.php',
     'inc/frontend.php',
 ] as $cz_include) {
