@@ -67,12 +67,26 @@ main.wp-block-group {
 
 /* Sit below the WP admin bar instead of overlapping it when logged in */
 .admin-bar .cz-header {
-        top: 46px;
-    }
+    top: 46px;
+}
 
 @media (min-width: 782px) {
-        .admin-bar .cz-header {
+    .admin-bar .cz-header {
         top: 32px;
+    }
+}
+
+/* WordPress core (as of 7.0) switches #wpadminbar from fixed to absolute
+   positioning below the 782px breakpoint, so on mobile it now scrolls
+   away with the page content instead of staying put — leaving a blank
+   46px gap above our own fixed header (which still assumes the admin
+   bar occupies that space permanently) and letting content scroll up
+   underneath/through it. Only ever applies to logged-in editors, never
+   to real site visitors, so it's safe to force back to the old fixed
+   behavior we already build the rest of the layout around. */
+@media screen and (max-width: 782px) {
+    #wpadminbar {
+        position: fixed !important;
     }
 }
 
@@ -123,6 +137,64 @@ html {
 
 @media (max-width: 599px) {
     .cz-hide-mobile { display: none; }
+}
+
+/* ── Buttons ──────────────────────────────────────────── */
+
+/* Every button on the site is hand-styled per-instance with an inline
+   background/text color (there's no theme.json button preset to hook a
+   :hover variant onto), so this has to win over the inline style with
+   !important. Simple color invert on hover/focus — reads as a clear,
+   deliberate state change without introducing a second color anywhere
+   on the site. */
+.wp-block-button__link {
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wp-block-button__link:hover,
+.wp-block-button__link:focus-visible {
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: inset 0 0 0 1px #1a1a1a;
+}
+
+/* ── Front-page showcase grid ─────────────────────────── */
+
+/* core/group's grid layout with a fixed columnCount has no responsive
+   behavior of its own — WordPress emits a single, permanent
+   `grid-template-columns: repeat(3, minmax(0, 1fr))` regardless of
+   viewport, unlike the other grids on the site. Left alone, that
+   squeezes 3 gallery-item tiles into ~100px-wide columns on a phone. */
+.cz-showcase-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+}
+
+@media (min-width: 600px) {
+    .cz-showcase-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+@media (min-width: 900px) {
+    .cz-showcase-grid {
+        grid-template-columns: 1fr 1fr 1fr !important;
+    }
+}
+
+/* On the real gallery grid, hover/scroll-reveal makes sense — you're
+   browsing many tiles. Here there are only 3, curated, meant to be read
+   at a glance, and mobile has no hover at all — the JS reveal only
+   fires once a tile crosses a visibility threshold while scrolling,
+   which needs room to breathe that a 3-item highlight strip doesn't
+   reliably have. Skip the interaction entirely on small screens: show
+   the caption permanently. Desktop keeps the normal hover behavior. */
+@media (max-width: 599px) {
+    .cz-showcase-grid .gallery-item .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
 }
 
 /* ── Gallery page grid ────────────────────────────────── */
@@ -261,7 +333,8 @@ html {
 .wp-block-query-pagination {
     justify-content: center;
     text-align: center;
-    font-size: 8pt;
+    font-size: 14pt;
+    font-weight: 700;
     text-transform: uppercase;
 }
 

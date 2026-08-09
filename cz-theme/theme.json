@@ -31,22 +31,25 @@
             {
               "fontFamily": "Prompt",
               "fontWeight": "400",
+              "fontDisplay": "swap",
               "src": [
-                "file:./assets/fonts/prompt/Prompt-Regular.ttf"
+                "file:./assets/fonts/prompt/Prompt-Regular.woff2"
               ]
             },
             {
               "fontFamily": "Prompt",
               "fontWeight": "700",
+              "fontDisplay": "swap",
               "src": [
-                "file:./assets/fonts/prompt/Prompt-Bold.ttf"
+                "file:./assets/fonts/prompt/Prompt-Bold.woff2"
               ]
             },
             {
               "fontFamily": "Prompt",
               "fontWeight": "300",
+              "fontDisplay": "swap",
               "src": [
-                "file:./assets/fonts/prompt/Prompt-Light.ttf"
+                "file:./assets/fonts/prompt/Prompt-Light.woff2"
               ]
             }
           ],
@@ -59,8 +62,9 @@
             {
               "fontFamily": "Roboto",
               "fontWeight": "400",
+              "fontDisplay": "swap",
               "src": [
-                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.ttf"
+                "file:./assets/fonts/roboto/Roboto-VariableFont_wdth,wght.woff2"
               ]
             }
           ],
