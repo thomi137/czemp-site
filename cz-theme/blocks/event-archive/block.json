@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/event-archive",
+  "title": "Veranstaltungsarchiv",
+  "category": "widgets",
+  "icon": "calendar-alt",
+  "description": "Zeigt datierte Beiträge (mit gesetztem Sichtbarkeitszeitraum) als Kachel-Raster, gruppiert nach Jahr.",
+  "supports": { "html": false },
+  "editorScript": "file:../../build/index.js",
+  "render": "file:./render.php",
+  "attributes": {
+    "currentYearOnly": { "type": "boolean", "default": true },
+    "pastEventsUrl": { "type": "string", "default": "" }
+  }
+}

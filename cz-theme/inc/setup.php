@@ -31,6 +31,8 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/breadcrumbs');
     register_block_type(get_stylesheet_directory() . '/blocks/site-header');
     register_block_type(get_stylesheet_directory() . '/blocks/site-footer');
+    register_block_type(get_stylesheet_directory() . '/blocks/latest-posts');
+    register_block_type(get_stylesheet_directory() . '/blocks/event-archive');
 });
 
 add_action('wp_enqueue_scripts', function () {
