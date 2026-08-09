@@ -12,6 +12,7 @@
 foreach ([
     'inc/setup.php',
     'inc/post-types.php',
+    'inc/post-dates.php',
     'inc/rest-api.php',
     'inc/collection-thumbnail.php',
     'inc/admin.php',
