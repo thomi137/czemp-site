@@ -10,6 +10,18 @@ add_action('after_setup_theme', function () {
     add_editor_style('assets/css/global.css');
 });
 
+// Emoji-to-image conversion is dead weight for a site that doesn't rely
+// on it — every modern browser renders emoji natively — and costs a
+// blocking inline script plus (conditionally) a real request for
+// wp-emoji-release.min.js on every single page load.
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+remove_action('admin_print_scripts', 'print_emoji_detection_script');
+remove_action('admin_print_styles', 'print_emoji_styles');
+remove_filter('the_content_feed', 'wp_staticize_emoji');
+remove_filter('comment_text_rss', 'wp_staticize_emoji');
+remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+
 // Register custom blocks
 add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/gallery-item');
