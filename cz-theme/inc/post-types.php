@@ -17,7 +17,7 @@ add_action('init', function () {
         'public'        => true,
         'show_in_rest'  => true,
         'menu_icon'     => 'dashicons-art',
-        'menu_position' => 4,
+        'menu_position' => 3,
         'supports'      => ['title', 'editor', 'thumbnail', 'excerpt'],
         'has_archive'   => true,
         'rewrite'       => ['slug' => 'galerie'],
