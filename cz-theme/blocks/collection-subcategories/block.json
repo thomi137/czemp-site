@@ -8,5 +8,6 @@
   "description": "Renders one card per child term of the currently viewed collection, linking into each. Renders nothing on leaf (childless) terms.",
   "supports": { "html": false },
   "render": "file:./render.php",
+  "editorScript": "file:../../build/index.js",
   "style": "file:./style.css"
 }

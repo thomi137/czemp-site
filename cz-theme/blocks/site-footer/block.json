@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/site-footer",
+  "title": "Site Footer",
+  "category": "theme",
+  "icon": "admin-home",
+  "description": "Sticky bottom nav bar plus the copyright line. To change what's in the nav, edit the \"Footer Menu\" under Appearance > Navigation, not this block.",
+  "supports": { "html": false },
+  "render": "file:./render.php",
+  "editorScript": "file:../../build/index.js",
+  "style": "file:./style.css"
+}

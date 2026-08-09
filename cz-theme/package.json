@@ -19,6 +19,7 @@
     "@wordpress/components": "^29.5.4",
     "@wordpress/element": "^6.19.2",
     "@wordpress/i18n": "^4.19.2",
+    "@wordpress/server-side-render": "^6.28.0",
     "prop-types": "^15.8.1"
   }
 }
