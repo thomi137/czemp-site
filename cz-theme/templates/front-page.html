@@ -1,25 +1,11 @@
 <!-- Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. -->
 
-<!-- wp:pattern {"slug":"czemp/header"} /-->
+<!-- wp:czemp-theme/site-header /-->
 
-<!-- wp:cover {"url":"/wp-content/themes/cz-theme/assets/images/front.png","dimRatio":70,"overlayColor":"white","isUserOverlayColor":true,"minHeight":100,"minHeightUnit":"vh","isDark":false,"tagName":"main","layout":{"type":"constrained"}} -->
-<main class="wp-block-cover is-light" style="min-height:100vh">
-    <span aria-hidden="true" class="wp-block-cover__background has-white-background-color has-background-dim-70 has-background-dim"></span>
-    <img class="wp-block-cover__image-background" src="/wp-content/themes/cz-theme/assets/images/front.png" alt="Claudia Zemp" data-object-fit="cover"/>
-    <div class="wp-block-cover__inner-container">
-
-        <!-- wp:post-content /-->
-
-        <!-- wp:buttons -->
-        <div class="wp-block-buttons">
-            <!-- wp:button {"style":{"border":{"radius":"0"},"typography":{"textTransform":"uppercase","letterSpacing":"0.1em","fontSize":"12px"},"color":{"background":"#1a1a1a","text":"#ffffff"}}} -->
-            <div class="wp-block-button"><a class="wp-block-button__link has-white-color has-text-color has-background" href="/gallery" style="border-radius:0;background-color:#1a1a1a;color:#ffffff;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Zur Galerie</a></div>
-            <!-- /wp:button -->
-        </div>
-        <!-- /wp:buttons -->
-
-    </div>
+<!-- wp:group {"tagName":"main","style":{"spacing":{"padding":{"bottom":"4rem"}}}} -->
+<main class="wp-block-group" style="padding-bottom:4rem">
+    <!-- wp:post-content {"layout":{"type":"constrained"}} /-->
 </main>
-<!-- /wp:cover -->
+<!-- /wp:group -->
 
-<!-- wp:pattern {"slug":"czemp/footer"} /-->
+<!-- wp:czemp-theme/site-footer /-->

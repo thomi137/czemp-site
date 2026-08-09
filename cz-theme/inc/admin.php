@@ -117,3 +117,54 @@ foreach (['personal_options_update', 'edit_user_profile_update'] as $hook) {
 add_filter('get_user_option_media_library_mode', function ($result) {
     return $result ?: 'list';
 });
+
+// Let Editors manage the Navigation menus (e.g. "Footer Menu") without
+// reopening the Site Editor's Templates/Template Parts/Global Styles for
+// them. WordPress core has no capability for "navigation only" — every
+// one of wp_navigation's, wp_template's, wp_template_part's and
+// wp_global_styles' edit/create/delete/publish capabilities are all
+// hard-mapped to the single `edit_theme_options` capability (verified via
+// get_post_type_object(...)->cap), so granting it to Editors is the only
+// way to unlock Navigation editing, and the map_meta_cap + REST filters
+// below claw back write access to the other three post types from anyone
+// who isn't an administrator. This exists specifically so the "Attempt
+// recovery" + autosave incident that overrode theme templates with broken
+// markup can't happen again through her account.
+add_action('init', function () {
+    $editor = get_role('editor');
+    if ($editor && !$editor->has_cap('edit_theme_options')) {
+        $editor->add_cap('edit_theme_options');
+    }
+});
+
+function cz_theme_locked_post_types() {
+    return ['wp_template', 'wp_template_part', 'wp_global_styles'];
+}
+
+add_filter('map_meta_cap', function ($caps, $cap, $user_id, $args) {
+    if (!in_array($cap, ['edit_post', 'delete_post', 'publish_post'], true) || empty($args[0])) {
+        return $caps;
+    }
+    $post = get_post($args[0]);
+    if (!$post || !in_array($post->post_type, cz_theme_locked_post_types(), true)) {
+        return $caps;
+    }
+    return user_can($user_id, 'administrator') ? $caps : ['do_not_allow'];
+}, 10, 4);
+
+// Covers *creating* new templates/parts/styles too, where map_meta_cap
+// never sees a post type to check against (core collapses "create_posts"
+// straight to edit_theme_options before it gets there).
+add_filter('rest_pre_dispatch', function ($result, $server, $request) {
+    if (current_user_can('administrator') || $request->get_method() === 'GET') {
+        return $result;
+    }
+    if (preg_match('#^/wp/v2/(templates|template-parts|global-styles)#', $request->get_route())) {
+        return new WP_Error(
+            'rest_forbidden',
+            'Nur Administratoren können Templates, Template-Teile oder globale Stile bearbeiten.',
+            ['status' => 403]
+        );
+    }
+    return $result;
+}, 10, 3);
