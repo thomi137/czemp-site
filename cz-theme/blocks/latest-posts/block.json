@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/latest-posts",
+  "title": "Aktuelles (neueste Beiträge)",
+  "category": "widgets",
+  "icon": "megaphone",
+  "description": "Zeigt die 3 neuesten Beiträge, deren Anzeigezeitraum das heutige Datum einschliesst.",
+  "supports": { "html": false },
+  "editorScript": "file:../../build/index.js",
+  "render": "file:./render.php"
+}

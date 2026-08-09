@@ -169,6 +169,15 @@ html {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 12px !important;
+    /* This sits directly in <main>, which is deliberately unclamped
+       (is-layout-flow) so the hero cover can go full-bleed — so unlike
+       the hero's own inner content (clamped via post-content's
+       is-layout-constrained), this grid needs its own cap to line up
+       with the header logo and the hero text at the same 1200px
+       content-size, instead of stretching edge-to-edge on wide screens. */
+    max-width: 1200px;
+    margin-inline: auto;
+    margin-bottom: 3rem;
 }
 
 @media (min-width: 600px) {
@@ -195,6 +204,50 @@ html {
         opacity: 1 !important;
         pointer-events: all !important;
     }
+}
+
+/* ── Event archive ─────────────────────────────────────── */
+
+.cz-event-archive__year {
+    margin-top: 3rem;
+}
+
+.cz-event-archive__year:first-child {
+    margin-top: 0;
+}
+
+.cz-events-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 600px) {
+    .cz-events-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 900px) {
+    .cz-events-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+/* Same reasoning as the homepage showcase grid: mobile has no hover, so
+   an events list is more usable with captions always visible instead of
+   requiring a scroll-triggered reveal per tile. */
+@media (max-width: 599px) {
+    .cz-events-grid .gallery-item .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}
+
+.cz-event-archive__past-link {
+    margin-top: 2rem;
+    text-align: center;
 }
 
 /* ── Gallery page grid ────────────────────────────────── */
