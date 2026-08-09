@@ -18,6 +18,19 @@
     }
 }
 
+/* ── Links ────────────────────────────────────────────── */
+
+/* No theme.json color palette is defined, so without this every plain-text
+   link on the site (post-terms, pagination, etc.) falls back to the
+   browser's default blue/purple — including a visited color, which we
+   don't want anywhere. Low specificity (bare element selector) on purpose:
+   anything that already sets its own link color (buttons, breadcrumbs,
+   gallery-item captions, nav) keeps doing so untouched. */
+a,
+a:visited {
+    color: #1a1a1a;
+}
+
 /* ── Layout ───────────────────────────────────────────── */
 
 .wp-site-blocks {
@@ -38,8 +51,16 @@ body .wp-site-blocks > main.wp-block-cover {
     min-height: calc(100dvh - 60px);
 }
 
+/* --cz-header-height (set by assets/js/header-height.js) is only ever the
+   header's own intrinsic height. When logged in, the header is pushed
+   down below the admin bar (see .admin-bar .cz-header below), so
+   anything compensating for "how much space the header+admin-bar occupy
+   at the top of the viewport" has to add WordPress's own
+   --wp-admin--admin-bar--height on top of it explicitly — it defaults to
+   an unset/0px fallback when logged out, so this formula works
+   unconditionally in both states without an .admin-bar-scoped override. */
 main.wp-block-group {
-    padding-top: var(--cz-header-height) !important;
+    padding-top: calc(var(--cz-header-height) + var(--wp-admin--admin-bar--height, 0px)) !important;
 }
 
 .wp-site-blocks > .cz-site-footer__bar {
@@ -48,9 +69,17 @@ main.wp-block-group {
 
 /* Full-bleed hero covers (e.g. the front page) opt out of the standard
    header clearance with this class, pulling back up to start at the true
-   top of the page — behind the fixed header — instead of leaving a gap. */
+   top of the page — behind the fixed header — instead of leaving a gap.
+   !important is load-bearing here: WordPress's own block-gap CSS has
+   `:root :where(.is-layout-flow) > :first-child{margin-block-start: 0;}`
+   — specificity (0,2,0) vs. this class's (0,1,0) — which silently wins
+   and zeroes out this margin otherwise (margin-top and the logical
+   margin-block-start it sets are the same physical property here, so
+   they compete in the same cascade). That's what was actually causing
+   the gap: padding-top applied in full, this cancelling margin discarded
+   entirely. */
 .cz-full-bleed-hero {
-    margin-top: calc(var(--cz-header-height) * -1);
+    margin-top: calc((var(--cz-header-height) + var(--wp-admin--admin-bar--height, 0px)) * -1) !important;
 }
 
 /* ── Header ───────────────────────────────────────────── */
@@ -65,15 +94,12 @@ main.wp-block-group {
     box-shadow: 0 1px 0 rgba(0,0,0,.06);
 }
 
-/* Sit below the WP admin bar instead of overlapping it when logged in */
+/* Sit below the WP admin bar instead of overlapping it when logged in.
+   WordPress maintains --wp-admin--admin-bar--height itself (32px desktop,
+   46px mobile, responsive at its own breakpoint) — reusing it here
+   instead of duplicating our own copy of those breakpoints/values. */
 .admin-bar .cz-header {
-    top: 46px;
-}
-
-@media (min-width: 782px) {
-    .admin-bar .cz-header {
-        top: 32px;
-    }
+    top: var(--wp-admin--admin-bar--height, 32px);
 }
 
 /* WordPress core (as of 7.0) switches #wpadminbar from fixed to absolute
@@ -381,17 +407,108 @@ html {
     }
 }
 
+/* ── Single artwork: fit image/title/excerpt in the viewport ─── */
+
+/* Artwork photos are often tall portrait shots straight from the camera
+   (e.g. 1066×2560) with no size cap of their own — at 55% column width
+   that can render several screens tall, dragging the whole page (and the
+   vertically-centered text beside it) out with it. Cap the image to the
+   space actually available below the header (and admin bar, when
+   logged in) instead of letting its intrinsic aspect ratio decide the
+   page's height. "60px" mirrors the same footer-height estimate already
+   used above for .wp-site-blocks > main's min-height; "4rem" accounts for
+   main's own bottom padding (see templates/single-artwork.html) plus
+   breadcrumb spacing above the columns. */
+@media (min-width: 600px) {
+    .single-artwork .wp-block-post-featured-image img {
+        width: 100%;
+        height: calc(100dvh - var(--cz-header-height) - var(--wp-admin--admin-bar--height, 0px) - 60px - 4rem) !important;
+        object-fit: contain !important;
+        border-radius: 12px;
+    }
+}
+
+/* ── Post terms (link back to the artwork's collection) ──────── */
+
+.wp-block-post-terms {
+    margin-bottom: 0.5rem;
+}
+
+.wp-block-post-terms a {
+    display: inline-block;
+    padding: 0.35em 1em;
+    border-radius: 999px;
+    border: 1px solid #1a1a1a;
+    font-size: 11pt;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.wp-block-post-terms a:hover,
+.wp-block-post-terms a:focus-visible {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
 /* ── Pagination ───────────────────────────────────────── */
 
 .wp-block-query-pagination {
     justify-content: center;
-    text-align: center;
-    font-size: 14pt;
-    font-weight: 700;
-    text-transform: uppercase;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
 }
 
-.wp-block-query-pagination a,
+.wp-block-query-pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Previous/next arrows and every number/ellipsis share one pill-button
+   look. .page-numbers covers both real links and the current-page <span>
+   (which isn't a link and shouldn't look like a disabled one). */
+.wp-block-query-pagination-previous,
+.wp-block-query-pagination-next,
 .wp-block-query-pagination .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4em;
+    height: 2.4em;
+    padding: 0 0.7em;
+    border-radius: 999px;
+    border: 1px solid rgba(26, 26, 26, 0.2);
+    font-size: 13pt;
+    font-weight: 500;
     text-decoration: none;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.wp-block-query-pagination-previous:hover,
+.wp-block-query-pagination-next:hover,
+.wp-block-query-pagination a.page-numbers:hover,
+.wp-block-query-pagination a.page-numbers:focus-visible {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+/* Current page: same pill, permanently in the "active" state instead of
+   on hover. */
+.wp-block-query-pagination .page-numbers.current {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+/* The "…" gap marker isn't interactive — no pill, just quiet dots. */
+.wp-block-query-pagination .page-numbers.dots {
+    border-color: transparent;
+    color: #999;
 }
