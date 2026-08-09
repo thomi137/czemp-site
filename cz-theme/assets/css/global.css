@@ -9,19 +9,24 @@
 /* ── Global variables ─────────────────────────────────── */
 
 :root {
-    --cz-header-height: 100px;
+    --cz-header-height: 76px;
 }
 
 @media (min-width: 600px) {
     :root {
-        --cz-header-height: 160px;
+        --cz-header-height: 136px;
     }
 }
 
 /* ── Layout ───────────────────────────────────────────── */
 
 .wp-site-blocks {
+    /* 100vh is the *largest* possible viewport on mobile Safari/Chrome —
+       it doesn't shrink as the address bar collapses/expands, which left
+       extra phantom height below the real content and could trap scroll
+       against the sticky nav. 100dvh tracks the actual visible area. */
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
 }
@@ -30,14 +35,22 @@ body .wp-site-blocks > main.wp-block-group,
 body .wp-site-blocks > main.wp-block-cover {
     flex: 1;
     min-height: calc(100vh - 60px);
+    min-height: calc(100dvh - 60px);
 }
 
 main.wp-block-group {
     padding-top: var(--cz-header-height) !important;
 }
 
-.wp-site-blocks > footer.wp-block-group {
+.wp-site-blocks > .cz-site-footer__bar {
     margin-block-start: 0;
+}
+
+/* Full-bleed hero covers (e.g. the front page) opt out of the standard
+   header clearance with this class, pulling back up to start at the true
+   top of the page — behind the fixed header — instead of leaving a gap. */
+.cz-full-bleed-hero {
+    margin-top: calc(var(--cz-header-height) * -1);
 }
 
 /* ── Header ───────────────────────────────────────────── */
@@ -54,14 +67,15 @@ main.wp-block-group {
 
 /* Sit below the WP admin bar instead of overlapping it when logged in */
 .admin-bar .cz-header {
-    top: 32px;
-}
-
-@media (max-width: 782px) {
-    .admin-bar .cz-header {
         top: 46px;
     }
+
+@media (min-width: 782px) {
+        .admin-bar .cz-header {
+        top: 32px;
+    }
 }
+
 
 html {
     scroll-padding-top: var(--cz-header-height);
@@ -138,6 +152,13 @@ html {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
+}
+
+/* WordPress's global block-gap style adds margin-block-start to every
+   list item but the first (assuming vertical flow layout). That fights
+   with the grid above, pushing every card but the first one down. */
+.cz-artwork-grid .wp-block-post-template > li {
+    margin-block-start: 0;
 }
 
 @media (min-width: 600px) {

@@ -17,6 +17,8 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/sticky-nav');
     register_block_type(get_stylesheet_directory() . '/blocks/collection-subcategories');
     register_block_type(get_stylesheet_directory() . '/blocks/breadcrumbs');
+    register_block_type(get_stylesheet_directory() . '/blocks/site-header');
+    register_block_type(get_stylesheet_directory() . '/blocks/site-footer');
 });
 
 add_action('wp_enqueue_scripts', function () {

@@ -3,3 +3,7 @@
 import '../blocks/gallery-item';
 import '../blocks/artwork-list-item';
 import '../blocks/sticky-nav';
+import '../blocks/breadcrumbs';
+import '../blocks/collection-subcategories';
+import '../blocks/site-header';
+import '../blocks/site-footer';
