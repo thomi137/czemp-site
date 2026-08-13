@@ -40,4 +40,8 @@ endif;
 ?>
 <footer class="cz-site-footer__bar">
     <p>© <?php echo esc_html(date('Y')); ?> Claudia Zemp</p>
+    <p class="cz-site-footer__legal">
+        <a href="<?php echo esc_url(home_url('/impressum/')); ?>">Impressum</a>
+        · <a href="<?php echo esc_url(home_url('/datenschutz/')); ?>">Datenschutz</a>
+    </p>
 </footer>
