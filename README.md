@@ -74,7 +74,7 @@ cz-theme/
 |---|---|
 | `setup.php` | Theme support, block registration, script/style enqueues, WebP image output |
 | `post-types.php` | `artwork` post type + `collection` taxonomy registration, artwork↔image sync |
-| `rest-api.php` | Token-protected `czemp/v1` REST routes used by the migration scripts |
+| `rest-api.php` | Token-protected `czemp/v1` REST routes used by the migration scripts — only registered while `CZ_MIGRATE_TOKEN` is defined in `wp-config.php` |
 | `collection-thumbnail.php` | Term-meta + focal-point picker admin UI for collection thumbnails |
 | `admin.php` | wp-admin list-table columns/filters, Media Library defaults, the per-user default-collection profile field |
 | `frontend.php` | Subcollection query scoping, `/galerie/` → `/gallery/` redirect, nav active-state, pagination cap |

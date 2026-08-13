@@ -1,11 +1,22 @@
 <?php
 // Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 
-// Migration REST endpoints — token-protected, no Basic Auth needed
+// Migration REST endpoints — token-protected, no Basic Auth needed.
+//
+// Deliberately opt-in: these routes only get registered while
+// CZ_MIGRATE_TOKEN is defined in wp-config.php (see
+// scripts/migrate/MIGRATION.md). Undefined — the steady state between
+// migrations — means the routes don't exist at all: wp-json/czemp/v1/*
+// 404s outright rather than merely 403ing a bad token, so there's nothing
+// to enumerate or brute-force when no migration is in progress. Define the
+// token again to bring all four routes back.
+if (!defined('CZ_MIGRATE_TOKEN') || !CZ_MIGRATE_TOKEN) {
+    return;
+}
+
 add_action('rest_api_init', function () {
     $token_check = function (WP_REST_Request $req) {
-        $token = defined('CZ_MIGRATE_TOKEN') ? CZ_MIGRATE_TOKEN : '';
-        return $token && $req->get_header('X-Migrate-Token') === $token
+        return hash_equals(CZ_MIGRATE_TOKEN, (string) $req->get_header('X-Migrate-Token'))
             ? true
             : new WP_Error('rest_forbidden', 'Ungültiger Token.', ['status' => 403]);
     };
