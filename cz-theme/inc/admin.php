@@ -40,7 +40,40 @@ add_action('restrict_manage_posts', function ($post_type) {
         );
     }
     echo '</select>';
+
+    // Tagging an attachment here auto-creates a draft Werk for it (see
+    // cz_maybe_create_artwork_from_attachment() in inc/post-types.php) —
+    // spelling that out right where the tagging decision gets made, since
+    // there's no reliable way to tell "this is a new artwork" from "this is
+    // an extra photo for one that already exists" from the tag alone.
+    if ($post_type === 'attachment') {
+        echo '<p class="description" style="display:block;margin-top:6px;">';
+        echo 'Ein <strong>neues</strong> Foto mit einer Kollektion taggen erstellt automatisch ein neues Werk (als Entwurf). ';
+        echo 'Für ein <strong>zusätzliches</strong> Foto zu einem bestehenden Werk (z. B. eine Nachtaufnahme): nicht taggen — ';
+        echo 'stattdessen über „Werk bearbeiten“ öffnen und das Bild direkt im Inhalt des Werks einfügen.';
+        echo '</p>';
+    }
 });
+
+// Row-action link from a tagged photo straight to the Werk it created (or
+// was already linked to) — the click-through half of the auto-create flow
+// above. Deliberately not an automatic redirect: tagging happens via Quick
+// Edit / bulk edit / AJAX, none of which have a clean "now send her
+// somewhere else" moment.
+add_filter('media_row_actions', function ($actions, $post) {
+    if (get_post_type($post) !== 'attachment') {
+        return $actions;
+    }
+    $artwork_id = wp_get_post_parent_id($post->ID);
+    if (!$artwork_id || get_post_type($artwork_id) !== 'artwork' || get_post_status($artwork_id) === 'trash') {
+        return $actions;
+    }
+    $actions['cz_edit_artwork'] = sprintf(
+        '<a href="%s">Werk bearbeiten →</a>',
+        esc_url(get_edit_post_link($artwork_id))
+    );
+    return $actions;
+}, 10, 2);
 
 // The "all collections" sentinel value ("all") must never be filtered as a
 // real term slug — otherwise the list returns 0 results instead of

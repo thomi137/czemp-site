@@ -226,7 +226,11 @@ html {
    reliably have. Skip the interaction entirely on small screens: show
    the caption permanently. Desktop keeps the normal hover behavior. */
 @media (max-width: 599px) {
-    .cz-showcase-grid .gallery-item .overlay {
+    /* :not(.gallery-item--mobile-overlay-off) lets an individual tile opt
+       out back to the original hover/scroll-into-view reveal (view.js's
+       IntersectionObserver) instead of this being forced on every tile in
+       the grid regardless of what that specific instance wants. */
+    .cz-showcase-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
         opacity: 1 !important;
         pointer-events: all !important;
     }
@@ -263,9 +267,10 @@ html {
 
 /* Same reasoning as the homepage showcase grid: mobile has no hover, so
    an events list is more usable with captions always visible instead of
-   requiring a scroll-triggered reveal per tile. */
+   requiring a scroll-triggered reveal per tile — unless a tile opts out,
+   see the matching comment on .cz-showcase-grid above. */
 @media (max-width: 599px) {
-    .cz-events-grid .gallery-item .overlay {
+    .cz-events-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
         opacity: 1 !important;
         pointer-events: all !important;
     }
@@ -388,6 +393,13 @@ html {
 .post-list-item__title a {
     text-decoration: none;
     color: inherit;
+}
+
+.post-list-item__price {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
 }
 
 .post-list-item__excerpt {

@@ -25,6 +25,12 @@ $show_image   = $attributes['showImage'] ?? true;
                 <?php echo esc_html( get_the_title( $post_id ) ); ?>
             </a>
         </h3>
+        <?php
+        $price = ( get_post_type( $post_id ) === 'artwork' ) ? get_post_meta( $post_id, 'price', true ) : '';
+        if ( $price !== '' ) :
+        ?>
+            <p class="post-list-item__price"><?php echo esc_html( $price ); ?></p>
+        <?php endif; ?>
         <?php if ( $show_excerpt ) : ?>
             <p class="post-list-item__excerpt"><?php echo esc_html( get_the_excerpt( $post_id ) ); ?></p>
         <?php endif; ?>

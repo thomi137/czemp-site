@@ -1,0 +1,8 @@
+/* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
+
+.cz-artwork-price {
+    font-size: 20px; /* matches theme.json's "medium" font-size preset */
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0.25rem 0 0;
+}

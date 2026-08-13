@@ -15,6 +15,7 @@ import {
     ColorPalette,
     FocalPointPicker,
     SelectControl,
+    ToggleControl,
 } from '@wordpress/components';
 
 import { useSelect } from '@wordpress/data';
@@ -30,15 +31,19 @@ export default function Edit({ attributes, setAttributes }) {
         overlayOpacity,
         focalPoint,
         linkUrl,
+        alwaysShowOverlayOnMobile,
     } = attributes;
-
-    const blockProps = useBlockProps({
-        className: 'gallery-item',
-    });
 
     const safeFocalPoint = focalPoint ?? { x: 0.5, y: 0.5 };
     const safeOverlayColor = overlayColor ?? '#000000';
     const safeOverlayOpacity = overlayOpacity ?? 0.6;
+    const safeAlwaysShowOverlayOnMobile = alwaysShowOverlayOnMobile !== false;
+
+    const blockProps = useBlockProps({
+        className: safeAlwaysShowOverlayOnMobile
+            ? 'gallery-item'
+            : 'gallery-item gallery-item--mobile-overlay-off',
+    });
 
     const collections = useSelect((select) => {
         return select('core').getEntityRecords('taxonomy', 'collection', { per_page: -1 });
@@ -89,6 +94,15 @@ export default function Edit({ attributes, setAttributes }) {
                         min={0}
                         max={1}
                         step={0.05}
+                    />
+                    <ToggleControl
+                        __nextHasNoMarginBottom
+                        label="Overlay auf Mobile immer anzeigen"
+                        help={safeAlwaysShowOverlayOnMobile
+                            ? 'Standard: Overlay bleibt auf Mobilgeräten dauerhaft sichtbar.'
+                            : 'Overlay erscheint auf Mobilgeräten nur beim Scrollen ins Bild oder bei Hover.'}
+                        checked={safeAlwaysShowOverlayOnMobile}
+                        onChange={(value) => setAttributes({ alwaysShowOverlayOnMobile: value })}
                     />
                 </PanelBody>
 
