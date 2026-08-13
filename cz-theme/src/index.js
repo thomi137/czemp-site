@@ -9,3 +9,4 @@ import '../blocks/site-header';
 import '../blocks/site-footer';
 import '../blocks/latest-posts';
 import '../blocks/event-archive';
+import '../blocks/artwork-price';

@@ -15,10 +15,19 @@ export default function save({ attributes }) {
         overlayOpacity,
         focalPoint,
         linkUrl,
+        alwaysShowOverlayOnMobile,
     } = attributes;
 
+    // Only ever ADD a class, and only when the toggle is explicitly off.
+    // Old, already-saved content has no alwaysShowOverlayOnMobile key at
+    // all — it parses to the attribute's default (true) — so this must
+    // produce the exact same output as before for every existing instance,
+    // or the Site Editor's byte-for-byte validator flags them all as
+    // "invalid content" the moment this ships.
     const blockProps = useBlockProps.save({
-        className: 'gallery-item',
+        className: alwaysShowOverlayOnMobile === false
+            ? 'gallery-item gallery-item--mobile-overlay-off'
+            : 'gallery-item',
     });
 
     const inner = (
