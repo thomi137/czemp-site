@@ -244,7 +244,10 @@ Thomas to fill in or delete before the real migration run.
     `front-page` template if it was customized on staging).
 11. Remove the `CZ_MIGRATE_TOKEN` define from `wp-config.php`, clear
     `MIGRATE_TOKEN`/`WP_USER`/`WP_APP_PASSWORD` from `.env`, revoke the
-    Application Password in WP-Admin.
+    Application Password in WP-Admin. As of the route-registration guard in
+    `inc/rest-api.php`, removing the define now fully unregisters the four
+    `czemp/v1/*` routes (404) rather than just blocking requests to them
+    (403) — nothing further to do to close them off.
 12. Turn off Seedprod maintenance mode.
 13. Smoke-test the live site (homepage, gallery archive, a collection
     and a subcollection page, a single artwork page, mobile menu).
