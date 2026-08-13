@@ -49,6 +49,10 @@
     "openInNewTab": {
       "type": "boolean",
       "default": false
+    },
+    "alwaysShowOverlayOnMobile": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

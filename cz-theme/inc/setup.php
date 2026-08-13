@@ -33,6 +33,7 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/site-footer');
     register_block_type(get_stylesheet_directory() . '/blocks/latest-posts');
     register_block_type(get_stylesheet_directory() . '/blocks/event-archive');
+    register_block_type(get_stylesheet_directory() . '/blocks/artwork-price');
 });
 
 add_action('wp_enqueue_scripts', function () {

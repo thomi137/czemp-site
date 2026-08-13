@@ -106,3 +106,58 @@ add_action('save_post_artwork', function ($post_id) {
     }
     cz_sync_artwork_thumbnail($post_id);
 });
+
+// The reverse direction: tagging a not-yet-linked photo with a collection
+// (Quick Edit, bulk edit, ...) auto-creates a draft Werk for it, so
+// "upload + tag" is the whole workflow instead of a separate trip to
+// Werke > Neu hinzufügen. Reuses cz_sync_artwork_thumbnail() (via
+// set_post_thumbnail() below) rather than duplicating its title/parent/term
+// sync.
+function cz_maybe_create_artwork_from_attachment($attachment_id) {
+    if (get_post_type($attachment_id) !== 'attachment' || !wp_attachment_is_image($attachment_id)) {
+        return;
+    }
+
+    // Already "Uploaded to" something — a Werk it's already linked to
+    // (including a trashed one: trashing doesn't clear post_parent, and
+    // shouldn't spawn a replacement), or something unrelated entirely (e.g.
+    // a photo embedded in a Page's own content). Either way, leave that
+    // relationship alone rather than silently reassigning it — this also
+    // catches cz_sync_artwork_thumbnail()'s own re-applied terms call
+    // further down, which re-fires this same listener: by then post_parent
+    // is already set, so it exits right here instead of looping. Only a
+    // real, permanent deletion of the linked Werk clears post_parent back
+    // to 0 (WordPress core's own cleanup on wp_delete_post()), which is
+    // what actually allows a fresh Werk to be created next time.
+    if (wp_get_post_parent_id($attachment_id)) {
+        return;
+    }
+
+    $term_ids = wp_get_post_terms($attachment_id, 'collection', ['fields' => 'ids']);
+    if (is_wp_error($term_ids) || empty($term_ids)) {
+        return; // also covers term *removal*, which fires this hook with an empty list
+    }
+
+    $artwork_id = wp_insert_post([
+        'post_type'   => 'artwork',
+        'post_status' => 'draft',
+        'post_title'  => get_the_title($attachment_id),
+    ], true);
+    if (is_wp_error($artwork_id)) {
+        return;
+    }
+
+    // Terms must land on the new Werk before set_post_thumbnail() triggers
+    // cz_sync_artwork_thumbnail() — that function reads the Werk's own
+    // terms and pushes them onto the attachment; if it ran first it would
+    // push an empty list and erase what was just tagged.
+    wp_set_object_terms($artwork_id, $term_ids, 'collection');
+    set_post_thumbnail($artwork_id, $attachment_id);
+}
+
+add_action('set_object_terms', function ($object_id, $terms, $tt_ids, $taxonomy) {
+    if ($taxonomy !== 'collection' || get_post_type($object_id) !== 'attachment') {
+        return;
+    }
+    cz_maybe_create_artwork_from_attachment($object_id);
+}, 10, 4);
