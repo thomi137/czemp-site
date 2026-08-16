@@ -7,7 +7,8 @@
   "icon": "calendar-alt",
   "description": "Zeigt datierte Beiträge (mit gesetztem Sichtbarkeitszeitraum) als Kachel-Raster, gruppiert nach Jahr.",
   "supports": {
-    "html": false
+    "html": false,
+    "anchor": true
   },
   "editorScript": "file:../../build/index.js",
   "render": "file:./render.php",

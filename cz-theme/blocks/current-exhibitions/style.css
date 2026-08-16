@@ -1,0 +1,70 @@
+/* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
+
+.cz-current-exhibitions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Label + chevrons sit inside one button (see render.php/edit.js) — this
+   just lays the two out with a gap, it doesn't restyle either. Font-size,
+   letter-spacing, and text-transform are all inherited from the button's
+   own inline style, so the label matches "Zur Galerie" automatically. */
+.cz-current-exhibitions__arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cz-current-exhibitions__heading {
+    margin: 0;
+}
+
+/* The block editor's reset stylesheet sets `svg { overflow: visible }`
+   (so editor icons never get unexpectedly clipped), which the front end
+   doesn't. Pinning overflow explicitly keeps both contexts identical
+   regardless of what the chevron animation does. */
+.cz-current-exhibitions__icon {
+    display: block;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Box model, color, and hover/focus all come from the wp-block-button__link
+   classes on the element itself (see render.php/edit.js) — same CSS "Zur
+   Galerie" uses. The only thing genuinely unique to this block is the
+   chevron animation, so that's the only thing styled here.
+
+   All three chevrons stay visible throughout — this is an opacity-only
+   pulse, no movement — but animate on the same keyframes offset in time,
+   so the brightness visibly runs from the top chevron down into the
+   bottom one and loops, a "tracking" cue reinforcing the downward scroll
+   without any chevron ever fully disappearing. (Deliberately no
+   `transform` here: a translateY drift on the bottom chevron would have
+   pushed it right up against `__icon`'s `overflow: hidden` edge above.) */
+.cz-current-exhibitions__chevron {
+    animation: cz-current-exhibitions-track 1.6s ease-in-out infinite;
+}
+
+.cz-current-exhibitions__chevron--middle {
+    animation-delay: 0.3s;
+}
+
+.cz-current-exhibitions__chevron--bottom {
+    animation-delay: 0.6s;
+}
+
+@keyframes cz-current-exhibitions-track {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cz-current-exhibitions__chevron {
+        animation: none;
+        opacity: 1;
+    }
+}

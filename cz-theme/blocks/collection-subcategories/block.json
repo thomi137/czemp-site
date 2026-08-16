@@ -7,7 +7,8 @@
   "icon": "category",
   "description": "Renders one card per child term of the currently viewed collection, linking into each. Renders nothing on leaf (childless) terms.",
   "supports": {
-    "html": false
+    "html": false,
+    "anchor": true
   },
   "render": "file:./render.php",
   "editorScript": "file:../../build/index.js",
