@@ -211,6 +211,13 @@ html {
     border-radius: 12px;
 }
 
+/* Single-artwork page: featured image + any content image (dark-mode
+   views, detail crops, etc.) square, no rounding. Every other page keeps
+   the 12px default above. */
+.single-artwork .wp-block-image img {
+    border-radius: 0;
+}
+
 /* ── Utilities ────────────────────────────────────────── */
 
 @media (max-width: 599px) {
@@ -483,12 +490,42 @@ html {
    used above for .wp-site-blocks > main's min-height; "4rem" accounts for
    main's own bottom padding (see templates/single-artwork.html) plus
    breadcrumb spacing above the columns. */
+/* width/height auto + max-width/max-height (not a fixed box +
+   object-fit) on purpose: object-fit:contain kept the img element's own
+   box at the column's full width even when a tall/narrow photo only
+   painted part of it. Auto sizing shrinks the element itself to the
+   actual picture, flush left by normal block flow — no object-position
+   hack needed either. */
 @media (min-width: 600px) {
     .single-artwork .wp-block-post-featured-image img {
-        width: 100%;
-        height: calc(100dvh - var(--cz-header-height) - var(--wp-admin--admin-bar--height, 0px) - 60px - 4rem) !important;
-        object-fit: contain !important;
-        border-radius: 12px;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: calc(100dvh - var(--cz-header-height) - var(--wp-admin--admin-bar--height, 0px) - 60px - 4rem) !important;
+        border-radius: 0;
+    }
+
+    /* The real remaining gap wasn't the img's own box — it's the COLUMN.
+       templates/single-artwork.html sets a fixed flex-basis:55%/45% split
+       (inline style, from the columns block's own width attributes), so
+       a tall/narrow photo capped to viewport height (often well under
+       55% wide once scaled) still sits inside a fixed 55%-wide column,
+       leaving dead space before the text column starts regardless of how
+       tightly the img itself is sized. Overriding the inline flex-basis
+       (needs !important — same reasoning as every other inline-style
+       override in this file) so the image column shrinks to its actual
+       content, capped at 55% as a ceiling for wide/landscape photos
+       instead of a fixed floor for narrow ones. Text column takes
+       whatever's left. */
+    .single-artwork .wp-block-columns > .wp-block-column:first-child {
+        flex: 0 1 auto !important;
+        width: auto !important;
+        max-width: 55%;
+    }
+
+    .single-artwork .wp-block-columns > .wp-block-column:last-child {
+        flex: 1 1 auto !important;
+        width: auto !important;
     }
 }
 
