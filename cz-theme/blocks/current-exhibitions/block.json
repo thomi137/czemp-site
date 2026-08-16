@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/current-exhibitions",
+  "title": "Aktuelle Ausstellungen",
+  "category": "widgets",
+  "icon": "arrow-down-alt2",
+  "description": "Überschrift mit einem sanft auf- und abbewegenden Pfeil, der zum nächsten verankerten Abschnitt scrollt.",
+  "supports": {
+    "html": false
+  },
+  "editorScript": "file:../../build/index.js",
+  "render": "file:./render.php",
+  "style": "file:./style.css",
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Aktuelle Ausstellungen"
+    },
+    "targetAnchor": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "example": {}
+}

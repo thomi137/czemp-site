@@ -5,9 +5,10 @@
   "title": "Aktuelles (neueste Beiträge)",
   "category": "widgets",
   "icon": "megaphone",
-  "description": "Zeigt die 3 neuesten Beiträge, deren Anzeigezeitraum das heutige Datum einschliesst.",
+  "description": "Zeigt alle Beiträge, deren Anzeigezeitraum das heutige Datum einschliesst.",
   "supports": {
-    "html": false
+    "html": false,
+    "anchor": true
   },
   "editorScript": "file:../../build/index.js",
   "render": "file:./render.php",

@@ -29,6 +29,29 @@
 a,
 a:visited {
     color: #1a1a1a;
+    text-decoration: none !important;
+}
+
+/* When an editor adds a hyperlink inside a gallery-item caption (heading
+   or paragraph) and sets its "Link" color to White, WordPress emits its
+   own `.wp-elements-<hash> a:where(...){color:var(--wp--preset--color--white)}`
+   in the global-styles inline CSS. That selector never repeats :visited,
+   so it ties the bare `a:visited` above on specificity — (0,1,1) either
+   way, `:where()` contributes nothing — and cascade order alone decides
+   the winner, exactly like the .cz-site-footer__legal case elsewhere in
+   this file. In practice a visited caption link falls back to the dark
+   #1a1a1a instead of staying the caption's own white. Inherit the
+   caption's already-white color instead of hardcoding it (the
+   wp-elements-<hash> class is regenerated on every edit, so it can't be
+   targeted directly), and beat the tie outright with a selector scoped to
+   `.gallery-item` plus !important. */
+.gallery-item a,
+.gallery-item a:visited {
+    color: #fff !important;
+}
+
+.gallery-item a:hover {
+    text-decoration: underline !important;
 }
 
 /* ── Layout ───────────────────────────────────────────── */
@@ -82,6 +105,27 @@ main.wp-block-group {
     margin-top: calc((var(--cz-header-height) + var(--wp-admin--admin-bar--height, 0px)) * -1) !important;
 }
 
+/* Front page hero: same pull-up as .cz-full-bleed-hero above, applied
+   automatically to the page's first cover block instead of requiring an
+   Additional CSS Class to be set by hand in the editor. Scoped to `.home`
+   (front page, added by WordPress's own body_class()) so it can't affect
+   a cover block used anywhere else on the site. Targets `.wp-block-cover`
+   rather than a direct-child selector because core/post-content wraps the
+   page's actual blocks in its own `.entry-content` layout div, so the
+   cover isn't a direct child of <main>. */
+.home main.wp-block-group .wp-block-cover:first-of-type {
+    margin-top: calc((var(--cz-header-height) + var(--wp-admin--admin-bar--height, 0px)) * -1) !important;
+}
+
+/* The rule above moves the whole cover (image included) up behind the
+   header; it doesn't touch where the heading/text sits inside it. Core's
+   cover block vertically centers its `.wp-block-cover__inner-container`
+   via flex `align-items`, so nudge it up from dead-center with a plain
+   negative margin instead of dead center. */
+.home main.wp-block-group .wp-block-cover:first-of-type .wp-block-cover__inner-container {
+    margin-top: -2.75rem !important;
+}
+
 /* ── Header ───────────────────────────────────────────── */
 
 .cz-header {
@@ -117,8 +161,16 @@ main.wp-block-group {
 }
 
 
+/* Header height alone lands the target flush against the header's bottom
+   edge — technically not hidden, but with no breathing room it reads as
+   the section starting mid-scroll rather than landing on purpose. The
+   extra 2rem is purely cosmetic clearance, not clearance from being
+   covered (that part's done by --cz-header-height on its own). Site-wide
+   rather than scoped to the new scroll-down button specifically: any
+   other fragment/anchor jump (browser back/forward, a future in-page
+   link) should get the same breathing room, not a bare, tighter one. */
 html {
-    scroll-padding-top: var(--cz-header-height);
+    scroll-padding-top: calc(var(--cz-header-height) + 2rem);
 }
 
 .cz-header .wp-block-site-title a {

@@ -34,6 +34,7 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/latest-posts');
     register_block_type(get_stylesheet_directory() . '/blocks/event-archive');
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-price');
+    register_block_type(get_stylesheet_directory() . '/blocks/current-exhibitions');
 });
 
 add_action('wp_enqueue_scripts', function () {
@@ -49,6 +50,13 @@ add_action('wp_enqueue_scripts', function () {
         get_stylesheet_directory_uri() . '/blocks/sticky-nav/view.js',
         [],
         filemtime(get_stylesheet_directory() . '/blocks/sticky-nav/view.js'),
+        true
+    );
+    wp_enqueue_script(
+        'cz-current-exhibitions-view',
+        get_stylesheet_directory_uri() . '/blocks/current-exhibitions/view.js',
+        [],
+        filemtime(get_stylesheet_directory() . '/blocks/current-exhibitions/view.js'),
         true
     );
     wp_enqueue_script(
