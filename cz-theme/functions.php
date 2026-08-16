@@ -19,6 +19,7 @@ foreach ([
     'inc/seo.php',
     'inc/admin.php',
     'inc/frontend.php',
+    'inc/sortable.php',
 ] as $cz_include) {
     require_once get_stylesheet_directory() . '/' . $cz_include;
 }
