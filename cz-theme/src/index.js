@@ -11,3 +11,4 @@ import '../blocks/latest-posts';
 import '../blocks/event-archive';
 import '../blocks/artwork-price';
 import '../blocks/current-exhibitions';
+import '../blocks/artwork-nav';
