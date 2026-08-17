@@ -1,0 +1,38 @@
+/* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
+
+/* Box model/color/hover-invert all come from the wp-block-button__link
+   classes + inline style on the element itself (see render.php) — same
+   CSS every other real button on the site uses. Only position + icon
+   sizing are unique to this block. */
+.cz-artwork-nav__prev,
+.cz-artwork-nav__next {
+    display: none;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15; /* below .cz-header's fixed z-index:20, above page content */
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.cz-artwork-nav__prev {
+    left: 20px;
+}
+
+.cz-artwork-nav__next {
+    right: 20px;
+}
+
+/* Mouse-only, on purpose — touch devices get swipe (view.js) instead of
+   a redundant on-screen button. Arrow-key navigation still works
+   regardless of whether these are visible (document-level listener, not
+   tied to focusing/tabbing to a hidden button). */
+@media (hover: hover) and (pointer: fine) {
+    .cz-artwork-nav__prev,
+    .cz-artwork-nav__next {
+        display: inline-flex;
+    }
+}
