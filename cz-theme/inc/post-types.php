@@ -18,7 +18,15 @@ add_action('init', function () {
         'show_in_rest'  => true,
         'menu_icon'     => 'dashicons-art',
         'menu_position' => 3,
-        'supports'      => ['title', 'editor', 'thumbnail', 'excerpt'],
+        // 'custom-fields' is required for the REST API to expose a `meta`
+        // field on this post type at all — without it, WP_REST_Posts_Controller
+        // never adds `meta` to the schema, so register_post_meta('artwork', ...)
+        // below is silently unreachable via REST no matter how it's
+        // configured (the block editor's meta panel writes vanish with no
+        // error). Support is removed again from the visible "Custom Fields"
+        // meta box just below, since that raw key/value UI isn't meant for
+        // Claudia — only the REST schema access is wanted.
+        'supports'      => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'],
         'has_archive'   => true,
         'rewrite'       => ['slug' => 'galerie'],
     ]);
@@ -42,6 +50,14 @@ add_action('init', function () {
             'assign_terms' => 'edit_posts',
         ],
     ]);
+});
+
+// Hide the generic "Custom Fields" meta box that 'custom-fields' support
+// (added above, needed only so the REST API exposes `meta` at all) would
+// otherwise add to the Werk edit screen — raw key/value UI isn't meant
+// for Claudia, only the "Preis" panel is.
+add_action('add_meta_boxes', function () {
+    remove_meta_box('postcustom', 'artwork', 'normal');
 });
 
 // Register price meta for artwork
