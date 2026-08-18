@@ -126,6 +126,20 @@ main.wp-block-group {
     margin-top: -2.75rem !important;
 }
 
+/* Bug fix, not just a nudge: every paragraph in the hero text has
+   `margin-top:var(--wp--preset--spacing--0)` (set via the editor's
+   spacing control), but theme.json defines no spacing preset named "0"
+   — that custom property doesn't exist, which makes the whole inline
+   declaration invalid at computed-value time, so the browser discards it
+   entirely. What actually applies instead is WordPress's own default
+   block-gap (24px, --wp--style--block-gap, unset in theme.json so core's
+   fallback wins) between every line — Claudia's "0" spacing was silently
+   never applying. Scoped tightly to this one hero text block, not a
+   sitewide spacing-preset fix. */
+.home .wp-block-cover__inner-container .wp-block-group > p {
+    margin-top: 0 !important;
+}
+
 /* ── Header ───────────────────────────────────────────── */
 
 .cz-header {
