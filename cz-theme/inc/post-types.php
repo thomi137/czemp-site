@@ -53,6 +53,27 @@ add_action('init', function () {
     ]);
 });
 
+// "Preis" sidebar panel on the Werk edit screen, so Claudia can set/change
+// a price without touching code. The artwork-price block that displays
+// this value lives in the single-artwork FSE template, which her Editor
+// account can't open (see inc/admin.php) — this panel is the only place
+// she can actually set it.
+add_action('admin_enqueue_scripts', function ($hook) {
+    if (!in_array($hook, ['post.php', 'post-new.php'], true)) {
+        return;
+    }
+    if ('artwork' !== get_current_screen()->post_type) {
+        return;
+    }
+    wp_enqueue_script(
+        'cz-artwork-price-panel',
+        get_stylesheet_directory_uri() . '/assets/js/artwork-price-panel.js',
+        ['wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data'],
+        filemtime(get_stylesheet_directory() . '/assets/js/artwork-price-panel.js'),
+        true
+    );
+});
+
 // Flush rewrite rules once after activation
 add_action('after_switch_theme', function () {
     // Post type & taxonomy are registered via 'init'; flush after.
