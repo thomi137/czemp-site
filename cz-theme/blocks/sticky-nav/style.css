@@ -211,12 +211,16 @@
 
 /* ── Mobile / Desktop breakpoints ──────────────────────── */
 
-@media (max-width: 599px) {
-    .cz-sticky-nav__open  { display: flex; }
-    .cz-sticky-nav__inner { display: none; }
-}
+/* Mobile-first: base (unqualified) rules are the <600px state — hamburger
+   shown, inline desktop nav hidden. The 600px tier flips both back and
+   additionally display:none's the drawer panel wrapper entirely (on top
+   of its own visibility:hidden default) so it doesn't reserve any layout
+   space on desktop, where it's never opened. */
+.cz-sticky-nav__open  { display: flex; }
+.cz-sticky-nav__inner { display: none; }
 
 @media (min-width: 600px) {
     .cz-sticky-nav__panel { display: none; }
     .cz-sticky-nav__open  { display: none; }
+    .cz-sticky-nav__inner { display: flex; }
 }
