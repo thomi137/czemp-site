@@ -20,12 +20,35 @@
    900px  — tablet/desktop split, grids only (2→3 columns).
    1280px — large-desktop type-size tier (header site-title only).
 
+   1024px — small-laptop/tablet-landscape tier, hero text only for now
+            (graduates the hero's desktop pull/heading size instead of
+            jumping straight from mobile-safe to full-desktop the moment
+            600px is crossed — confirmed cramped on an iPad mini in
+            landscape otherwise). This is a genuine, widely-shared
+            content-width class (Tailwind's `lg`, Bootstrap's `lg`), not
+            a bespoke "iPad mini" breakpoint — the distinction matters,
+            don't add a tier for a specific device without this kind of
+            reasoning behind it.
+
    Mobile-first per .claude/rules/coding-guidelines.md: base rules (no
    media query) are the smallest/mobile state, larger tiers layer on top
    via `min-width` only. A few `max-width` queries remain by exception,
    each commented at its own rule with why it isn't converted — see
    `#wpadminbar`, the showcase/events grid overlay rules, and the
-   single-artwork column-stack rule below. */
+   single-artwork column-stack rule below.
+
+   Separately, a HEIGHT axis — not a 4th width tier. A landscape phone
+   crosses the 600px width breakpoint (landscape width is typically
+   840px+) and gets treated as "desktop": tall 136px header, larger type,
+   vertically-centered hero text sized for a viewport that's actually
+   tall. On a real landscape phone the viewport is only ~380–430px
+   *tall*, so those desktop assumptions collide with the fixed header and
+   crop content — confirmed live. `(min-height: 500px)` gates the
+   desktop-tier bumps (header height, site-title size) so they need width
+   AND real vertical room; `(max-height: 500px)` triggers the
+   landscape-phone shrink where something needs the opposite. 500px is a
+   height threshold, lives on its own axis from the 3 width numbers above
+   — combine, don't fold into that list. */
 
 /* ── Global variables ─────────────────────────────────── */
 
@@ -33,7 +56,7 @@
     --cz-header-height: 76px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 600px) and (min-height: 500px) {
     :root {
         --cz-header-height: 136px;
     }
@@ -139,12 +162,35 @@ main.wp-block-group {
 }
 
 /* The rule above moves the whole cover (image included) up behind the
-   header; it doesn't touch where the heading/text sits inside it. Core's
-   cover block vertically centers its `.wp-block-cover__inner-container`
-   via flex `align-items`, so nudge it up from dead-center with a plain
-   negative margin instead of dead center. */
+   header; it doesn't touch where the heading/text sits inside it.
+
+   This used to be a vertically-centered layout nudged up from dead-center
+   with a negative margin (-2.75rem here, plus an inline -8rem on the text
+   group itself, tuned by eye against one specific desktop width). That
+   combination was never actually safe at every width: it depends on the
+   text's rendered height relative to the viewport, which changes with
+   font-size, line-wrapping, and viewport height — every "fix" this
+   session for one width/orientation left others still broken (confirmed
+   repeatedly, most recently: still too close to the header well above
+   1024px, a range none of the earlier per-tier patches touched).
+
+   Replaced with a hard guarantee instead of a tuned guess: top-align the
+   text (no more centering-then-pulling-up) and give it a fixed minimum
+   clearance below the header via padding-top, computed from the same
+   --cz-header-height variable the header itself uses. This can't drift
+   out of sync with the header's real height at any width, admin-bar
+   state, or content length — there's no more magic pull number to
+   re-tune per breakpoint. Applies at every width; only the heading/
+   paragraph font-size still varies by tier below. */
+.home main.wp-block-group .wp-block-cover:first-of-type {
+    align-items: flex-start !important;
+}
 .home main.wp-block-group .wp-block-cover:first-of-type .wp-block-cover__inner-container {
-    margin-top: -2.75rem !important;
+    margin-top: 0 !important;
+    padding-top: calc(var(--cz-header-height) + 1.5rem) !important;
+}
+.home .wp-block-cover__inner-container .wp-block-group {
+    margin-top: 0 !important;
 }
 
 /* Bug fix, not just a nudge: every paragraph in the hero text has
@@ -159,6 +205,52 @@ main.wp-block-group {
    sitewide spacing-preset fix. */
 .home .wp-block-cover__inner-container .wp-block-group > p {
     margin-top: 0 !important;
+}
+
+/* Positioning is now handled unconditionally above (top-align + a hard
+   padding-top clearance from the header) — everything left here is just
+   font-size/spacing tuned per tier, small screen to large. */
+
+/* Mobile / short-height landscape phone. */
+@media (max-width: 599px), (max-height: 500px) {
+    .home main.wp-block-group .wp-block-cover:first-of-type {
+        /* Content is short and top-aligned — forcing the cover to a full
+           min-height:100vh (its own inline style) leaves a long dead
+           stretch of bare background image below the buttons before the
+           next section even starts. Let it hug its actual content
+           instead; still full-bleed width, just not artificially
+           stretched to fill the whole screen. */
+        min-height: auto !important;
+    }
+    .home main.wp-block-group .wp-block-cover:first-of-type .wp-block-cover__inner-container {
+        padding-bottom: 3rem !important;
+    }
+    .home .wp-block-cover__inner-container .wp-block-group > h1.wp-block-heading {
+        font-size: 33pt !important;
+        margin-left: 1.25rem !important;
+        margin-bottom: 1.5rem;
+    }
+    .home .wp-block-cover__inner-container .wp-block-group > p.wp-block-paragraph {
+        font-size: 18pt !important;
+    }
+    /* Every hero paragraph also carries that fixed inline
+       margin-left/right:141px (desktop text-width control, set in the
+       editor) — cut down to match the heading's own left margin above,
+       so title and body text line up flush on the same left edge. */
+    .home .wp-block-cover__inner-container .wp-block-group > p {
+        margin-left: 1.25rem !important;
+        margin-right: 1.25rem !important;
+    }
+}
+
+/* 600–1023px, tall enough to not be a landscape phone (that's the rule
+   above): the small-laptop/tablet-landscape tier. Step the heading down
+   partway between the mobile-safe size above and the desktop inline
+   value — first pass, adjust after a real look. */
+@media (min-width: 600px) and (max-width: 1023px) and (min-height: 501px) {
+    .home .wp-block-cover__inner-container .wp-block-group > h1.wp-block-heading {
+        font-size: 48pt !important;
+    }
 }
 
 /* ── Header ───────────────────────────────────────────── */
@@ -216,13 +308,13 @@ html {
     font-size: 12pt;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 600px) and (min-height: 500px) {
     .cz-header .wp-block-site-title a {
         font-size: 14pt;
     }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1280px) and (min-height: 500px) {
     .cz-header .wp-block-site-title a {
         font-size: 18pt;
     }
@@ -266,15 +358,8 @@ html {
 
 /* ── Utilities ────────────────────────────────────────── */
 
-/* Editor-facing utility (add via the block's "Additional CSS Class(es)"
-   field) — not used by any template directly. Mobile-first: hidden by
-   default, `unset` (not a specific display value) at the 600px tier so
-   it doesn't force block/flex/grid on whatever the block's own display
-   type actually is. */
-.cz-hide-mobile { display: none; }
-
-@media (min-width: 600px) {
-    .cz-hide-mobile { display: unset; }
+@media (max-width: 599px) {
+    .cz-hide-mobile { display: none; }
 }
 
 /* ── Buttons ──────────────────────────────────────────── */

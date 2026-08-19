@@ -20,6 +20,22 @@
     padding: 24px 16px;
 }
 
+/* Phone in landscape: viewport height is short enough that the bar's
+   normal padding/nav text size (tuned for portrait, where height is
+   never the constraint) dominates too much of the visible screen. A
+   height concern, not a width one, so it's tracked separately from the
+   theme's 3 width-based breakpoints (see the comment in
+   assets/css/global.css) rather than folded into that scale. */
+@media (max-height: 500px) and (orientation: landscape) {
+    .cz-sticky-nav__bar {
+        padding: 10px 16px;
+    }
+    .cz-sticky-nav__inner .wp-block-navigation,
+    .cz-sticky-nav__inner .wp-block-navigation__container {
+        font-size: 12pt !important;
+    }
+}
+
 /* ── Hamburger ──────────────────────────────────────────── */
 
 .cz-sticky-nav__open {
@@ -211,16 +227,12 @@
 
 /* ── Mobile / Desktop breakpoints ──────────────────────── */
 
-/* Mobile-first: base (unqualified) rules are the <600px state — hamburger
-   shown, inline desktop nav hidden. The 600px tier flips both back and
-   additionally display:none's the drawer panel wrapper entirely (on top
-   of its own visibility:hidden default) so it doesn't reserve any layout
-   space on desktop, where it's never opened. */
-.cz-sticky-nav__open  { display: flex; }
-.cz-sticky-nav__inner { display: none; }
+@media (max-width: 599px) {
+    .cz-sticky-nav__open  { display: flex; }
+    .cz-sticky-nav__inner { display: none; }
+}
 
 @media (min-width: 600px) {
     .cz-sticky-nav__panel { display: none; }
     .cz-sticky-nav__open  { display: none; }
-    .cz-sticky-nav__inner { display: flex; }
 }

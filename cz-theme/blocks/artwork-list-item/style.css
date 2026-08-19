@@ -1,23 +1,9 @@
 /* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
 
-/* Mobile-first: stacked by default (was previously implicit via a
-   max-width:600px override — now explicit, since the 600px min-width
-   rule below has to state flex-direction:row rather than rely on flex's
-   default). Also fixes a real inconsistency: this used to be the only
-   "mobile ceiling" query in the theme at max-width:600px instead of
-   599px, a 1px overlap with the 600px min-width tier used everywhere
-   else — see the breakpoints comment in assets/css/global.css. */
 .post-list-item {
     display: flex;
-    flex-direction: column;
     gap: 1.5rem;
     align-items: flex-start;
-}
-
-@media (min-width: 600px) {
-    .post-list-item {
-        flex-direction: row;
-    }
 }
 
 .post-list-item__image {
@@ -43,3 +29,10 @@
     margin-top: 0.5rem;
 }
 
+@media (max-width: 600px) {
+
+    .post-list-item {
+        flex-direction: column;
+    }
+
+}
