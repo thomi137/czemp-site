@@ -6,6 +6,27 @@
  * @since: 1.0
 */
 
+/* ── Breakpoints ──────────────────────────────────────── */
+
+/* The theme's 3 breakpoints, as literal-value reference — NOT real CSS
+   custom properties, because `@media` conditions can't read them
+   (`@media (min-width: var(--x))` is not valid CSS, browsers ignore it
+   outright). Every `@media` query in this theme — global.css and every
+   block's style.css — uses these exact numbers. Don't introduce a 4th
+   value without updating this comment.
+
+   600px  — mobile/tablet split. The workhorse breakpoint: header height,
+            padding, every grid's 1→2 columns, nav drawer/inline switch.
+   900px  — tablet/desktop split, grids only (2→3 columns).
+   1280px — large-desktop type-size tier (header site-title only).
+
+   Mobile-first per .claude/rules/coding-guidelines.md: base rules (no
+   media query) are the smallest/mobile state, larger tiers layer on top
+   via `min-width` only. A few `max-width` queries remain by exception,
+   each commented at its own rule with why it isn't converted — see
+   `#wpadminbar`, the showcase/events grid overlay rules, and the
+   single-artwork column-stack rule below. */
+
 /* ── Global variables ─────────────────────────────────── */
 
 :root {
@@ -168,6 +189,10 @@ main.wp-block-group {
    underneath/through it. Only ever applies to logged-in editors, never
    to real site visitors, so it's safe to force back to the old fixed
    behavior we already build the rest of the layout around. */
+/* Exception to the theme's min-width-only convention (see the
+   breakpoints comment near the top of this file): 782px is WordPress
+   core's own admin-bar breakpoint, not one of ours — kept as max-width
+   to mirror core exactly rather than translate it into our scale. */
 @media screen and (max-width: 782px) {
     #wpadminbar {
         position: fixed !important;
@@ -212,6 +237,13 @@ html {
     }
 }
 
+/* NOT a dead clamp — the upper bound is load-bearing. Above 1279px this
+   deliberately matches no rule at all (padding reverts to 0), which is
+   what lets the homepage hero cover (main is unclamped/is-layout-flow,
+   see the showcase-grid comment below) go genuinely edge-to-edge at wide
+   viewports. Mistakenly "simplified" to an unbounded min-width once
+   already — broke full-bleed at ≥1280px in production. Don't repeat
+   that; leave the max-width in place. */
 @media (min-width: 600px) and (max-width: 1279px) {
     main.wp-block-group {
         padding-left: 48px;
@@ -234,8 +266,15 @@ html {
 
 /* ── Utilities ────────────────────────────────────────── */
 
-@media (max-width: 599px) {
-    .cz-hide-mobile { display: none; }
+/* Editor-facing utility (add via the block's "Additional CSS Class(es)"
+   field) — not used by any template directly. Mobile-first: hidden by
+   default, `unset` (not a specific display value) at the 600px tier so
+   it doesn't force block/flex/grid on whatever the block's own display
+   type actually is. */
+.cz-hide-mobile { display: none; }
+
+@media (min-width: 600px) {
+    .cz-hide-mobile { display: unset; }
 }
 
 /* ── Buttons ──────────────────────────────────────────── */
@@ -298,6 +337,13 @@ html {
    which needs room to breathe that a 3-item highlight strip doesn't
    reliably have. Skip the interaction entirely on small screens: show
    the caption permanently. Desktop keeps the normal hover behavior. */
+/* Exception to the min-width-only convention: the hover-reveal behavior
+   this overrides (opacity:0 + :hover) is an unconditional base rule in
+   blocks/gallery-item/style.css, a different file, with its own
+   transition. Converting this to true mobile-first means moving that
+   hover system itself behind a min-width (or hover:hover) query — real
+   surgery on a separately-tuned interaction, not a mechanical
+   restructure. Left as max-width on purpose. */
 @media (max-width: 599px) {
     /* :not(.gallery-item--mobile-overlay-off) lets an individual tile opt
        out back to the original hover/scroll-into-view reveal (view.js's
@@ -342,6 +388,7 @@ html {
    an events list is more usable with captions always visible instead of
    requiring a scroll-triggered reveal per tile — unless a tile opts out,
    see the matching comment on .cz-showcase-grid above. */
+/* Same exception as .cz-showcase-grid above — left as max-width. */
 @media (max-width: 599px) {
     .cz-events-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
         opacity: 1 !important;
@@ -483,6 +530,13 @@ html {
 
 /* ── Single artwork: text under image on mobile ───────── */
 
+/* Exception to the min-width-only convention: interacts with per-column
+   inline flex-basis styles from templates/single-artwork.html (55%/45%)
+   plus a second, separate min-width:600px rule further below in this
+   file that re-shrinks the image column to content width. This region
+   has already been the source of two rounds of live debugging this
+   session (see single-artwork-image-fit.md) — not worth the regression
+   risk for a style-purity rewrite with no visible difference. */
 @media (max-width: 599px) {
     .single-artwork .wp-block-columns {
         flex-direction: column;
