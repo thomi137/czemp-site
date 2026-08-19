@@ -23,6 +23,10 @@
     }
 }
 
+/* NOT a dead clamp — matches the same load-bearing upper bound on
+   main.wp-block-group's padding in global.css (see that comment).
+   Reverted after mistakenly removing it broke the homepage hero's
+   full-bleed at ≥1280px in production. */
 @media (min-width: 600px) and (max-width: 1279px) {
     .cz-header__brand {
         padding-left: 48px;
