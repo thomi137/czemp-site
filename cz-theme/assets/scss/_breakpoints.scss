@@ -49,6 +49,17 @@ $lg: 1024px;
 $xl: 1280px;
 $height-sm: 500px;
 
+// Derived values, precomputed once here rather than as inline
+// arithmetic inside each @media feature below (`min-height: $x + 1px`
+// etc.) — some SCSS language servers/linters mis-parse an inline binary
+// expression in that position (Dart Sass itself compiles it fine, this
+// is purely an editor-tooling readability fix). A bare variable
+// reference in a media feature is unambiguous to every tool.
+$sm-max: $sm - 1px;               // 599px — one below $sm, the mobile ceiling
+$lg-max: $lg - 1px;                // 1023px — one below $lg
+$xl-max: $xl - 1px;                // 1279px — one below $xl
+$height-sm-strict: $height-sm + 1px; // 501px — strictly above the height threshold
+
 @mixin sm { @media (min-width: $sm) { @content; } }
 @mixin md { @media (min-width: $md) { @content; } }
 @mixin lg { @media (min-width: $lg) { @content; } }
@@ -56,12 +67,12 @@ $height-sm: 500px;
 
 // Mobile ceiling — the max-width mirror of $sm, for the few rules that
 // are genuinely a "below $sm" state rather than a "$sm and up" layer.
-@mixin below-sm { @media (max-width: $sm - 1px) { @content; } }
+@mixin below-sm { @media (max-width: $sm-max) { @content; } }
 
 // The $sm–$lg range only (600–1023px) — the hero's small-laptop/tablet
 // step, distinct from both the mobile-safe size below it and the full
 // desktop value at $lg and up.
-@mixin sm-to-lg { @media (min-width: $sm) and (max-width: $lg - 1px) { @content; } }
+@mixin sm-to-lg { @media (min-width: $sm) and (max-width: $lg-max) { @content; } }
 
 // The $sm–$xl range (600–1279px) — main.wp-block-group's padding clamp.
 // NOT a dead upper bound: above $xl this deliberately matches nothing
@@ -69,11 +80,11 @@ $height-sm: 500px;
 // genuinely edge-to-edge at wide viewports. Mistakenly "simplified" to
 // an unbounded min-width once already — broke full-bleed at ≥1280px in
 // production. Don't repeat that.
-@mixin sm-to-xl { @media (min-width: $sm) and (max-width: $xl - 1px) { @content; } }
+@mixin sm-to-xl { @media (min-width: $sm) and (max-width: $xl-max) { @content; } }
 
 @mixin landscape-phone { @media (max-height: $height-sm) { @content; } }
 @mixin desktop-height { @media (min-height: $height-sm) { @content; } }
-@mixin desktop-height-strict { @media (min-height: $height-sm + 1px) { @content; } }
+@mixin desktop-height-strict { @media (min-height: $height-sm-strict) { @content; } }
 
 // "Mobile-width OR short-height" — the two-axis OR condition used
 // wherever a rule needs to fire on either a narrow phone (portrait) or a
@@ -81,7 +92,7 @@ $height-sm: 500px;
 // comma-separated (OR) media query the way they can an AND, so this
 // gets its own combined mixin instead of composing two others.
 @mixin mobile-or-short {
-    @media (max-width: $sm - 1px), (max-height: $height-sm) {
+    @media (max-width: $sm-max), (max-height: $height-sm) {
         @content;
     }
 }
