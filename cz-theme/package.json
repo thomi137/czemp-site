@@ -4,14 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "wp-scripts build",
-    "start": "wp-scripts start"
+    "build": "wp-scripts build && npm run build:css && npm run build:js",
+    "build:css": "sass --style=compressed --no-source-map assets/scss/global.scss:assets/css/global.css blocks/site-header/style.scss:blocks/site-header/style.css blocks/artwork-list-item/style.scss:blocks/artwork-list-item/style.css blocks/sticky-nav/style.scss:blocks/sticky-nav/style.css",
+    "build:js": "esbuild assets/js/*.js --minify --outdir=build/js",
+    "start": "wp-scripts start",
+    "start:css": "sass --watch assets/scss/global.scss:assets/css/global.css blocks/site-header/style.scss:blocks/site-header/style.css blocks/artwork-list-item/style.scss:blocks/artwork-list-item/style.css blocks/sticky-nav/style.scss:blocks/sticky-nav/style.css",
+    "start:js": "esbuild assets/js/*.js --outdir=build/js --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "^31.4.0"
+    "@wordpress/scripts": "^31.4.0",
+    "esbuild": "0.27.7",
+    "sass": "1.103.0"
   },
   "dependencies": {
     "@wordpress/block-editor": "^14.14.6",

@@ -1,0 +1,33 @@
+/* No theme.json color palette is defined, so without this every plain-text
+   link on the site (post-terms, pagination, etc.) falls back to the
+   browser's default blue/purple — including a visited color, which we
+   don't want anywhere. Low specificity (bare element selector) on purpose:
+   anything that already sets its own link color (buttons, breadcrumbs,
+   gallery-item captions, nav) keeps doing so untouched. */
+a,
+a:visited {
+    color: #1a1a1a;
+    text-decoration: none !important;
+}
+
+/* When an editor adds a hyperlink inside a gallery-item caption (heading
+   or paragraph) and sets its "Link" color to White, WordPress emits its
+   own `.wp-elements-<hash> a:where(...){color:var(--wp--preset--color--white)}`
+   in the global-styles inline CSS. That selector never repeats :visited,
+   so it ties the bare `a:visited` above on specificity — (0,1,1) either
+   way, `:where()` contributes nothing — and cascade order alone decides
+   the winner, exactly like the .cz-site-footer__legal case elsewhere in
+   this file. In practice a visited caption link falls back to the dark
+   #1a1a1a instead of staying the caption's own white. Inherit the
+   caption's already-white color instead of hardcoding it (the
+   wp-elements-<hash> class is regenerated on every edit, so it can't be
+   targeted directly), and beat the tie outright with a selector scoped to
+   `.gallery-item` plus !important. */
+.gallery-item a,
+.gallery-item a:visited {
+    color: #fff !important;
+}
+
+.gallery-item a:hover {
+    text-decoration: underline !important;
+}

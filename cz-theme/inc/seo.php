@@ -94,9 +94,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_enqueue_media();
     wp_enqueue_script(
         'cz-seo-image-picker',
-        get_stylesheet_directory_uri() . '/assets/js/seo-image-picker.js',
+        get_stylesheet_directory_uri() . '/build/js/seo-image-picker.js',
         ['jquery'],
-        filemtime(get_stylesheet_directory() . '/assets/js/seo-image-picker.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/seo-image-picker.js'),
         true
     );
 });
@@ -177,9 +177,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_enqueue_media();
     wp_enqueue_script(
         'cz-seo-post-image-picker',
-        get_stylesheet_directory_uri() . '/assets/js/seo-post-image-picker.js',
+        get_stylesheet_directory_uri() . '/build/js/seo-post-image-picker.js',
         ['jquery'],
-        filemtime(get_stylesheet_directory() . '/assets/js/seo-post-image-picker.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/seo-post-image-picker.js'),
         true
     );
 });

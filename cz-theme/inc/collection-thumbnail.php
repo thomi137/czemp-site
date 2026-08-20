@@ -89,9 +89,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     );
     wp_enqueue_script(
         'cz-collection-thumbnail-picker',
-        get_stylesheet_directory_uri() . '/assets/js/collection-thumbnail-picker.js',
+        get_stylesheet_directory_uri() . '/build/js/collection-thumbnail-picker.js',
         ['jquery'],
-        filemtime(get_stylesheet_directory() . '/assets/js/collection-thumbnail-picker.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/collection-thumbnail-picker.js'),
         true
     );
 });

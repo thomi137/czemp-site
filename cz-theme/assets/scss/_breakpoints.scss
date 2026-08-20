@@ -1,0 +1,87 @@
+// Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
+
+// The theme's single source of truth for breakpoints — was 4 hand-typed
+// literal values duplicated across global.css and 3 block style.css
+// files, kept in sync only by a comment ("don't introduce a 5th value
+// without updating this comment"). Real CSS custom properties can't be
+// used for this — `@media (min-width: var(--x))` is invalid CSS,
+// browsers ignore it outright — so Sass variables/mixins (resolved at
+// compile time, before the browser ever sees the media query) are the
+// actual fix, not a workaround.
+//
+// 600px  — mobile/tablet split. The workhorse breakpoint: header height,
+//          padding, every grid's 1→2 columns, nav drawer/inline switch.
+// 900px  — tablet/desktop split, grids only (2→3 columns).
+// 1024px — small-laptop/tablet-landscape tier, hero text only for now
+//          (graduates the hero's desktop pull/heading size instead of
+//          jumping straight from mobile-safe to full-desktop the moment
+//          600px is crossed — confirmed cramped on an iPad mini in
+//          landscape otherwise). This is a genuine, widely-shared
+//          content-width class (Tailwind's `lg`, Bootstrap's `lg`), not
+//          a bespoke "iPad mini" breakpoint — the distinction matters,
+//          don't add a tier for a specific device without this kind of
+//          reasoning behind it.
+// 1280px — large-desktop type-size tier (header site-title only).
+//
+// Mobile-first per .claude/rules/coding-guidelines.md: base rules (no
+// media query) are the smallest/mobile state, larger tiers layer on top
+// via `min-width` only. A few `max-width` queries remain by exception,
+// each commented at its own rule with why it isn't converted — see
+// `#wpadminbar`, the showcase/events grid overlay rules, and the
+// single-artwork column-stack rule.
+//
+// Separately, a HEIGHT axis — not a 5th width tier. A landscape phone
+// crosses the 600px width breakpoint (landscape width is typically
+// 840px+) and gets treated as "desktop": tall 136px header, larger type,
+// vertically-centered hero text sized for a viewport that's actually
+// tall. On a real landscape phone the viewport is only ~380–430px
+// *tall*, so those desktop assumptions collide with the fixed header and
+// crop content — confirmed live. `min-height: $height-sm` gates the
+// desktop-tier bumps (header height, site-title size) so they need width
+// AND real vertical room; `max-height: $height-sm` triggers the
+// landscape-phone shrink where something needs the opposite. 500px is a
+// height threshold, lives on its own axis from the 4 width numbers above
+// — combine, don't fold into that list.
+
+$sm: 600px;
+$md: 900px;
+$lg: 1024px;
+$xl: 1280px;
+$height-sm: 500px;
+
+@mixin sm { @media (min-width: $sm) { @content; } }
+@mixin md { @media (min-width: $md) { @content; } }
+@mixin lg { @media (min-width: $lg) { @content; } }
+@mixin xl { @media (min-width: $xl) { @content; } }
+
+// Mobile ceiling — the max-width mirror of $sm, for the few rules that
+// are genuinely a "below $sm" state rather than a "$sm and up" layer.
+@mixin below-sm { @media (max-width: $sm - 1px) { @content; } }
+
+// The $sm–$lg range only (600–1023px) — the hero's small-laptop/tablet
+// step, distinct from both the mobile-safe size below it and the full
+// desktop value at $lg and up.
+@mixin sm-to-lg { @media (min-width: $sm) and (max-width: $lg - 1px) { @content; } }
+
+// The $sm–$xl range (600–1279px) — main.wp-block-group's padding clamp.
+// NOT a dead upper bound: above $xl this deliberately matches nothing
+// (padding reverts to 0), which is what lets the homepage hero cover go
+// genuinely edge-to-edge at wide viewports. Mistakenly "simplified" to
+// an unbounded min-width once already — broke full-bleed at ≥1280px in
+// production. Don't repeat that.
+@mixin sm-to-xl { @media (min-width: $sm) and (max-width: $xl - 1px) { @content; } }
+
+@mixin landscape-phone { @media (max-height: $height-sm) { @content; } }
+@mixin desktop-height { @media (min-height: $height-sm) { @content; } }
+@mixin desktop-height-strict { @media (min-height: $height-sm + 1px) { @content; } }
+
+// "Mobile-width OR short-height" — the two-axis OR condition used
+// wherever a rule needs to fire on either a narrow phone (portrait) or a
+// short viewport (landscape phone), but nested mixins can't express a
+// comma-separated (OR) media query the way they can an AND, so this
+// gets its own combined mixin instead of composing two others.
+@mixin mobile-or-short {
+    @media (max-width: $sm - 1px), (max-height: $height-sm) {
+        @content;
+    }
+}

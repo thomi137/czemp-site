@@ -1,0 +1,5 @@
+@use "../breakpoints" as bp;
+
+@include bp.below-sm {
+    .cz-hide-mobile { display: none; }
+}

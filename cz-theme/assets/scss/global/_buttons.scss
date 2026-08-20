@@ -1,0 +1,16 @@
+/* Every button on the site is hand-styled per-instance with an inline
+   background/text color (there's no theme.json button preset to hook a
+   :hover variant onto), so this has to win over the inline style with
+   !important. Simple color invert on hover/focus — reads as a clear,
+   deliberate state change without introducing a second color anywhere
+   on the site. */
+.wp-block-button__link {
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wp-block-button__link:hover,
+.wp-block-button__link:focus-visible {
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: inset 0 0 0 1px #1a1a1a;
+}

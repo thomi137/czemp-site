@@ -1,0 +1,59 @@
+@use "../breakpoints" as bp;
+
+/* core/group's grid layout with a fixed columnCount has no responsive
+   behavior of its own — WordPress emits a single, permanent
+   `grid-template-columns: repeat(3, minmax(0, 1fr))` regardless of
+   viewport, unlike the other grids on the site. Left alone, that
+   squeezes 3 gallery-item tiles into ~100px-wide columns on a phone. */
+.cz-showcase-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    /* This sits directly in <main>, which is deliberately unclamped
+       (is-layout-flow) so the hero cover can go full-bleed — so unlike
+       the hero's own inner content (clamped via post-content's
+       is-layout-constrained), this grid needs its own cap to line up
+       with the header logo and the hero text at the same 1200px
+       content-size, instead of stretching edge-to-edge on wide screens. */
+    max-width: 1200px;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+}
+
+@include bp.sm {
+    .cz-showcase-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+@include bp.md {
+    .cz-showcase-grid {
+        grid-template-columns: 1fr 1fr 1fr !important;
+    }
+}
+
+/* On the real gallery grid, hover/scroll-reveal makes sense — you're
+   browsing many tiles. Here there are only 3, curated, meant to be read
+   at a glance, and mobile has no hover at all — the JS reveal only
+   fires once a tile crosses a visibility threshold while scrolling,
+   which needs room to breathe that a 3-item highlight strip doesn't
+   reliably have. Skip the interaction entirely on small screens: show
+   the caption permanently. Desktop keeps the normal hover behavior. */
+/* Exception to the min-width-only convention: the hover-reveal behavior
+   this overrides (opacity:0 + :hover) is an unconditional base rule in
+   blocks/gallery-item/style.css, a different file, with its own
+   transition. Converting this to true mobile-first means moving that
+   hover system itself behind a min-width (or hover:hover) query — real
+   surgery on a separately-tuned interaction, not a mechanical
+   restructure. Kept as a "below $sm" query on purpose; still pulls the
+   shared $sm literal via the mixin rather than a second hardcoded 599. */
+@include bp.below-sm {
+    /* :not(.gallery-item--mobile-overlay-off) lets an individual tile opt
+       out back to the original hover/scroll-into-view reveal (view.js's
+       IntersectionObserver) instead of this being forced on every tile in
+       the grid regardless of what that specific instance wants. */
+    .cz-showcase-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}

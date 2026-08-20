@@ -1,0 +1,13 @@
+@use "../breakpoints" as bp;
+
+:root {
+    --cz-header-height: 76px;
+}
+
+@include bp.sm {
+    @include bp.desktop-height {
+        :root {
+            --cz-header-height: 136px;
+        }
+    }
+}

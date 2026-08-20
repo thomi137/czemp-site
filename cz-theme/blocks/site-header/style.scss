@@ -1,5 +1,7 @@
 /* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
 
+@use "../../assets/scss/breakpoints" as bp;
+
 .cz-header__brand {
     display: flex;
     flex-wrap: nowrap;
@@ -16,18 +18,14 @@
     margin-inline: auto;
 }
 
-@media (max-width: 599px) {
+@include bp.below-sm {
     .cz-header__brand {
         padding-left: 20px;
         padding-right: 20px;
     }
 }
 
-/* NOT a dead clamp — matches the same load-bearing upper bound on
-   main.wp-block-group's padding in global.css (see that comment).
-   Reverted after mistakenly removing it broke the homepage hero's
-   full-bleed at ≥1280px in production. */
-@media (min-width: 600px) and (max-width: 1279px) {
+@include bp.sm-to-xl {
     .cz-header__brand {
         padding-left: 48px;
         padding-right: 48px;

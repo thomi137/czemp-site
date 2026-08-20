@@ -1,0 +1,56 @@
+.wp-block-query-pagination {
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+}
+
+.wp-block-query-pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Previous/next arrows and every number/ellipsis share one pill-button
+   look. .page-numbers covers both real links and the current-page <span>
+   (which isn't a link and shouldn't look like a disabled one). */
+.wp-block-query-pagination-previous,
+.wp-block-query-pagination-next,
+.wp-block-query-pagination .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4em;
+    height: 2.4em;
+    padding: 0 0.7em;
+    border-radius: 999px;
+    border: 1px solid rgba(26, 26, 26, 0.2);
+    font-size: 13pt;
+    font-weight: 500;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.wp-block-query-pagination-previous:hover,
+.wp-block-query-pagination-next:hover,
+.wp-block-query-pagination a.page-numbers:hover,
+.wp-block-query-pagination a.page-numbers:focus-visible {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+/* Current page: same pill, permanently in the "active" state instead of
+   on hover. */
+.wp-block-query-pagination .page-numbers.current {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+}
+
+/* The "…" gap marker isn't interactive — no pill, just quiet dots. */
+.wp-block-query-pagination .page-numbers.dots {
+    border-color: transparent;
+    color: #999;
+}

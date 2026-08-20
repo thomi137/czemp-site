@@ -1,0 +1,10 @@
+.wp-block-image img {
+    border-radius: 12px;
+}
+
+/* Single-artwork page: featured image + any content image (dark-mode
+   views, detail crops, etc.) square, no rounding. Every other page keeps
+   the 12px default above. */
+.single-artwork .wp-block-image img {
+    border-radius: 0;
+}
