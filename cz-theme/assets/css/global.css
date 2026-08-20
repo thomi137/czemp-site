@@ -6,20 +6,32 @@
  * @since: 1.0
 */
 
+/* Opt in to the browser's native cross-document View Transitions for
+   normal navigations, site-wide. Mainly for blocks/artwork-nav's prev/
+   next navigation (see the `view-transition-name` on the single-artwork
+   featured image further down — that's what turns this from a generic
+   whole-page crossfade into the old image visibly morphing into the
+   new one), but harmless everywhere else too: any other same-origin
+   navigation just gets a subtle default crossfade instead of a hard
+   cut. Unsupported browsers ignore this at-rule entirely and get
+   today's instant navigation — no fallback code needed, this degrades
+   on its own. */
+@view-transition {
+    navigation: auto;
+}
+
 /* ── Breakpoints ──────────────────────────────────────── */
 
-/* The theme's 3 breakpoints, as literal-value reference — NOT real CSS
+/* The theme's 4 breakpoints, as literal-value reference — NOT real CSS
    custom properties, because `@media` conditions can't read them
    (`@media (min-width: var(--x))` is not valid CSS, browsers ignore it
    outright). Every `@media` query in this theme — global.css and every
-   block's style.css — uses these exact numbers. Don't introduce a 4th
+   block's style.css — uses these exact numbers. Don't introduce a 5th
    value without updating this comment.
 
    600px  — mobile/tablet split. The workhorse breakpoint: header height,
             padding, every grid's 1→2 columns, nav drawer/inline switch.
    900px  — tablet/desktop split, grids only (2→3 columns).
-   1280px — large-desktop type-size tier (header site-title only).
-
    1024px — small-laptop/tablet-landscape tier, hero text only for now
             (graduates the hero's desktop pull/heading size instead of
             jumping straight from mobile-safe to full-desktop the moment
@@ -29,6 +41,7 @@
             a bespoke "iPad mini" breakpoint — the distinction matters,
             don't add a tier for a specific device without this kind of
             reasoning behind it.
+   1280px — large-desktop type-size tier (header site-title only).
 
    Mobile-first per .claude/rules/coding-guidelines.md: base rules (no
    media query) are the smallest/mobile state, larger tiers layer on top
@@ -621,8 +634,16 @@ html {
    file that re-shrinks the image column to content width. This region
    has already been the source of two rounds of live debugging this
    session (see single-artwork-image-fit.md) — not worth the regression
-   risk for a style-purity rewrite with no visible difference. */
-@media (max-width: 599px) {
+   risk for a style-purity rewrite with no visible difference.
+
+   Also fires on `(max-height: 500px)` regardless of width — same height
+   axis as the home hero (see the breakpoints comment near the top of
+   this file). A landscape phone is ≥600px wide but only ~380-430px
+   tall; the min-width:600px rule below caps the image to
+   `100dvh - header - 60px - 4rem`, which on a landscape phone works out
+   to well under 200px. Stack instead — confirmed live, image was
+   genuinely too small to see anything in it. */
+@media (max-width: 599px), (max-height: 500px) {
     .single-artwork .wp-block-columns {
         flex-direction: column;
     }
@@ -649,7 +670,7 @@ html {
    painted part of it. Auto sizing shrinks the element itself to the
    actual picture, flush left by normal block flow — no object-position
    hack needed either. */
-@media (min-width: 600px) {
+@media (min-width: 600px) and (min-height: 501px) {
     .single-artwork .wp-block-post-featured-image img {
         width: auto;
         height: auto;
@@ -680,6 +701,59 @@ html {
         flex: 1 1 auto !important;
         width: auto !important;
     }
+}
+
+/* Carousel-ish feel for prev/next navigation (blocks/artwork-nav) without
+   an actual carousel — plain full-page navigation, but the browser
+   morphs the old featured image into the new one instead of a hard cut
+   (via the sitewide `@view-transition` opt-in near the top of this
+   file). Unconditional, not scoped to the min-width/min-height media
+   query above: the transition should still work on the stacked mobile
+   layout, not just the desktop side-by-side one. Only ever one instance
+   of this element per page, so it naturally satisfies the API's
+   one-name-per-active-element rule — no per-artwork uniqueness needed. */
+.single-artwork .wp-block-post-featured-image img {
+    view-transition-name: cz-artwork-image;
+}
+
+/* Directional slide instead of the default stationary crossfade above —
+   old image slides out one side while the new one slides in from the
+   other, matching whichever way the user actually navigated. Driven by
+   the `cz-nav-next` / `cz-nav-prev` transition type
+   blocks/artwork-nav/view.js adds via the `pageswap` event. Newer API
+   surface than the plain view-transition-name above
+   (:active-view-transition-type is View Transitions Level 2) — degrades
+   to that plain crossfade automatically wherever unsupported, never
+   breaks. 30% partial slide + fade rather than a full 100% swipe-off —
+   first pass, adjust the percentage/duration after a real look. */
+::view-transition-group(cz-artwork-image) {
+    animation-duration: 450ms;
+}
+
+:root:active-view-transition-type(cz-nav-next)::view-transition-old(cz-artwork-image) {
+    animation: cz-artwork-slide-out-left 450ms ease both;
+}
+:root:active-view-transition-type(cz-nav-next)::view-transition-new(cz-artwork-image) {
+    animation: cz-artwork-slide-in-right 450ms ease both;
+}
+:root:active-view-transition-type(cz-nav-prev)::view-transition-old(cz-artwork-image) {
+    animation: cz-artwork-slide-out-right 450ms ease both;
+}
+:root:active-view-transition-type(cz-nav-prev)::view-transition-new(cz-artwork-image) {
+    animation: cz-artwork-slide-in-left 450ms ease both;
+}
+
+@keyframes cz-artwork-slide-out-left {
+    to { transform: translateX(-30%); opacity: 0; }
+}
+@keyframes cz-artwork-slide-in-right {
+    from { transform: translateX(30%); opacity: 0; }
+}
+@keyframes cz-artwork-slide-out-right {
+    to { transform: translateX(30%); opacity: 0; }
+}
+@keyframes cz-artwork-slide-in-left {
+    from { transform: translateX(-30%); opacity: 0; }
 }
 
 /* ── Post terms (link back to the artwork's collection) ──────── */
