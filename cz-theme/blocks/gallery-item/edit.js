@@ -59,6 +59,18 @@ export default function Edit({ attributes, setAttributes }) {
                             onSelect={(media) => setAttributes({
                                 imageUrl: media.url,
                                 imageAlt: media.alt || '',
+                                // Captured for step 2 (see
+                                // context/current-feature.md) — save.js
+                                // doesn't read these yet, this step only
+                                // starts persisting them. media.sizes is
+                                // the classic media-frame object's size
+                                // map ({ sizeName: { url, width, height } }),
+                                // not every entry is guaranteed present
+                                // (depends on the original's dimensions).
+                                imageId: media.id ?? 0,
+                                imageSizes: media.sizes ?? {},
+                                imageWidth: media.width ?? 0,
+                                imageHeight: media.height ?? 0,
                             })}
                             render={({ open }) => (
                                 <>
