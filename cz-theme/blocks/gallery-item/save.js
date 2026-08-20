@@ -5,12 +5,16 @@ import {
     useBlockProps,
 } from '@wordpress/block-editor';
 
-import { hexToRgba } from './utils';
+import { hexToRgba, buildResponsiveImageProps } from './utils';
 
 export default function save({ attributes }) {
     const {
         imageUrl,
         imageAlt,
+        imageId,
+        imageSizes,
+        imageWidth,
+        imageHeight,
         overlayColor,
         overlayOpacity,
         focalPoint,
@@ -30,6 +34,19 @@ export default function save({ attributes }) {
             : 'gallery-item',
     });
 
+    // {} for every already-published post (no imageId — see block.json's
+    // default) or any instance with nothing usable to build a srcset
+    // from — same guarantee as the alwaysShowOverlayOnMobile comment
+    // above, see buildResponsiveImageProps in utils.js for why no
+    // separate deprecated save() is needed for this.
+    const responsiveImageProps = buildResponsiveImageProps({
+        imageId,
+        imageUrl,
+        imageSizes,
+        imageWidth,
+        imageHeight,
+    });
+
     const inner = (
         <div {...blockProps}>
             {imageUrl && (
@@ -40,6 +57,7 @@ export default function save({ attributes }) {
                         objectFit: 'cover',
                         objectPosition: `${(focalPoint?.x ?? 0.5) * 100}% ${(focalPoint?.y ?? 0.5) * 100}%`,
                     }}
+                    {...responsiveImageProps}
                 />
             )}
             <div
