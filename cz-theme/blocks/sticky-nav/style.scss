@@ -1,5 +1,7 @@
 /* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
 
+@use "../../assets/scss/breakpoints" as bp;
+
 /* ── Sticky Bar ─────────────────────────────────────────── */
 
 .cz-sticky-nav {
@@ -24,15 +26,17 @@
    normal padding/nav text size (tuned for portrait, where height is
    never the constraint) dominates too much of the visible screen. A
    height concern, not a width one, so it's tracked separately from the
-   theme's 3 width-based breakpoints (see the comment in
-   assets/css/global.css) rather than folded into that scale. */
-@media (max-height: 500px) and (orientation: landscape) {
-    .cz-sticky-nav__bar {
-        padding: 10px 16px;
-    }
-    .cz-sticky-nav__inner .wp-block-navigation,
-    .cz-sticky-nav__inner .wp-block-navigation__container {
-        font-size: 12pt !important;
+   theme's width breakpoints (see assets/scss/_breakpoints.scss) rather
+   than folded into that scale. */
+@include bp.landscape-phone {
+    @media (orientation: landscape) {
+        .cz-sticky-nav__bar {
+            padding: 10px 16px;
+        }
+        .cz-sticky-nav__inner .wp-block-navigation,
+        .cz-sticky-nav__inner .wp-block-navigation__container {
+            font-size: 12pt !important;
+        }
     }
 }
 
@@ -227,12 +231,12 @@
 
 /* ── Mobile / Desktop breakpoints ──────────────────────── */
 
-@media (max-width: 599px) {
+@include bp.below-sm {
     .cz-sticky-nav__open  { display: flex; }
     .cz-sticky-nav__inner { display: none; }
 }
 
-@media (min-width: 600px) {
+@include bp.sm {
     .cz-sticky-nav__panel { display: none; }
     .cz-sticky-nav__open  { display: none; }
 }

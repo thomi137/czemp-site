@@ -1,0 +1,50 @@
+// Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
+
+/*
+ * @package: czemp
+ * @version: 1.0
+ * @since: 1.0
+*/
+
+// Compiles to assets/css/global.css (gitignored generated output —
+// npm run build regenerates it, same convention as cz-theme/build/ for
+// the block-editor JS bundle). Split into one partial per topic under
+// global/ — was one 842-line file, now mirrors that file's original
+// section markers 1:1. Breakpoints (widths + the orthogonal height
+// axis) live in one shared place, _breakpoints.scss, used from here and
+// from the 3 block style.scss files that also have breakpoint-dependent
+// rules (sticky-nav, site-header, artwork-list-item) — previously 4
+// separately hand-typed, comment-enforced copies of the same numbers.
+
+@use "global/variables";
+@use "global/links";
+@use "global/layout";
+@use "global/header";
+@use "global/mobile-padding";
+@use "global/images";
+@use "global/utilities";
+@use "global/buttons";
+@use "global/showcase-grid";
+@use "global/event-archive";
+@use "global/gallery-grid";
+@use "global/archive-grid";
+@use "global/subcollection-grid";
+@use "global/artwork-list-item";
+@use "global/single-artwork-mobile";
+@use "global/single-artwork-fit";
+@use "global/post-terms";
+@use "global/pagination";
+
+/* Opt in to the browser's native cross-document View Transitions for
+   normal navigations, site-wide. Mainly for blocks/artwork-nav's prev/
+   next navigation (see the `view-transition-name` in
+   global/_single-artwork-fit.scss — that's what turns this from a
+   generic whole-page crossfade into the old image visibly morphing into
+   the new one), but harmless everywhere else too: any other same-origin
+   navigation just gets a subtle default crossfade instead of a hard
+   cut. Unsupported browsers ignore this at-rule entirely and get
+   today's instant navigation — no fallback code needed, this degrades
+   on its own. */
+@view-transition {
+    navigation: auto;
+}

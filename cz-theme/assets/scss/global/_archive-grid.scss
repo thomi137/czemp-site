@@ -1,0 +1,26 @@
+@use "../breakpoints" as bp;
+
+.cz-artwork-grid .wp-block-post-template {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* WordPress's global block-gap style adds margin-block-start to every
+   list item but the first (assuming vertical flow layout). That fights
+   with the grid above, pushing every card but the first one down. */
+.cz-artwork-grid .wp-block-post-template > li {
+    margin-block-start: 0;
+}
+
+@include bp.sm {
+    .cz-artwork-grid .wp-block-post-template {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@include bp.md {
+    .cz-artwork-grid .wp-block-post-template {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

@@ -1,0 +1,25 @@
+@use "../breakpoints" as bp;
+
+/* Exception to the min-width-only convention: interacts with per-column
+   inline flex-basis styles from templates/single-artwork.html (55%/45%)
+   plus a second, separate min-width:600px rule further below in this
+   file that re-shrinks the image column to content width. This region
+   has already been the source of two rounds of live debugging this
+   session (see single-artwork-image-fit.md) — not worth the regression
+   risk for a style-purity rewrite with no visible difference.
+
+   Also fires on `(max-height: 500px)` regardless of width — same height
+   axis as the home hero (see assets/scss/_breakpoints.scss). A landscape
+   phone is ≥600px wide but only ~380-430px tall; the min-width:600px
+   rule in _single-artwork-fit.scss caps the image to
+   `100dvh - header - 60px - 4rem`, which on a landscape phone works out
+   to well under 200px. Stack instead — confirmed live, image was
+   genuinely too small to see anything in it. */
+@include bp.mobile-or-short {
+    .single-artwork .wp-block-columns {
+        flex-direction: column;
+    }
+    .single-artwork .wp-block-column {
+        flex-basis: 100%;
+    }
+}

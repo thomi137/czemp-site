@@ -69,9 +69,9 @@ add_action('wp_enqueue_scripts', function () {
     );
     wp_enqueue_script(
         'cz-header-height',
-        get_stylesheet_directory_uri() . '/assets/js/header-height.js',
+        get_stylesheet_directory_uri() . '/build/js/header-height.js',
         [],
-        filemtime(get_stylesheet_directory() . '/assets/js/header-height.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/header-height.js'),
         true
     );
 });

@@ -1,5 +1,12 @@
 /* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
 
+/* NOTE: this file's `max-width: 600px` below is a known 1px
+   inconsistency against the theme's shared $sm breakpoint (599px,
+   see assets/scss/_breakpoints.scss) — left as its own literal on
+   purpose. Flagged and deliberately not touched in a prior session
+   (low-risk, but out of scope for this pure refactor, which preserves
+   behavior exactly). Fix it as its own small change later if reopened. */
+
 .post-list-item {
     display: flex;
     gap: 1.5rem;

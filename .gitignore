@@ -19,6 +19,17 @@ node_modules
 /cz-theme/build/
 /wp-content/
 
+# Compiled from .scss (assets/scss/**, blocks/*/style.scss) — npm run
+# build regenerates these, same convention as /cz-theme/build/ above.
+/cz-theme/assets/css/global.css
+/cz-theme/assets/css/global.css.map
+/cz-theme/blocks/site-header/style.css
+/cz-theme/blocks/site-header/style.css.map
+/cz-theme/blocks/artwork-list-item/style.css
+/cz-theme/blocks/artwork-list-item/style.css.map
+/cz-theme/blocks/sticky-nav/style.css
+/cz-theme/blocks/sticky-nav/style.css.map
+
 # Migration
 scripts/migrate/**
 !scripts/migrate/example.csv

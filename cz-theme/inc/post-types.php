@@ -83,9 +83,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     }
     wp_enqueue_script(
         'cz-artwork-price-panel',
-        get_stylesheet_directory_uri() . '/assets/js/artwork-price-panel.js',
+        get_stylesheet_directory_uri() . '/build/js/artwork-price-panel.js',
         ['wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data'],
-        filemtime(get_stylesheet_directory() . '/assets/js/artwork-price-panel.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/artwork-price-panel.js'),
         true
     );
 });

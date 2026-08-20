@@ -1,0 +1,45 @@
+@use "../breakpoints" as bp;
+
+.cz-event-archive__year {
+    margin-top: 3rem;
+}
+
+.cz-event-archive__year:first-child {
+    margin-top: 0;
+}
+
+.cz-events-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+@include bp.sm {
+    .cz-events-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@include bp.md {
+    .cz-events-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+/* Same reasoning as the homepage showcase grid: mobile has no hover, so
+   an events list is more usable with captions always visible instead of
+   requiring a scroll-triggered reveal per tile — unless a tile opts out,
+   see the matching comment on .cz-showcase-grid. */
+/* Same exception as .cz-showcase-grid — kept as a "below $sm" query. */
+@include bp.below-sm {
+    .cz-events-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}
+
+.cz-event-archive__past-link {
+    margin-top: 2rem;
+    text-align: center;
+}

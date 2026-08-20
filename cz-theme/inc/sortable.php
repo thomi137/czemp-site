@@ -233,9 +233,9 @@ add_action('admin_enqueue_scripts', function ($hook) {
     $term = cz_sortable_active_collection();
     wp_enqueue_script(
         'cz-sortable-list',
-        get_stylesheet_directory_uri() . '/assets/js/sortable-list.js',
+        get_stylesheet_directory_uri() . '/build/js/sortable-list.js',
         ['jquery', 'jquery-ui-sortable'],
-        filemtime(get_stylesheet_directory() . '/assets/js/sortable-list.js'),
+        filemtime(get_stylesheet_directory() . '/build/js/sortable-list.js'),
         true
     );
     wp_localize_script('cz-sortable-list', 'czSortable', [

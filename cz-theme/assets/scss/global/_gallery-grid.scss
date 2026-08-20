@@ -1,0 +1,20 @@
+@use "../breakpoints" as bp;
+
+.cz-gallery-page .wp-block-group.is-layout-grid {
+    display: grid !important;
+    grid-auto-flow: row !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+}
+
+@include bp.sm {
+    .cz-gallery-page .wp-block-group.is-layout-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+@include bp.md {
+    .cz-gallery-page .wp-block-group.is-layout-grid {
+        grid-template-columns: 1fr 1fr 1fr !important;
+    }
+}
