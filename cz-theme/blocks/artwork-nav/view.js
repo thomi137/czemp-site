@@ -3,8 +3,56 @@
 const nav = document.querySelector('.cz-artwork-nav');
 
 if (nav) {
-	const prevUrl = nav.querySelector('.cz-artwork-nav__prev')?.href;
-	const nextUrl = nav.querySelector('.cz-artwork-nav__next')?.href;
+	const prevBtn = nav.querySelector('.cz-artwork-nav__prev');
+	const nextBtn = nav.querySelector('.cz-artwork-nav__next');
+	const prevUrl = prevBtn?.href;
+	const nextUrl = nextBtn?.href;
+
+	// Same fade-out overlay the mobile nav drawer uses before it navigates
+	// away (blocks/sticky-nav/render.php + style.css) — reused here rather
+	// than building a second one.
+	const spinner = document.querySelector('.cz-spinner-overlay');
+
+	// Which way we're going, read by the `pageswap` listener below right
+	// as the browser starts navigating away, so it can tag the transition
+	// with a direction (see global.css's `:active-view-transition-type`
+	// rules for the actual slide animation). Matches
+	// view-transition-name'd elements — see .single-artwork
+	// .wp-block-post-featured-image img in global.css — into a directional
+	// slide instead of the default stationary crossfade.
+	let pendingDirection = null;
+
+	// `pageswap` is the correct hook for this: it fires on the document
+	// you're navigating *away* from, right as a cross-document view
+	// transition is about to start, and the type it adds here carries
+	// through to the new document's half of the same transition. Does
+	// nothing if the browser doesn't support view transitions at all
+	// (event.viewTransition is undefined then) — same graceful
+	// degradation as everywhere else in this feature.
+	window.addEventListener('pageswap', (event) => {
+		if (event.viewTransition && pendingDirection) {
+			event.viewTransition.types.add(pendingDirection);
+		}
+	});
+
+	const navigateTo = (url, direction) => {
+		pendingDirection = direction;
+		spinner?.classList.add('is-visible');
+		window.location.href = url;
+	};
+
+	// Buttons stay plain <a href> links, not intercepted with
+	// preventDefault — they keep working with zero JS (see the feature's
+	// original design). This just records which one was clicked, ahead
+	// of the browser's own normal navigation, so they get the same
+	// directional slide as keyboard/swipe below instead of the plain
+	// crossfade.
+	prevBtn?.addEventListener('click', () => {
+		pendingDirection = 'cz-nav-prev';
+	});
+	nextBtn?.addEventListener('click', () => {
+		pendingDirection = 'cz-nav-next';
+	});
 
 	// Circular navigation needs no logic here — the prev/next hrefs
 	// themselves already wrap (see render.php's modulo arithmetic). This
@@ -15,9 +63,9 @@ if (nav) {
 			return;
 		}
 		if (event.key === 'ArrowLeft' && prevUrl) {
-			window.location.href = prevUrl;
+			navigateTo(prevUrl, 'cz-nav-prev');
 		} else if (event.key === 'ArrowRight' && nextUrl) {
-			window.location.href = nextUrl;
+			navigateTo(nextUrl, 'cz-nav-next');
 		}
 	});
 
@@ -45,9 +93,9 @@ if (nav) {
 				// gesture on the image is never mistaken for a swipe.
 				if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
 					if (deltaX < 0 && nextUrl) {
-						window.location.href = nextUrl;
+						navigateTo(nextUrl, 'cz-nav-next');
 					} else if (deltaX > 0 && prevUrl) {
-						window.location.href = prevUrl;
+						navigateTo(prevUrl, 'cz-nav-prev');
 					}
 				}
 			},
