@@ -1,3 +1,5 @@
+@use "../breakpoints" as bp;
+
 .wp-block-image img {
     border-radius: 12px;
 }
@@ -25,4 +27,17 @@
 .cz-portrait-photo {
     grid-row: 1;
     grid-column: 1;
+}
+
+/* Full desktop ($lg and up) keeps its current size untouched — the
+   image's own inline width (set by the editor's resize handle) plus
+   WP core's max-width:100% already handle that. In between mobile
+   (which the grid's own container-query collapse already handles) and
+   full desktop, the image reads too large relative to the now-narrower
+   text column beside it — scale it down specifically in that band. */
+@include bp.sm-to-lg {
+    .cz-portrait-photo img {
+        max-width: 60%;
+        height: auto;
+    }
 }
