@@ -82,6 +82,8 @@ $height-sm-strict: $height-sm + 1px; // 501px — strictly above the height thre
 // production. Don't repeat that.
 @mixin sm-to-xl { @media (min-width: $sm) and (max-width: $xl-max) { @content; } }
 
+@mixin lg-to-xl { @media (min-width: $lg ) and (max-width: $xl-max) { @content; }}
+
 @mixin landscape-phone { @media (max-height: $height-sm) { @content; } }
 @mixin desktop-height { @media (min-height: $height-sm) { @content; } }
 @mixin desktop-height-strict { @media (min-height: $height-sm-strict) { @content; } }
