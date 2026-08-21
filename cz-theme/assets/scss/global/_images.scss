@@ -70,3 +70,27 @@
     }
 
 }
+
+/* Landscape phone: crosses the width breakpoints above (landscape width
+   is typically 700px+) but only has ~360-430px of real vertical height —
+   same class of bug already fixed for the hero/sticky-nav (see
+   fix-home-hero-header-overlap.md). Whatever width band it lands in
+   above assumes tablet/desktop vertical room it doesn't have, squeezing
+   the photo. Treat it like mobile instead: stack single column. Placed
+   last so it wins by source order over the width-only bands above (same
+   selector, same specificity) — explicitly resets grid-column too, since
+   the sm-to-xl/xl blocks above set one and "not redeclared" would let
+   their value stand otherwise. */
+@include bp.landscape-phone {
+    @media (orientation: landscape) {
+        .wp-block-group:has(> .cz-portrait-photo) {
+            grid-template-columns: 1fr;
+        }
+        .wp-block-group:has(> .cz-portrait-photo) > .cz-portrait-photo {
+            grid-column: 1;
+        }
+        .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
+            grid-column: 1;
+        }
+    }
+}
