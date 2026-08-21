@@ -235,18 +235,35 @@ function cz_seo_get_context() {
         'noindex'     => false,
     ];
 
-    if (is_front_page()) {
-        $tagline = get_bloginfo('description');
-        if ($tagline) {
-            $context['description'] = $tagline;
-        }
-        return $context;
-    }
-
+    // Bug fix: this used to be a separate `if (is_front_page()) { ...;
+    // return; }` branch placed BEFORE the is_singular() block below —
+    // which meant it always returned first and the front page's own
+    // per-page "SEO & Social" meta box override (_cz_seo_description,
+    // set right there on its edit screen, same as every other Page)
+    // was silently never read at all. The front page IS singular (a
+    // static Page, per templates/front-page.html) so it belongs inside
+    // that same cz_seo_excerpt() cascade — override, then excerpt, then
+    // the sitewide fallback — with only the tagline preference below
+    // layered on top as a homepage-specific extra step, not a
+    // replacement for it.
     if (is_singular()) {
         $post = get_queried_object();
         $context['type']        = in_array($post->post_type, ['post', 'artwork'], true) ? 'article' : 'website';
         $context['description'] = cz_seo_excerpt($post);
+
+        // Homepage-only preference: cz_seo_excerpt() already checked the
+        // page's own override and excerpt first (both take priority,
+        // same as any other page) — this only kicks in once both of
+        // those came up empty and it fell through to the bare sitewide
+        // fallback text. Many sites intentionally use the tagline
+        // (Einstellungen → Allgemein) as exactly this, so prefer it over
+        // the generic fallback specifically here.
+        if (is_front_page() && $context['description'] === get_option('cz_seo_default_description')) {
+            $tagline = get_bloginfo('description');
+            if ($tagline) {
+                $context['description'] = $tagline;
+            }
+        }
 
         $override_image_id = (int) get_post_meta($post->ID, '_cz_seo_image_id', true);
         $thumbnail = $override_image_id
@@ -254,6 +271,19 @@ function cz_seo_get_context() {
             : (has_post_thumbnail($post) ? cz_seo_image_from_attachment(get_post_thumbnail_id($post)) : null);
         if ($thumbnail) {
             $context['image'] = $thumbnail;
+        }
+        return $context;
+    }
+
+    // Front page set to "Your latest posts" instead of a static Page —
+    // not singular, so there's no post to read an override/excerpt
+    // from at all. Only the tagline or sitewide fallback apply here.
+    // (Not this site's actual setup today — templates/front-page.html
+    // implies a static Page — kept for correctness if that ever changes.)
+    if (is_front_page()) {
+        $tagline = get_bloginfo('description');
+        if ($tagline) {
+            $context['description'] = $tagline;
         }
         return $context;
     }
