@@ -11,52 +11,30 @@
     border-radius: 0;
 }
 
-/* Portrait page bio layout: the photo and its accompanying paragraphs
-   sit as sibling items in a Group block set to CSS Grid layout —
-   auto-fill columns, side-by-side once there's room, collapsing to 1
-   column with no media query needed once there isn't. `float` (from
-   the image's own "alignleft" alignment) has zero effect on a grid item
-   per spec. `order` alone wasn't enough either — the editor's own
-   per-item "column span" setting gives both items explicit
-   `grid-column: span N`, and that competes with plain auto-placement
-   ordering in a way that didn't reliably win. Pin explicit start lines
-   instead: forces the image into the grid's first cell outright,
-   regardless of its position in the editor's content order or any
-   span/order interaction. Opt an image into this via the block
-   editor's Advanced panel → Additional CSS Class(es): cz-portrait-photo. */
+/* Portrait page bio layout: photo + paragraph-group sit as sibling items
+   in a Group block set to CSS Grid (6 columns, editor-configured). The
+   editor's own per-item column-span doesn't adapt per viewport, so a
+   fixed 6-track grid squishes the photo at narrower widths and, unless
+   spans sum to the full track count, leaves empty trailing columns.
+   Override grid-template-columns + explicit grid-column per breakpoint
+   band instead, always spanning the full width. Pin the photo to
+   column 1 unconditionally — `order`/the editor's own span competing
+   with auto-placement didn't reliably win before. Opt an image in via
+   the block editor's Advanced panel → Additional CSS Class(es):
+   cz-portrait-photo. */
 .cz-portrait-photo {
-    grid-row: 1;
     grid-column: 1;
+    height: 100%;
 }
 
-/* Mobile is already handled by the grid's own container-query collapse,
-   and true wide desktop ($xl/1280px and up) keeps WP's own auto-fill +
-   per-item column-span behavior untouched — only the bands in between
-   needed real grid column sizing instead of fighting the image's own
-   box dimensions with a max-width hack: 1fr photo / 2fr text through
-   $lg (1024px), then a finer 5-track split (photo spanning 2, text
-   spanning 3) from $lg up to $xl.
 
-   `.wp-block-group:has(> .cz-portrait-photo)` instead of a second
-   manually-added class on the outer group — a first attempt needed one
-   (cz-portrait-layout, on top of cz-portrait-photo on the image itself)
-   and it never actually got added in the editor, so the rule silently
-   never fired. :has() reaches "whichever grid container directly holds
-   the photo" from the one class that's already there — nothing else to
-   remember to add. */
-@include bp.sm-to-lg {
+@include bp.below-sm {
     .wp-block-group:has(> .cz-portrait-photo) {
-        grid-template-columns: 1fr 2fr;
-    }
-    .wp-block-group:has(> .cz-portrait-photo) > .cz-portrait-photo {
-        grid-column: 1;
-    }
-    .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
-        grid-column: 2;
+        grid-template-columns: 1fr;
     }
 }
 
-@include bp.lg-to-xl {
+@include bp.sm-to-xl {
     .wp-block-group:has(> .cz-portrait-photo) {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -66,4 +44,29 @@
     .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
         grid-column: 3/5;
     }
+}
+
+@include bp.lg {
+    /* The <img> keeps its native 480x640 intrinsic size otherwise, sitting
+    undersized inside whatever grid cell it's spanning — stretch it to
+    fill the cell and crop instead. */
+    .cz-portrait-photo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+@include bp.xl {
+    .wp-block-group:has(> .cz-portrait-photo) {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .wp-block-group:has(> .cz-portrait-photo) > .cz-portrait-photo {
+        grid-column: 1/4;
+    }
+    .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
+        grid-column: 4/7;
+    }
+
 }
