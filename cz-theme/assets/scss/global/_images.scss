@@ -29,15 +29,23 @@
     grid-column: 1;
 }
 
-/* Full desktop ($lg and up) keeps its current size untouched — the
-   image's own inline width (set by the editor's resize handle) plus
-   WP core's max-width:100% already handle that. In between mobile
-   (which the grid's own container-query collapse already handles) and
-   full desktop, the image reads too large relative to the now-narrower
-   text column beside it — scale it down specifically in that band. */
+/* Full desktop ($lg and up) keeps WP's own auto-fill + per-item
+   column-span behavior untouched, and mobile is already handled by the
+   grid's own container-query collapse — only the band in between needed
+   help. Superseded the previous max-width:60% hack on the <img> alone
+   with real grid column sizing: explicit grid-template-columns on the
+   outer grid (1fr photo / 2fr text) instead of fighting the image's own
+   box. Requires a second Additional CSS Class, cz-portrait-layout, on
+   the OUTER Group block (the one wrapping both the photo and the text
+   group) — .cz-portrait-photo alone only reaches the image. */
 @include bp.sm-to-lg {
-    .cz-portrait-photo img {
-        max-width: 60%;
-        height: auto;
+    .cz-portrait-layout {
+        grid-template-columns: 1fr 2fr;
+    }
+    .cz-portrait-layout > .cz-portrait-photo {
+        grid-column: 1;
+    }
+    .cz-portrait-layout > *:not(.cz-portrait-photo) {
+        grid-column: 2;
     }
 }
