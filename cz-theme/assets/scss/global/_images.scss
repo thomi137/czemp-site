@@ -11,16 +11,18 @@
 
 /* Portrait page bio layout: the photo and its accompanying paragraphs
    sit as sibling items in a Group block set to CSS Grid layout —
-   auto-fill columns, side-by-side once there's room for 2, collapsing
-   to 1 column with no media query needed once there isn't. `float`
-   (from the image's own "alignleft" alignment) has zero effect on a
-   grid item per spec — what actually controls "side-by-side on desktop
-   vs. stacked on mobile" is purely which item comes first, and the
-   image is the LAST block in the editor's content order, so it landed
-   dead last once the grid collapsed on mobile. `order` (unlike float)
-   *does* apply to grid items, consistently at any column count — one
-   rule fixes both breakpoints. Opt an image into this via the block
+   auto-fill columns, side-by-side once there's room, collapsing to 1
+   column with no media query needed once there isn't. `float` (from
+   the image's own "alignleft" alignment) has zero effect on a grid item
+   per spec. `order` alone wasn't enough either — the editor's own
+   per-item "column span" setting gives both items explicit
+   `grid-column: span N`, and that competes with plain auto-placement
+   ordering in a way that didn't reliably win. Pin explicit start lines
+   instead: forces the image into the grid's first cell outright,
+   regardless of its position in the editor's content order or any
+   span/order interaction. Opt an image into this via the block
    editor's Advanced panel → Additional CSS Class(es): cz-portrait-photo. */
 .cz-portrait-photo {
-    order: -1;
+    grid-row: 1;
+    grid-column: 1;
 }
