@@ -29,11 +29,13 @@
     grid-column: 1;
 }
 
-/* Full desktop ($lg and up) keeps WP's own auto-fill + per-item
-   column-span behavior untouched, and mobile is already handled by the
-   grid's own container-query collapse — only the band in between needed
-   help: real grid column sizing (1fr photo / 2fr text) instead of
-   fighting the image's own box dimensions with a max-width hack.
+/* Mobile is already handled by the grid's own container-query collapse,
+   and true wide desktop ($xl/1280px and up) keeps WP's own auto-fill +
+   per-item column-span behavior untouched — only the bands in between
+   needed real grid column sizing instead of fighting the image's own
+   box dimensions with a max-width hack: 1fr photo / 2fr text through
+   $lg (1024px), then a finer 5-track split (photo spanning 2, text
+   spanning 3) from $lg up to $xl.
 
    `.wp-block-group:has(> .cz-portrait-photo)` instead of a second
    manually-added class on the outer group — a first attempt needed one
@@ -51,5 +53,17 @@
     }
     .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
         grid-column: 2;
+    }
+}
+
+@include bp.lg-to-xl {
+    .wp-block-group:has(> .cz-portrait-photo) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .wp-block-group:has(> .cz-portrait-photo) > .cz-portrait-photo {
+        grid-column: 1/3;
+    }
+    .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
+        grid-column: 3/5;
     }
 }
