@@ -121,3 +121,42 @@ add_filter('render_block', function (string $block_content, array $block) {
         $block_content
     );
 }, 10, 2);
+
+// Homepage hero (core/cover, min-height:100vh) is almost certainly the
+// page's LCP element — dominant, above the fold — but as a plain <img>
+// it has no priority signal: the browser treats it like any other
+// image competing for bandwidth early in the load. Confirmed via
+// Lighthouse: homepage scored 93% vs 96% on /gallery/ after the
+// gallery-item responsive-images fix. Not fixable by touching page
+// content or a template file — the hero lives in the front page's own
+// post content (not templates/ or patterns/), identified here only by
+// its cz-full-bleed-hero class (see the matching comment in global.css)
+// plus is_front_page(); the class check is defensive in case another
+// front-page cover ever gets added.
+add_filter('render_block', function (string $block_content, array $block) {
+    if ($block['blockName'] !== 'core/cover' || !is_front_page()) {
+        return $block_content;
+    }
+    if (!str_contains($block_content, 'cz-full-bleed-hero')) {
+        return $block_content;
+    }
+    return str_replace(
+        'class="wp-block-cover__image-background"',
+        'fetchpriority="high" class="wp-block-cover__image-background"',
+        $block_content
+    );
+}, 10, 2);
+
+// Same LCP fix as above, the other half: a preload hint so the browser
+// can start fetching the hero image before it's even reached in the
+// HTML (in parallel with the render-blocking CSS/font requests),
+// instead of only discovering it once body parsing gets there.
+add_action('wp_head', function () {
+    if (!is_front_page()) {
+        return;
+    }
+    printf(
+        '<link rel="preload" as="image" type="image/webp" href="%s">' . "\n",
+        esc_url(get_stylesheet_directory_uri() . '/assets/images/front.webp')
+    );
+});
