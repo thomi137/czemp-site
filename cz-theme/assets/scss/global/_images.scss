@@ -32,20 +32,24 @@
 /* Full desktop ($lg and up) keeps WP's own auto-fill + per-item
    column-span behavior untouched, and mobile is already handled by the
    grid's own container-query collapse — only the band in between needed
-   help. Superseded the previous max-width:60% hack on the <img> alone
-   with real grid column sizing: explicit grid-template-columns on the
-   outer grid (1fr photo / 2fr text) instead of fighting the image's own
-   box. Requires a second Additional CSS Class, cz-portrait-layout, on
-   the OUTER Group block (the one wrapping both the photo and the text
-   group) — .cz-portrait-photo alone only reaches the image. */
+   help: real grid column sizing (1fr photo / 2fr text) instead of
+   fighting the image's own box dimensions with a max-width hack.
+
+   `.wp-block-group:has(> .cz-portrait-photo)` instead of a second
+   manually-added class on the outer group — a first attempt needed one
+   (cz-portrait-layout, on top of cz-portrait-photo on the image itself)
+   and it never actually got added in the editor, so the rule silently
+   never fired. :has() reaches "whichever grid container directly holds
+   the photo" from the one class that's already there — nothing else to
+   remember to add. */
 @include bp.sm-to-lg {
-    .cz-portrait-layout {
+    .wp-block-group:has(> .cz-portrait-photo) {
         grid-template-columns: 1fr 2fr;
     }
-    .cz-portrait-layout > .cz-portrait-photo {
+    .wp-block-group:has(> .cz-portrait-photo) > .cz-portrait-photo {
         grid-column: 1;
     }
-    .cz-portrait-layout > *:not(.cz-portrait-photo) {
+    .wp-block-group:has(> .cz-portrait-photo) > *:not(.cz-portrait-photo) {
         grid-column: 2;
     }
 }
