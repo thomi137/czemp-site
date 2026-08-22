@@ -1,23 +1,26 @@
 .wp-block-post-terms {
+
     margin-bottom: 0.5rem;
-}
+    a {
+        display: inline-block;
+        padding: 0.35em 1em;
+        border: 1px solid #1a1a1a;
+        border-radius: 999px;
+        color: #1a1a1a;
+        font-size: 11pt;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition:
+            background-color 0.2s ease,
+            color 0.2s ease;
 
-.wp-block-post-terms a {
-    display: inline-block;
-    padding: 0.35em 1em;
-    border-radius: 999px;
-    border: 1px solid #1a1a1a;
-    font-size: 11pt;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #1a1a1a;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
+        &:hover,
+        &:focus-visible {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+    }
 
-.wp-block-post-terms a:hover,
-.wp-block-post-terms a:focus-visible {
-    background-color: #1a1a1a;
-    color: #fff;
 }
