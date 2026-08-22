@@ -4,9 +4,15 @@
 // Fully server-rendered, same reasoning as czemp-theme/site-header: no
 // save() means nothing for the editor to invalidate against.
 
-// Looked up by title rather than hard-coding a wp_navigation post ID —
+// Looked up by slug rather than hard-coding a wp_navigation post ID —
 // that ID differs per environment (local vs. live) and would silently
-// break if the menu were ever recreated.
+// break if the menu were ever recreated. Slug rather than title: WP
+// auto-generates the slug from the title once at creation
+// (sanitize_title('Footer Menu') === 'footer-menu', confirmed against
+// production) and it isn't exposed for editing anywhere in the normal
+// Navigation UI the way the title is — an Editor renaming "Footer Menu"
+// to something else (an easy, innocent edit) would silently break a
+// title-based lookup but leaves a slug-based one alone.
 function cz_get_footer_nav_id() {
     static $id = null;
     if ($id !== null) {
@@ -14,7 +20,7 @@ function cz_get_footer_nav_id() {
     }
     $posts = get_posts([
         'post_type'      => 'wp_navigation',
-        'title'          => 'Footer Menu',
+        'name'           => 'footer-menu',
         'posts_per_page' => 1,
         'post_status'    => 'publish',
     ]);

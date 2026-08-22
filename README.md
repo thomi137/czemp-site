@@ -10,7 +10,7 @@ that the GPLv2 Licence is adhered to.
 
 ## Components
 
-### Development Environment
+## Development Environment
 
 Normally, the development setup for WordPress suggests to use some distribution
 of a virtual machine containing the full stack of DB, WordPress installation and a Webserver.
@@ -20,7 +20,7 @@ in the `docker-compose.yml` file.
 **In practice, testing currently happens against the live site rather than this Docker setup** — the container
 should be kept on a current WordPress version so it stays representative of production.
 
-#### Images
+### Docker Images
 The current `docker-compose.yml` uses standard [Dockerhub](https://hub.docker.com/) images, specifically:
 
 * [Mysql](https://hub.docker.com/_/mysql)
@@ -30,7 +30,7 @@ The current `docker-compose.yml` uses standard [Dockerhub](https://hub.docker.co
 Note that you should configure images according to your target environment. It may be even worthwhile to create you own `Dockerfile`s. 
 Any improvement and comment on this setup is greatly appreciated (as are corresponding PRs, BTW 😉).
 
-#### Usage
+### Usage
 
 Out of the box, this is easy:
 

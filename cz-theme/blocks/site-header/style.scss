@@ -2,6 +2,18 @@
 
 @use "../../assets/scss/breakpoints" as bp;
 
+/* An <img> with no display override is inline by default, so it aligns
+   to its line box's text baseline — reserving ~8px of descender space
+   beneath it that isn't part of the visible logo. That inflates the
+   whole row past the image's real 73px height, so align-items:center
+   ends up centering everything against the wrong number. Confirmed via
+   direct measurement (81px row vs. 73px actual image). display:block
+   removes the img from inline/baseline layout entirely, so its box
+   height matches its visible pixels exactly. */
+.cz-header__brand img {
+    display: block;
+}
+
 .cz-header__brand {
     display: flex;
     flex-wrap: nowrap;
@@ -16,6 +28,21 @@
        either side's CSS changes independently. */
     max-width: 1200px;
     margin-inline: auto;
+}
+
+/* The <h1> wrapper itself defaults to the browser's UA stylesheet
+   font-size (2em, i.e. 36px off an 18px body) — nothing in the theme
+   resets it, only the <a> inside gets an explicit breakpoint font-size.
+   That leaves the H1's own box sized for 36px/line-height:normal text
+   even though the actually-visible text is 16-24px, showing up in
+   DevTools as a much taller box than the glyphs need (confirmed: 54px
+   box for text with a real cap-height nowhere near that). Reset both so
+   the wrapper's box actually matches its content instead of an unrelated
+   UA default. */
+.cz-header__brand .wp-block-site-title{
+    margin: 0;
+    font-size: inherit;
+    line-height: 1;
 }
 
 @include bp.below-sm {
