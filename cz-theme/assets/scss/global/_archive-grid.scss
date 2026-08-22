@@ -4,7 +4,7 @@
      .wp-block-post-template {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: var(--cz-grid-gap);
 
         /* WordPress's global block-gap style adds margin-block-start to every
         list item but the first (assuming vertical flow layout). That fights

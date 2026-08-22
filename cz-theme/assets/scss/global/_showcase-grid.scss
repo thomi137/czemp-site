@@ -8,7 +8,7 @@
 .cz-showcase-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: var(--cz-grid-gap) !important;
     /* This sits directly in <main>, which is deliberately unclamped
        (is-layout-flow) so the hero cover can go full-bleed — so unlike
        the hero's own inner content (clamped via post-content's

@@ -159,6 +159,7 @@ export default function Edit({ attributes, setAttributes }) {
                             'core/button',
                             'core/list',
                             'core/image',
+                            'core/spacer'
                         ]}
                         template={[
                             ['core/heading', { placeholder: 'Title' }],

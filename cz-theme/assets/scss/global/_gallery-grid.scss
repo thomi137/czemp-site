@@ -1,10 +1,18 @@
 @use "../breakpoints" as bp;
 
+/* display/grid-auto-flow/grid-template-columns stay forced — WP's own
+   Grid layout type gives a fixed, non-responsive column count (its
+   "Columns" setting has no media queries), so this replaces that with
+   real 1/2/3-column responsive behavior. Gap is deliberately NOT forced
+   here (was `!important` before) — that overrode the editor's own
+   Block-Abstand/Gap control regardless of what was set there. Leaving
+   gap alone lets it fall through to that per-block control (already
+   exposed via theme.json's appearanceTools), or the sitewide default
+   blockGap if unset. */
 .cz-gallery-page .wp-block-group.is-layout-grid {
     display: grid !important;
     grid-auto-flow: row !important;
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
 }
 
 @include bp.sm {
