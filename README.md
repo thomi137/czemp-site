@@ -10,6 +10,20 @@ that the GPLv2 Licence is adhered to.
 
 ## Components
 
+### Home Page
+The front page has its own styling. If you choose a hero picture and make it full bleed on large screens, then add the cz-full-bleed-hero class to the cover. The rest of the content will stay within `1280px`. For the responsive breakpoints, we do not yet utilize Wordpress >= 7.1 mobile breakpoints. Rather, we rely on our own more detailed (see `_breakpoints.scss`):
+
+```scss
+  $sm: 700px;
+  $md: 900px;
+  $lg: 1024px;
+  $xl: 1280px;
+  $height-sm: 500px;
+```
+
+### Navigation
+The navigation menu must be initialized in the editor. Currently, there is only `footer-menu` which is searched for when rendering `site-footer`. This will then render a sticky nav bar at the bottom. Make sure you name your navigation 
+
 ## Development Environment
 
 Normally, the development setup for WordPress suggests to use some distribution
