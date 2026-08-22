@@ -1,0 +1,14 @@
+/* Universal box-sizing: border-box. WP core sets this piecemeal on
+   individual blocks (e.g. .wp-block-site-title) but there's no sitewide
+   rule, so anything hand-built (this theme's custom blocks especially)
+   is on the browser's default content-box unless it happens to inherit
+   from a core block. Purely sizing math — doesn't touch spacing or
+   typography, so unlike a margin/font-size reset this is safe to apply
+   everywhere with no risk to real content's vertical rhythm (see
+   blocks/site-header/style.scss's comments for why THOSE aren't reset
+   globally). */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
