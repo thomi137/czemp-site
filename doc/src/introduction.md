@@ -10,7 +10,8 @@ Diese Seite ist öffentlich einsehbar, wie der ganze Quellcode der Website auch.
 Linie an dich: Wenn du wissen willst, warum etwas auf deiner Website so funktioniert, wie es funktioniert, findest
 du hier die Antwort — ohne technischen Fachjargon.
 
-Für die tägliche Arbeit im Backend (Werke anlegen, Preise eintragen, Reihenfolge ändern usw.) gibt es weiterhin
-das separate Benutzerhandbuch — diese Seite hier ergänzt es, ersetzt es nicht.
+Für die tägliche Arbeit im Backend (Werke anlegen, Kollektionen verwalten, Reihenfolge ändern usw.) gibt es
+ausserdem das [Benutzerhandbuch](manual/index.md) — eine Schritt-für-Schritt-Anleitung, unabhängig von diesem
+Rückblick.
 
 Viel Spass beim Lesen!
