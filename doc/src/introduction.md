@@ -3,8 +3,7 @@
 Liebe Claudia
 
 Diese Seite ist ein kleines Tagebuch der Arbeiten an deiner Website claudia-zemp.ch, seit sie live gegangen ist.
-Thomas hat die Seite technisch umgesetzt — mit Unterstützung eines KI-Programmier-Assistenten (Claude) für einen
-Grossteil des Codes — und hier steht in verständlicher Sprache, was seither dazugekommen oder verbessert wurde.
+Thomas hat die Seite technisch umgesetzt und hier steht in verständlicher Sprache, was seither dazugekommen oder verbessert wurde.
 Sortiert nach Themen, nicht chronologisch.
 
 Diese Seite ist öffentlich einsehbar, wie der ganze Quellcode der Website auch. Sie richtet sich aber in erster
