@@ -148,3 +148,8 @@ npm start         # watch mode — block JS only; see start:css / start:js for t
 - `scripts/deploy_test.sh` — builds the theme and ships it to the server over SSH/rsync. Prompts for confirmation
   before deploying. This targets the real production site (claudia-zemp.ch) — there is no separate staging
   environment.
+- `scripts/backup/` — production backup/restore tooling: `backup.sh`/`cleanup.sh` run *on the server*
+  (`~/scripts/`, deployed there by `deploy.sh`) via a cron job set up manually in the hosting provider's control
+  panel — zips the whole webroot + a DB dump to `~/backups`, keeps the newest 6. `restore.sh` (also server-side,
+  manual only) restores the live site from one of those archives, with a pre-restore DB safety dump first. See
+  `context/history/features/feature-backup-restore-scripts.md` for the full writeup.
