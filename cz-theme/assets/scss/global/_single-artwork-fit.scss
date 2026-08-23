@@ -104,3 +104,30 @@
 @keyframes cz-artwork-slide-in-left {
     from { transform: translateX(-30%); opacity: 0; }
 }
+
+/* Same four keyframes, same 450ms/ease, as plain toggleable classes —
+   blocks/artwork-nav/carousel.js's same-document swap has no view
+   transition pseudo-elements to hook :active-view-transition-type onto,
+   so it adds/removes these directly on a cloned "old" image (slide-out)
+   and the real "new" one (slide-in) instead. */
+.cz-carousel-slide-out-left {
+    animation: cz-artwork-slide-out-left 450ms ease both;
+}
+.cz-carousel-slide-in-right {
+    animation: cz-artwork-slide-in-right 450ms ease both;
+}
+.cz-carousel-slide-out-right {
+    animation: cz-artwork-slide-out-right 450ms ease both;
+}
+.cz-carousel-slide-in-left {
+    animation: cz-artwork-slide-in-left 450ms ease both;
+}
+
+/* carousel.js focuses the new post title (tabindex="-1") after a swap so
+   a screen reader announces it — not a real keyboard-navigated focus
+   target, so the browser's default blue ring is just visual noise here,
+   clashing with the site's black/white palette for every mouse/swipe
+   click. Suppressed on this element specifically, not globally. */
+.single-artwork .wp-block-post-title:focus {
+    outline: none;
+}

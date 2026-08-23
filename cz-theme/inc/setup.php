@@ -67,6 +67,15 @@ add_action('wp_enqueue_scripts', function () {
         filemtime(get_stylesheet_directory() . '/blocks/artwork-nav/view.js'),
         true
     );
+    if (is_singular('artwork')) {
+        wp_enqueue_script(
+            'cz-artwork-nav-carousel',
+            get_stylesheet_directory_uri() . '/blocks/artwork-nav/carousel.js',
+            [],
+            filemtime(get_stylesheet_directory() . '/blocks/artwork-nav/carousel.js'),
+            true
+        );
+    }
     wp_enqueue_script(
         'cz-header-height',
         get_stylesheet_directory_uri() . '/build/js/header-height.js',

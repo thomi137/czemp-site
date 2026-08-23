@@ -1,9 +1,10 @@
 /* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
 
-/* Box model/color/hover-invert all come from the wp-block-button__link
-   classes + inline style on the element itself (see render.php) — same
-   CSS every other real button on the site uses. Only position + icon
-   sizing are unique to this block. */
+/* Own look, not the sitewide solid-button invert (see render.php for why
+   these skip wp-block-button__link): circle, transparent with a full-
+   opacity border and a dim chevron by default, solid black with a full-
+   opacity white chevron on hover — border and icon fade independently,
+   which a single opacity on the button itself couldn't do. */
 .cz-artwork-nav__prev,
 .cz-artwork-nav__next {
     display: none;
@@ -16,6 +17,17 @@
     padding: 0;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    border: 1.5px solid #1a1a1a;
+    background-color: transparent;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cz-artwork-nav__prev svg,
+.cz-artwork-nav__next svg {
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
 }
 
 .cz-artwork-nav__prev {
@@ -34,5 +46,20 @@
     .cz-artwork-nav__prev,
     .cz-artwork-nav__next {
         display: inline-flex;
+    }
+
+    .cz-artwork-nav__prev:hover,
+    .cz-artwork-nav__next:hover,
+    .cz-artwork-nav__prev:focus-visible,
+    .cz-artwork-nav__next:focus-visible {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .cz-artwork-nav__prev:hover svg,
+    .cz-artwork-nav__next:hover svg,
+    .cz-artwork-nav__prev:focus-visible svg,
+    .cz-artwork-nav__next:focus-visible svg {
+        opacity: 1;
     }
 }
