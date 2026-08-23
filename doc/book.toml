@@ -1,0 +1,10 @@
+[book]
+title = "claudia-zemp.ch – Was gebaut wurde"
+authors = ["Thomas Prosser"]
+language = "de"
+src = "src"
+description = "Ein Rückblick auf die Arbeiten an claudia-zemp.ch, in verständlicher Sprache."
+
+[output.html]
+default-theme = "light"
+git-repository-url = "https://github.com/thomi137/czemp-site"

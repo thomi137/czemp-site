@@ -47,3 +47,6 @@ Benutzerhandbuch-claudia-zemp.pdf
 
 # Dev stuff for API
 wp-config.php
+
+# mdBook build output (doc/src/ is the tracked source, GitHub Actions builds this fresh)
+doc/book/
