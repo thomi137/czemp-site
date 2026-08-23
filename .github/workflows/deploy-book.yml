@@ -3,14 +3,15 @@
 # Builds doc/ (the German mdBook for Claudia) and deploys it to GitHub
 # Pages. Requires a one-time manual step in the repo settings: Settings →
 # Pages → Source: GitHub Actions.
+#
+# Deliberately tag-triggered, not on every push to master — the book
+# should reflect a released state (matching this project's existing
+# v* tagging convention), not every intermediate commit.
 name: Deploy book to GitHub Pages
 
 on:
   push:
-    branches: [master]
-    paths:
-      - "doc/**"
-      - ".github/workflows/deploy-book.yml"
+    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
