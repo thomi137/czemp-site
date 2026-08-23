@@ -1,17 +1,20 @@
 // Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later.
 
+// Click/keyboard/swipe triggering moved to carousel.js (step 2 of
+// context/current-feature.md) — one trigger path, not two racing ones.
+// All that's left here is the plain <a href> fallback's direction
+// tagging: whenever carousel.js can't run at all (fetch/DOMParser/
+// pushState unsupported, or JS disabled outright), these prev/next links
+// still work as normal navigation with no JS involvement, and get the
+// generic crossfade instead of the directional slide — carousel.js has
+// its own copy of this same tagging for when *it* falls back mid-swap
+// (fetch failure, missing markup), see its pendingFallbackDirection.
+
 const nav = document.querySelector('.cz-artwork-nav');
 
 if (nav) {
 	const prevBtn = nav.querySelector('.cz-artwork-nav__prev');
 	const nextBtn = nav.querySelector('.cz-artwork-nav__next');
-	const prevUrl = prevBtn?.href;
-	const nextUrl = nextBtn?.href;
-
-	// Same fade-out overlay the mobile nav drawer uses before it navigates
-	// away (blocks/sticky-nav/render.php + style.css) — reused here rather
-	// than building a second one.
-	const spinner = document.querySelector('.cz-spinner-overlay');
 
 	// Which way we're going, read by the `pageswap` listener below right
 	// as the browser starts navigating away, so it can tag the transition
@@ -35,71 +38,10 @@ if (nav) {
 		}
 	});
 
-	const navigateTo = (url, direction) => {
-		pendingDirection = direction;
-		spinner?.classList.add('is-visible');
-		window.location.href = url;
-	};
-
-	// Buttons stay plain <a href> links, not intercepted with
-	// preventDefault — they keep working with zero JS (see the feature's
-	// original design). This just records which one was clicked, ahead
-	// of the browser's own normal navigation, so they get the same
-	// directional slide as keyboard/swipe below instead of the plain
-	// crossfade.
 	prevBtn?.addEventListener('click', () => {
 		pendingDirection = 'cz-nav-prev';
 	});
 	nextBtn?.addEventListener('click', () => {
 		pendingDirection = 'cz-nav-next';
 	});
-
-	// Circular navigation needs no logic here — the prev/next hrefs
-	// themselves already wrap (see render.php's modulo arithmetic). This
-	// only adds two more ways to trigger the same navigation the buttons
-	// already offer.
-	document.addEventListener('keydown', (event) => {
-		if (event.target.matches('input, textarea, [contenteditable="true"]')) {
-			return;
-		}
-		if (event.key === 'ArrowLeft' && prevUrl) {
-			navigateTo(prevUrl, 'cz-nav-prev');
-		} else if (event.key === 'ArrowRight' && nextUrl) {
-			navigateTo(nextUrl, 'cz-nav-next');
-		}
-	});
-
-	const image = document.querySelector('.wp-block-post-featured-image');
-	if (image) {
-		let touchStartX = 0;
-		let touchStartY = 0;
-
-		image.addEventListener(
-			'touchstart',
-			(event) => {
-				touchStartX = event.changedTouches[0].clientX;
-				touchStartY = event.changedTouches[0].clientY;
-			},
-			{ passive: true }
-		);
-
-		image.addEventListener(
-			'touchend',
-			(event) => {
-				const deltaX = event.changedTouches[0].clientX - touchStartX;
-				const deltaY = event.changedTouches[0].clientY - touchStartY;
-
-				// Horizontal-dominant threshold so a vertical scroll
-				// gesture on the image is never mistaken for a swipe.
-				if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
-					if (deltaX < 0 && nextUrl) {
-						navigateTo(nextUrl, 'cz-nav-next');
-					} else if (deltaX > 0 && prevUrl) {
-						navigateTo(prevUrl, 'cz-nav-prev');
-					}
-				}
-			},
-			{ passive: true }
-		);
-	}
 }
