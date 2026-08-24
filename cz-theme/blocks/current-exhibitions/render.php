@@ -26,7 +26,7 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => 'cz-current-exhib
     <button
         type="button"
         class="cz-current-exhibitions__arrow wp-block-button__link has-text-color has-background has-custom-font-size wp-element-button"
-        style="border-radius:0;color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
+        style="border-radius:12px;color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
         <?php if ('' !== $target_anchor) : ?>
         data-target-anchor="<?php echo esc_attr($target_anchor); ?>"
         <?php endif; ?>
