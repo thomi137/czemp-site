@@ -104,6 +104,12 @@
           "custom": true
         }
       }
+    },
+
+    "custom": {
+      "button": {
+        "radius": "999px"
+      }
     }
   },
 
@@ -157,6 +163,16 @@
               "fontSize": "56px"
             }
           }
+        }
+      },
+      "core/button": {
+        "border": {
+          "radius": "var:custom|button|radius"
+        }
+      },
+      "czemp-theme/current-exhibitions": {
+        "border": {
+          "radius": "var:custom|button|radius"
         }
       }
     }

@@ -108,7 +108,7 @@ $original_post = $post;
             <a
                 class="wp-block-button__link has-text-color has-background has-custom-font-size wp-element-button"
                 href="<?php echo esc_url($past_events_url); ?>"
-                style="border-radius:0;color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
+                style="color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
             >Vergangene Veranstaltungen ansehen</a>
         </p>
     <?php endif; ?>

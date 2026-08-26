@@ -22,11 +22,22 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => 'cz-current-exhib
     // and global.css's existing .wp-block-button__link:hover rule, not a
     // re-typed copy. No aria-label override: the visible label text is
     // the accessible name, same as "Zur Galerie" gets none either.
+    //
+    // Border-radius is NOT part of this inline style — it comes from this
+    // block's own border support (block.json) + theme.json's default for
+    // czemp-theme/current-exhibitions, both pointing at the same
+    // --wp--custom--button--radius as core/button's own default. The
+    // `selectors.border` entry in block.json re-targets that generated
+    // CSS onto .cz-current-exhibitions__arrow specifically — this <button>,
+    // not the outer wrapper div get_block_wrapper_attributes() applies to
+    // below — same pattern core/button itself uses to style its inner
+    // <a class="wp-block-button__link"> rather than the outer
+    // .wp-block-button div.
     ?>
     <button
         type="button"
         class="cz-current-exhibitions__arrow wp-block-button__link has-text-color has-background has-custom-font-size wp-element-button"
-        style="border-radius:12px;color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
+        style="color:#ffffff;background-color:#1a1a1a;font-size:12px;letter-spacing:0.1em;text-transform:uppercase"
         <?php if ('' !== $target_anchor) : ?>
         data-target-anchor="<?php echo esc_attr($target_anchor); ?>"
         <?php endif; ?>

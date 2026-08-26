@@ -43,4 +43,14 @@
 .cz-event-archive__past-link {
     margin-top: 2rem;
     text-align: center;
+
+    // Hand-rendered <a>, not a real core/button instance (no .wp-block-button
+    // wrapper div ancestor) - never matched core/button's theme.json border
+    // rule (:where(.wp-block-button .wp-block-button__link)), so it needs its
+    // own reference to the same --wp--custom--button--radius WordPress
+    // generates from theme.json's settings.custom.button.radius. Same one
+    // value, just not reachable via block supports here.
+    a {
+        border-radius: var(--wp--custom--button--radius);
+    }
 }

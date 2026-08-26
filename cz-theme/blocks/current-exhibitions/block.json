@@ -7,7 +7,13 @@
   "icon": "arrow-down-alt2",
   "description": "Überschrift mit einem sanft auf- und abbewegenden Pfeil, der zum nächsten verankerten Abschnitt scrollt.",
   "supports": {
-    "html": false
+    "html": false,
+    "border": {
+      "radius": true
+    }
+  },
+  "selectors": {
+    "border": ".cz-current-exhibitions__arrow"
   },
   "editorScript": "file:../../build/index.js",
   "render": "file:./render.php",
