@@ -1,0 +1,116 @@
+/* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
+
+/* Box model, colour, and hover/focus all come from the wp-block-button__link
+   classes on the element itself (see edit.js/save.js) — same CSS "Zur
+   Galerie" and current-exhibitions use, so this block matches them for
+   free. Padding/font-size/colour/border-radius come from real block
+   supports (block.json), not this file — this only covers what's unique
+   to *this* block: the icon + its animation. */
+.wp-block-czemp-theme-animated-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* The block editor's reset stylesheet sets `svg { overflow: visible }` (so
+   editor icons never get unexpectedly clipped), which the front end
+   doesn't. Pinning overflow explicitly keeps both contexts identical
+   regardless of which animation is active — same reasoning as
+   current-exhibitions's matching rule. A transform on the icon moves its
+   whole box, clip region included, so this never fights the bounce/slide
+   animations below. */
+.cz-animated-button__icon {
+	display: block;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+/* Chevron-Track — ported as-is from current-exhibitions: all three
+   chevrons stay visible throughout (opacity-only pulse, no movement) but
+   animate on the same keyframes offset in time, so brightness visibly
+   runs top to bottom and loops. */
+.cz-animated-button__chevron {
+	animation: cz-animated-button-track 1.6s ease-in-out infinite;
+}
+
+.cz-animated-button__chevron--middle {
+	animation-delay: 0.3s;
+}
+
+.cz-animated-button__chevron--bottom {
+	animation-delay: 0.6s;
+}
+
+@keyframes cz-animated-button-track {
+	0%, 100% {
+		opacity: 0.4;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+/* Auf-Ab-Pfeil — the classic "scroll cue": a single arrow drifting gently
+   up and down, no fading. */
+.cz-animated-button__icon--bounce-arrow {
+	animation: cz-animated-button-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes cz-animated-button-bounce {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(4px);
+	}
+}
+
+/* Pulsierender Punkt — the most minimal option: a small dot "breathing"
+   in place, no directional movement at all. */
+.cz-animated-button__icon--pulse-dot {
+	transform-origin: center;
+	animation: cz-animated-button-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes cz-animated-button-pulse {
+	0%, 100% {
+		transform: scale(0.85);
+		opacity: 0.5;
+	}
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+/* Gleitender Pfeil — more directional than the bounce: the arrow falls
+   and fades out, then resets to the top and repeats, rather than
+   oscillating in place. */
+.cz-animated-button__icon--slide-arrow {
+	animation: cz-animated-button-slide 1.5s ease-in infinite;
+}
+
+@keyframes cz-animated-button-slide {
+	0% {
+		transform: translateY(-2px);
+		opacity: 0;
+	}
+	30% {
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(6px);
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cz-animated-button__chevron,
+	.cz-animated-button__icon--bounce-arrow,
+	.cz-animated-button__icon--pulse-dot,
+	.cz-animated-button__icon--slide-arrow {
+		animation: none;
+		opacity: 1;
+		transform: none;
+	}
+}

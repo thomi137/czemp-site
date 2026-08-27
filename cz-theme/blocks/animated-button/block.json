@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "czemp-theme/animated-button",
+  "title": "Animierter Button",
+  "category": "widgets",
+  "icon": "button",
+  "description": "Ein Button mit einstellbarem Innenabstand, Schriftgröße, Farbe und Eckenradius, optional mit einer kleinen Scroll-Animation.",
+  "supports": {
+    "html": false,
+    "spacing": {
+      "padding": true
+    },
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true
+    },
+    "border": {
+      "radius": true
+    }
+  },
+  "editorScript": "file:../../build/index.js",
+  "editorStyle": "file:./style.css",
+  "style": "file:./style.css",
+  "attributes": {
+    "text": { "type": "string", "default": "Button" },
+    "url": { "type": "string", "default": "" },
+    "linkTarget": { "type": "string", "default": "_self" },
+    "rel": { "type": "string", "default": "" },
+    "animation": { "type": "string", "default": "none" }
+  },
+  "example": {}
+}

@@ -36,6 +36,7 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-price');
     register_block_type(get_stylesheet_directory() . '/blocks/current-exhibitions');
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-nav');
+    register_block_type(get_stylesheet_directory() . '/blocks/animated-button');
 });
 
 add_action('wp_enqueue_scripts', function () {
