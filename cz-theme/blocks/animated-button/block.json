@@ -31,7 +31,9 @@
     "url": { "type": "string", "default": "" },
     "linkTarget": { "type": "string", "default": "_self" },
     "rel": { "type": "string", "default": "" },
-    "animation": { "type": "string", "default": "none" }
+    "animation": { "type": "string", "default": "none" },
+    "linkType": { "type": "string", "default": "url" },
+    "targetAnchor": { "type": "string", "default": "" }
   },
   "example": {}
 }

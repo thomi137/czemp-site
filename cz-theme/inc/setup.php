@@ -62,6 +62,13 @@ add_action('wp_enqueue_scripts', function () {
         true
     );
     wp_enqueue_script(
+        'cz-animated-button-view',
+        get_stylesheet_directory_uri() . '/blocks/animated-button/view.js',
+        [],
+        filemtime(get_stylesheet_directory() . '/blocks/animated-button/view.js'),
+        true
+    );
+    wp_enqueue_script(
         'cz-artwork-nav-view',
         get_stylesheet_directory_uri() . '/blocks/artwork-nav/view.js',
         [],
