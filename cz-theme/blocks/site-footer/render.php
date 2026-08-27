@@ -37,8 +37,12 @@ $nav_id = cz_get_footer_nav_id();
 // footer <div> shrank its containing block down to just this block's own
 // content height and broke the stickiness.
 if ($nav_id) :
+    // Menü-Stil preview switch (Settings -> Menü-Stil, inc/nav-style.php)
+    // - passed through explicitly since this is the only place
+    // czemp-theme/sticky-nav ever gets instantiated.
+    $nav_button_style = get_option('cz_nav_button_style') ? 'true' : 'false';
     echo do_blocks(
-        '<!-- wp:czemp-theme/sticky-nav -->' .
+        '<!-- wp:czemp-theme/sticky-nav {"buttonStyle":' . $nav_button_style . '} -->' .
         '<!-- wp:navigation {"ref":' . (int) $nav_id . ',"overlayMenu":"never","layout":{"type":"flex","justifyContent":"space-between"},"style":{"spacing":{"blockGap":"32px"},"typography":{"textTransform":"uppercase","letterSpacing":"0.08em","fontSize":"18px"}},"textColor":"white"} /-->' .
         '<!-- /wp:czemp-theme/sticky-nav -->'
     );

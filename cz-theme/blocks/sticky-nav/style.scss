@@ -229,6 +229,64 @@
     animation: spin 700ms linear infinite;
 }
 
+/* ── Button-style nav links (preview toggle) ───────────── */
+
+/* "Menüpunkte als runde Buttons" in the editor's Inspector — Claudia
+   wants everything round, this is the on/off switch to actually show her
+   the button look before committing to it. Reuses the exact same
+   --wp--custom--button--radius token core/button and animated-button
+   share (one point of truth), plus this project's colour-invert-on-hover
+   button doctrine rather than the plain-text opacity fade used above —
+   a half-opacity pill reads as washed-out, not a deliberate state
+   change, so button mode goes full-opacity + colour swap instead. */
+
+.cz-sticky-nav--buttons .cz-sticky-nav__inner .wp-block-navigation-item__content {
+    opacity: 1;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: var(--wp--custom--button--radius);
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.cz-sticky-nav--buttons .cz-sticky-nav__inner .wp-block-navigation-item__content:hover,
+.cz-sticky-nav--buttons .cz-sticky-nav__inner .current-menu-item .wp-block-navigation-item__content {
+    background-color: #fff;
+    color: #1a1a1a;
+}
+
+/* Mobile drawer: the plain-text look is a full-width block with a
+   divider line per item (list-like, by design). A button shouldn't
+   stretch edge-to-edge, so the item itself (the flex child) gets
+   align-self: flex-start to size to its own content instead of
+   stretching — the anchor is already display: block within it, so it
+   fills exactly that content-sized box, giving a proper pill instead of
+   a full-width bar. */
+.cz-sticky-nav--buttons .cz-sticky-nav__links li,
+.cz-sticky-nav--buttons .cz-sticky-nav__links .wp-block-navigation-item {
+    align-self: flex-start;
+}
+
+.cz-sticky-nav--buttons .cz-sticky-nav__links a,
+.cz-sticky-nav--buttons .cz-sticky-nav__links .wp-block-navigation-item__content {
+    opacity: 1;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: var(--wp--custom--button--radius);
+    border-bottom: none;
+    margin-bottom: 12px;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.cz-sticky-nav--buttons .cz-sticky-nav__links a:hover,
+.cz-sticky-nav--buttons .cz-sticky-nav__links .wp-block-navigation-item__content:hover,
+.cz-sticky-nav--buttons .cz-sticky-nav__links .current-menu-item a,
+.cz-sticky-nav--buttons .cz-sticky-nav__links .current-menu-item .wp-block-navigation-item__content {
+    background-color: #fff;
+    color: #1a1a1a;
+}
+
 /* ── Mobile / Desktop breakpoints ──────────────────────── */
 
 @include bp.below-sm {
