@@ -3,8 +3,9 @@
 
 /**
  * Menü-Stil: a preview switch for the sticky-nav links, so Claudia can
- * actually see the "round buttons" look on the live site before deciding
- * on it, rather than judging it from a description.
+ * actually see the "pillbox/transparent" look (same recipe the site's
+ * pagination links already use) on the live site before deciding on it,
+ * rather than judging it from a description.
  *
  * Off by default; toggled from its own Settings page, same manage_options
  * gate as Wartungsmodus (inc/maintenance.php) - Thomas-only, since
@@ -38,7 +39,7 @@ function cz_render_nav_style_settings_page() {
                     <td>
                         <label>
                             <input type="checkbox" name="cz_nav_button_style" value="1" <?php checked(get_option('cz_nav_button_style')); ?>>
-                            Menüpunkte (Desktop-Leiste und mobiles Menü) als runde Buttons statt als Text anzeigen
+                            Menüpunkte (Desktop-Leiste und mobiles Menü) als transparente Pillen (wie bei der Seitennummerierung) statt als Text anzeigen
                         </label>
                     </td>
                 </tr>
