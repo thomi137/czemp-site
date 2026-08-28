@@ -11,9 +11,6 @@
     "color": { "background": true, "text": true }
   },
   "allowedBlocks": ["core/navigation"],
-  "attributes": {
-    "buttonStyle": { "type": "boolean", "default": false }
-  },
   "render": "file:./render.php",
   "editorScript": "file:../../build/index.js",
   "style": "file:./style.css"
