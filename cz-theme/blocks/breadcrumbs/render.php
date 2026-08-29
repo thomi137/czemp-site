@@ -15,7 +15,12 @@ if ( is_singular( 'artwork' ) ) {
 
     $terms = get_the_terms( get_the_ID(), 'collection' );
     if ( $terms && ! is_wp_error( $terms ) ) {
-        $term = $terms[0];
+        // Same context artwork-nav already tracks (see blocks/artwork-nav/
+        // render.php): which Kollektion the visitor actually arrived from,
+        // when known, instead of always the artwork's first assigned term.
+        $requested_term_id = isset( $_GET['kollektion'] ) ? absint( $_GET['kollektion'] ) : 0;
+        $has_context        = $requested_term_id && is_object_in_term( get_the_ID(), 'collection', [ $requested_term_id ] );
+        $term               = $has_context ? get_term( $requested_term_id, 'collection' ) : $terms[0];
         if ( $term->parent ) {
             $parent = get_term( $term->parent, 'collection' );
             if ( $parent && ! is_wp_error( $parent ) ) {

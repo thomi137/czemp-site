@@ -88,9 +88,32 @@
 .cz-sticky-nav__inner .wp-block-navigation,
 .cz-sticky-nav__inner .wp-block-navigation__container {
     justify-content: center !important;
-    font-size: 18px !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+}
+
+/* Match the site-title's own breakpoint tiers (see .cz-header
+   .wp-block-site-title a in assets/scss/global/_header.scss) instead of
+   a flat px value unrelated to it — the desktop bar is only ever visible
+   at bp.sm and up anyway (see .cz-sticky-nav__inner { display:none } in
+   bp.below-sm below), so this is purely about matching that size, not
+   controlling visibility. */
+@include bp.sm {
+    @include bp.desktop-height {
+        .cz-sticky-nav__inner .wp-block-navigation,
+        .cz-sticky-nav__inner .wp-block-navigation__container {
+            font-size: 14pt !important;
+        }
+    }
+}
+
+@include bp.xl {
+    @include bp.desktop-height {
+        .cz-sticky-nav__inner .wp-block-navigation,
+        .cz-sticky-nav__inner .wp-block-navigation__container {
+            font-size: 16pt !important;
+        }
+    }
 }
 
 .cz-sticky-nav__inner .wp-block-navigation-item__content {

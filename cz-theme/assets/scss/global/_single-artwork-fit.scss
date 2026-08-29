@@ -52,6 +52,45 @@
     }
 }
 
+/* Non-featured images inside post-content (e.g. a 2nd/3rd companion photo)
+   had no consistent sizing at all — each rendered at its own native
+   aspect ratio scaled to the text column's width, so a tall portrait shot
+   and a wide landscape shot ended up wildly different heights next to
+   each other. Width is capped per breakpoint below (via flex-basis on the
+   wrapper), height stays auto — each photo keeps its own native aspect
+   ratio, just consistently sized relative to the others instead of
+   cropped to match. Featured image is untouched (see the width/height
+   auto block above); this only targets post-content. */
+.single-artwork .wp-block-post-content .wp-block-image {
+    margin: 0;
+}
+
+.single-artwork .wp-block-post-content .wp-block-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* 1 companion image per row on mobile, 2 per row from $sm up (so several
+   don't stretch the page unreasonably tall on desktop) — only kicks in
+   when post-content actually has more than one image; a single image
+   stays full-width either way since flex-basis is a percentage. */
+.single-artwork .wp-block-post-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.single-artwork .wp-block-post-content > * {
+    flex: 1 1 100%;
+}
+
+@include bp.sm {
+    .single-artwork .wp-block-post-content > .wp-block-image {
+        flex: 1 1 calc(50% - 0.5rem);
+    }
+}
+
 /* Carousel-ish feel for prev/next navigation (blocks/artwork-nav) without
    an actual carousel — plain full-page navigation, but the browser
    morphs the old featured image into the new one instead of a hard cut

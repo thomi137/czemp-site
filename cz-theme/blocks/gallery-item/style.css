@@ -61,3 +61,17 @@ a:has(> .gallery-item) {
     text-align: center;
     width: 100%;
 }
+
+/* The tile itself is a fixed 1:1 square (aspect-ratio above) that shrinks
+   with the viewport, but the heading's font-size doesn't - fine for a
+   short one-word collection name, but a longer title (e.g. an
+   event-archive tile like "HeartBeats Tour mit «Herzensmenschen» von
+   Claudia Zemp") wraps to several lines at the same fixed size and
+   crowds a small mobile tile. Plain CSS, not Sass, so no shared
+   breakpoint mixin here - 700px is a literal mirror of $sm in
+   assets/scss/_breakpoints.scss; keep in sync if that ever changes. */
+@media (max-width: 699px) {
+    .gallery-item .overlay h2 {
+        font-size: 18px;
+    }
+}
