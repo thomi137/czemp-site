@@ -23,4 +23,5 @@
 - [Rechtliches](rechtliches.md)
 - [Handy & Tablet](mobile.md)
 - [Sicherheit & Datensicherung](sicherheit-backup.md)
+- [Deine Rückmeldungen (Ende August)](rueckmeldungen-august.md)
 - [Ausblick](ausblick.md)
