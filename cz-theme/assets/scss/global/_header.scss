@@ -1,7 +1,6 @@
 @use "../breakpoints" as bp;
 
 .cz-header {
-    padding: 0.75rem 0;
     position: fixed;
     top: 0;
     left: 0;
@@ -9,6 +8,7 @@
     z-index: 20;
     background: #fff;
     box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    padding: 0.75rem 0;
 }
 
 /* Sit below the WP admin bar instead of overlapping it when logged in.
@@ -19,33 +19,21 @@
     top: var(--wp-admin--admin-bar--height, 32px);
 }
 
-/* WordPress core (as of 7.0) switches #wpadminbar from fixed to absolute
-   positioning below the 782px breakpoint, so on mobile it now scrolls
-   away with the page content instead of staying put — leaving a blank
-   46px gap above our own fixed header (which still assumes the admin
-   bar occupies that space permanently) and letting content scroll up
-   underneath/through it. Only ever applies to logged-in editors, never
-   to real site visitors, so it's safe to force back to the old fixed
-   behavior we already build the rest of the layout around. */
-/* Exception to the theme's min-width-only convention (see
-   assets/scss/_breakpoints.scss): 782px is WordPress core's own
-   admin-bar breakpoint, not one of ours — kept as a raw max-width
-   literal to mirror core exactly rather than translate it into our
-   scale. */
+/* WordPress core switches #wpadminbar from fixed to absolute positioning
+   below its own 782px breakpoint, so on mobile it scrolls away with the
+   page instead of staying put — leaving a gap above our fixed header
+   (which assumes the admin bar always occupies that space) and letting
+   content scroll up underneath it. Only ever applies to logged-in
+   editors, never real visitors, so it's safe to force back to fixed. */
+/* Exception to the min-width-only convention (assets/scss/_breakpoints.scss):
+   782px is WordPress core's own admin-bar breakpoint, not ours — kept as
+   a raw max-width literal to mirror core exactly. */
 @media screen and (max-width: 782px) {
     #wpadminbar {
         position: fixed !important;
     }
 }
 
-/* Header height alone lands the target flush against the header's bottom
-   edge — technically not hidden, but with no breathing room it reads as
-   the section starting mid-scroll rather than landing on purpose. The
-   extra 2rem is purely cosmetic clearance, not clearance from being
-   covered (that part's done by --cz-header-height on its own). Site-wide
-   rather than scoped to the new scroll-down button specifically: any
-   other fragment/anchor jump (browser back/forward, a future in-page
-   link) should get the same breathing room, not a bare, tighter one. */
 html {
     scroll-padding-top: calc(var(--cz-header-height) + 2rem);
 }
