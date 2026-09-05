@@ -109,10 +109,10 @@ export default function Edit({ attributes, setAttributes }) {
                     />
                     <ToggleControl
                         __nextHasNoMarginBottom
-                        label="Overlay auf Mobile immer anzeigen"
+                        label="Overlay auf Mobile & Desktop immer anzeigen"
                         help={safeAlwaysShowOverlayOnMobile
-                            ? 'Standard: Overlay bleibt auf Mobilgeräten dauerhaft sichtbar.'
-                            : 'Overlay erscheint auf Mobilgeräten nur beim Scrollen ins Bild oder bei Hover.'}
+                            ? 'Standard: Overlay bleibt auf Mobilgeräten und ab 1024px Breite dauerhaft sichtbar; dazwischen (Tablet-Breite) nur bei Hover/Scroll.'
+                            : 'Overlay erscheint überall nur beim Scrollen ins Bild oder bei Hover.'}
                         checked={safeAlwaysShowOverlayOnMobile}
                         onChange={(value) => setAttributes({ alwaysShowOverlayOnMobile: value })}
                     />

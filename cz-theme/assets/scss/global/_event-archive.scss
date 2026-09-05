@@ -40,6 +40,15 @@
     }
 }
 
+/* Same ≥1024px extension as .cz-showcase-grid — see that file's comment
+   for why 700–1023px is deliberately left alone. */
+@include bp.lg {
+    .cz-events-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}
+
 .cz-event-archive__past-link {
     margin-top: 2rem;
     text-align: center;

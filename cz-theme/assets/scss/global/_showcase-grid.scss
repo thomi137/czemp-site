@@ -38,7 +38,9 @@
    fires once a tile crosses a visibility threshold while scrolling,
    which needs room to breathe that a 3-item highlight strip doesn't
    reliably have. Skip the interaction entirely on small screens: show
-   the caption permanently. Desktop keeps the normal hover behavior. */
+   the caption permanently. Large screens (≥1024px, see bp.lg below) get
+   the same forced-visible treatment on request — only the 700–1023px
+   tablet band still relies on hover/scroll-reveal. */
 /* Exception to the min-width-only convention: the hover-reveal behavior
    this overrides (opacity:0 + :hover) is an unconditional base rule in
    blocks/gallery-item/style.css, a different file, with its own
@@ -52,6 +54,20 @@
        out back to the original hover/scroll-into-view reveal (view.js's
        IntersectionObserver) instead of this being forced on every tile in
        the grid regardless of what that specific instance wants. */
+    .cz-showcase-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
+        opacity: 1 !important;
+        pointer-events: all !important;
+    }
+}
+
+/* Same forced-visible treatment, requested separately for large screens:
+   captions readable at a glance without requiring a hover pass, same as
+   mobile above. 700–1023px (tablets, real hover or not) is untouched —
+   deliberately not "below-sm OR ≥lg", just the two ends of the range. The
+   per-tile opt-out class is the same one the toggle already writes
+   (block.json's alwaysShowOverlayOnMobile / save.js) — no new attribute,
+   this just extends where the existing checkbox's "on" state applies. */
+@include bp.lg {
     .cz-showcase-grid .gallery-item:not(.gallery-item--mobile-overlay-off) .overlay {
         opacity: 1 !important;
         pointer-events: all !important;

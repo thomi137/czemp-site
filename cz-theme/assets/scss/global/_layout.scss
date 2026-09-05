@@ -28,6 +28,16 @@ body .wp-site-blocks > main.wp-block-cover {
    unconditionally in both states without an .admin-bar-scoped override. */
 main.wp-block-group {
     padding-top: calc(var(--cz-header-height) + var(--wp-admin--admin-bar--height, 0px)) !important;
+    /* WordPress's own global styles apply a default block-gap margin
+       (margin-block-start, currently 24px) to every direct child of
+       .wp-site-blocks via `:where(.wp-site-blocks) > *` — including main,
+       since the fixed-position header before it in the DOM is still
+       main's preceding sibling as far as that selector's concerned, even
+       though it's visually out of flow. That's a real, separate 24px
+       stacking on top of the padding-top above (confirmed by tracing the
+       matched CSS rule directly, not guessed) — zeroed here since the
+       padding-top is already the actual, correct spacing mechanism. */
+    margin-top: 0 !important;
 }
 
 .wp-site-blocks > .cz-site-footer__bar {
@@ -72,22 +82,43 @@ main.wp-block-group {
    font-size, line-wrapping, and viewport height — every "fix" this
    session for one width/orientation left others still broken (confirmed
    repeatedly, most recently: still too close to the header well above
-   1024px, a range none of the earlier per-tier patches touched).
+   1024px, a range none of the earlier per-tier patches touched). That
+   was replaced with a hard top-align + fixed clearance instead — safe,
+   but Claudia wants the hero genuinely centered again.
 
-   Replaced with a hard guarantee instead of a tuned guess: top-align the
-   text (no more centering-then-pulling-up) and give it a fixed minimum
-   clearance below the header via padding-top, computed from the same
-   --cz-header-height variable the header itself uses. This can't drift
-   out of sync with the header's real height at any width, admin-bar
-   state, or content length — there's no more magic pull number to
-   re-tune per breakpoint. Applies at every width; only the heading/
-   paragraph font-size still varies by tier below. */
+   First attempt at real centering excluded the header from the centered
+   region (padding-top on the cover itself, equal to the header's
+   height), so the content centered in "the space below the header"
+   instead of the full viewport — read as "too far down."
+
+   Second attempt dropped that padding entirely — align-items:center on
+   the raw 100vh box, no compensation — which centers correctly on paper
+   but is measurably wrong in practice: the header (~97px) and the black
+   sticky-nav bar at the bottom (~80px) aren't the same height, and both
+   overlay the cover rather than pushing it — so centering on the *full*
+   box (which includes both hidden strips) sits the content a bit lower
+   than the middle of what's actually *visible* between them, biased
+   toward whichever hidden strip is taller. Confirmed via direct
+   measurement (Playwright), not by eye: a consistent ~15px offset at
+   every viewport height tested, small but real and exactly explained by
+   that height difference — not a rounding artifact.
+
+   Real fix: exclude *both* bars from the centered region, not just one
+   — padding-top for the header, padding-bottom for the sticky-nav,
+   each from its own measured CSS var (assets/js/header-height.js sets
+   both; --cz-sticky-nav-height added there for this). align-items:center
+   then centers within exactly the visible strip between them, at any
+   viewport height, no per-breakpoint number to tune. Safe against
+   overlap for the same reason as before: the short-viewport branch below
+   (bp.mobile-or-short) drops the 100vh stretch entirely below that
+   height, so this rule only ever applies where there's room to spare. */
 .home main.wp-block-group .wp-block-cover:first-of-type {
-    align-items: flex-start !important;
+    align-items: center !important;
+    padding-top: var(--cz-header-height) !important;
+    padding-bottom: var(--cz-sticky-nav-height) !important;
 }
 .home main.wp-block-group .wp-block-cover:first-of-type .wp-block-cover__inner-container {
     margin-top: 0 !important;
-    padding-top: calc(var(--cz-header-height) + 1.5rem) !important;
 }
 .home .wp-block-cover__inner-container .wp-block-group {
     margin-top: 0 !important;
@@ -107,9 +138,12 @@ main.wp-block-group {
     margin-top: 0 !important;
 }
 
-/* Positioning is now handled unconditionally above (top-align + a hard
-   padding-top clearance from the header) — everything left here is just
-   font-size/spacing tuned per tier, small screen to large. */
+/* Positioning above is now: true center on a full 100vh viewport, minus
+   the header/sticky-nav strips, where there's room to spare; the tier
+   below drops the 100vh stretch instead and gives its own header
+   clearance directly (padding-top reset to 0 below since it's no longer
+   centering — the inner-container's own padding-top does that job here,
+   same as it always has). */
 
 /* Mobile / short-height landscape phone. */
 @include bp.mobile-or-short {
@@ -121,8 +155,21 @@ main.wp-block-group {
            instead; still full-bleed width, just not artificially
            stretched to fill the whole screen. */
         min-height: auto !important;
+        align-items: flex-start !important;
+        /* The base rule's own padding-top/bottom (header/sticky-nav
+           clearance for centering purposes) would otherwise stack with
+           the inner-container's padding-top below, double-counting the
+           header height. Reset here; this tier's clearance comes
+           entirely from the inner-container padding instead. */
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
     .home main.wp-block-group .wp-block-cover:first-of-type .wp-block-cover__inner-container {
+        /* Auto-height box pulled up behind the fixed header (see the
+           negative margin-top above) needs its own clearance restored
+           here — the base rule no longer provides it now that it's
+           true-centering instead. */
+        padding-top: calc(var(--cz-header-height) + 1.5rem) !important;
         padding-bottom: 3rem !important;
     }
     .home .wp-block-cover__inner-container .wp-block-group > h1.wp-block-heading {

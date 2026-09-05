@@ -13,6 +13,21 @@ function cz_setHeaderOffset() {
     document.documentElement.style.setProperty('--cz-header-height', height + 'px');
 }
 
+// Same idea, for the black sticky-nav bar at the bottom (blocks/sticky-nav).
+// Needed so the front-page hero can centre its text in the space actually
+// visible between the two fixed/sticky bars, not the raw 100vh viewport —
+// the two bars aren't the same height, so excluding only one biases the
+// centered content toward the taller one.
+function cz_setStickyNavHeight() {
+    const nav = document.querySelector('.cz-sticky-nav');
+    if (!nav) return;
+    const height = Math.ceil(nav.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--cz-sticky-nav-height', height + 'px');
+}
+
 cz_setHeaderOffset();
+cz_setStickyNavHeight();
 window.addEventListener('load', cz_setHeaderOffset);
+window.addEventListener('load', cz_setStickyNavHeight);
 window.addEventListener('resize', cz_setHeaderOffset);
+window.addEventListener('resize', cz_setStickyNavHeight);
