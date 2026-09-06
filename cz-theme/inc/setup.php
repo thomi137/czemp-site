@@ -34,6 +34,7 @@ add_action('init', function () {
     register_block_type(get_stylesheet_directory() . '/blocks/latest-posts');
     register_block_type(get_stylesheet_directory() . '/blocks/event-archive');
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-price');
+    register_block_type(get_stylesheet_directory() . '/blocks/artwork-secondary-image');
     register_block_type(get_stylesheet_directory() . '/blocks/current-exhibitions');
     register_block_type(get_stylesheet_directory() . '/blocks/artwork-nav');
     register_block_type(get_stylesheet_directory() . '/blocks/animated-button');

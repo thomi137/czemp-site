@@ -1,0 +1,16 @@
+/* Copyright (c) 2026 Thomas Prosser. Licensed under GPL-2.0-or-later. */
+
+/* Uncropped, native aspect ratio — matches the featured image's own
+   width-first sizing (_single-artwork-fit.scss): full column width,
+   height auto, whole photo always visible. No JS width-matching needed
+   either, since both images just fill the same column at width:100%. */
+.cz-artwork-secondary-image {
+    margin-top: 1rem;
+}
+
+.cz-artwork-secondary-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+}

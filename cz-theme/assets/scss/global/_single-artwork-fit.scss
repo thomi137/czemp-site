@@ -1,55 +1,18 @@
 @use "../breakpoints" as bp;
 
-/* Artwork photos are often tall portrait shots straight from the camera
-   (e.g. 1066×2560) with no size cap of their own — at 55% column width
-   that can render several screens tall, dragging the whole page (and the
-   vertically-centered text beside it) out with it. Cap the image to the
-   space actually available below the header (and admin bar, when
-   logged in) instead of letting its intrinsic aspect ratio decide the
-   page's height. "60px" mirrors the same footer-height estimate already
-   used in _layout.scss for .wp-site-blocks > main's min-height; "4rem"
-   accounts for main's own bottom padding (see
-   templates/single-artwork.html) plus breadcrumb spacing above the
-   columns. */
-/* width/height auto + max-width/max-height (not a fixed box +
-   object-fit) on purpose: object-fit:contain kept the img element's own
-   box at the column's full width even when a tall/narrow photo only
-   painted part of it. Auto sizing shrinks the element itself to the
-   actual picture, flush left by normal block flow — no object-position
-   hack needed either. */
-@include bp.sm {
-    @include bp.desktop-height-strict {
-        .single-artwork .wp-block-post-featured-image img {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-            max-height: calc(100dvh - var(--cz-header-height) - var(--wp-admin--admin-bar--height, 0px) - 60px - 4rem) !important;
-            border-radius: 0;
-        }
-
-        /* The real remaining gap wasn't the img's own box — it's the COLUMN.
-           templates/single-artwork.html sets a fixed flex-basis:55%/45% split
-           (inline style, from the columns block's own width attributes), so
-           a tall/narrow photo capped to viewport height (often well under
-           55% wide once scaled) still sits inside a fixed 55%-wide column,
-           leaving dead space before the text column starts regardless of how
-           tightly the img itself is sized. Overriding the inline flex-basis
-           (needs !important — same reasoning as every other inline-style
-           override in this file) so the image column shrinks to its actual
-           content, capped at 55% as a ceiling for wide/landscape photos
-           instead of a fixed floor for narrow ones. Text column takes
-           whatever's left. */
-        .single-artwork .wp-block-columns > .wp-block-column:first-child {
-            flex: 0 1 auto !important;
-            width: auto !important;
-            max-width: 55%;
-        }
-
-        .single-artwork .wp-block-columns > .wp-block-column:last-child {
-            flex: 1 1 auto !important;
-            width: auto !important;
-        }
-    }
+/* Width-first sizing: the featured image always fills its column's full
+   width, height auto (native aspect ratio) — no viewport-height cap.
+   Deliberate tradeoff (see context/current-feature.md): a tall portrait
+   photo can make the page taller than one screen, and that's accepted
+   now in exchange for never cropping/shrinking a photo. Column keeps its
+   template-set 55%/45% flex-basis (templates/single-artwork.html) as-is —
+   no shrink-to-content override needed once the image itself always
+   fills the column. */
+.single-artwork .wp-block-post-featured-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
 }
 
 /* Non-featured images inside post-content (e.g. a 2nd/3rd companion photo)

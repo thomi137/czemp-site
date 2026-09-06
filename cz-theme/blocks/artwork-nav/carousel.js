@@ -32,6 +32,8 @@
 	var IMG_SELECTOR = '.wp-block-post-featured-image img';
 	var BREADCRUMBS_SELECTOR = '.cz-breadcrumbs';
 	var COLUMN_SELECTOR = '.wp-block-column.is-vertically-aligned-top';
+	var SECONDARY_WRAPPER_SELECTOR = '.cz-artwork-secondary-image';
+	var IMAGE_COLUMN_SELECTOR = '.wp-block-columns > .wp-block-column:first-child';
 
 	// inc/seo.php's full per-page tag set (description, Open Graph,
 	// Twitter Card) — kept in sync from the fetched document's <head> on
@@ -176,6 +178,36 @@
 		currentImg.setAttribute('alt', newImg.getAttribute('alt') || '');
 	}
 
+	// Patches the secondary/companion image (blocks/artwork-secondary-image)
+	// against newDoc — an artwork may or may not have one at all (explicit
+	// per-artwork meta, see context/current-feature.md), so unlike
+	// patchImage() this also has to add/remove the whole wrapper element,
+	// not just swap an existing img's attributes. This is the actual fix
+	// for the bug that sank the earlier content-parsing attempt: without
+	// it, browsing prev/next left whatever secondary image was already in
+	// the DOM in place across every subsequent artwork.
+	function patchSecondaryImage(newDoc) {
+		var newWrapper = newDoc.querySelector(SECONDARY_WRAPPER_SELECTOR);
+		var currentWrapper = document.querySelector(SECONDARY_WRAPPER_SELECTOR);
+
+		if (!newWrapper) {
+			if (currentWrapper && currentWrapper.parentNode) {
+				currentWrapper.parentNode.removeChild(currentWrapper);
+			}
+			return;
+		}
+
+		if (currentWrapper) {
+			currentWrapper.innerHTML = newWrapper.innerHTML;
+			return;
+		}
+
+		var imageColumn = document.querySelector(IMAGE_COLUMN_SELECTOR);
+		if (imageColumn) {
+			imageColumn.appendChild(newWrapper.cloneNode(true));
+		}
+	}
+
 	/**
 	 * Fetches `url`, patches the current document in place. Falls back to
 	 * a normal navigation on fetch failure or missing load-bearing markup.
@@ -227,6 +259,8 @@
 				if (currentImg) {
 					animateImagePatch(currentImg, newImg, direction);
 				}
+
+				patchSecondaryImage(newDoc);
 
 				var newBreadcrumbs = newDoc.querySelector(BREADCRUMBS_SELECTOR);
 				var currentBreadcrumbs = document.querySelector(BREADCRUMBS_SELECTOR);

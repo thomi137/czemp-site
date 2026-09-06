@@ -10,6 +10,7 @@ import '../blocks/site-footer';
 import '../blocks/latest-posts';
 import '../blocks/event-archive';
 import '../blocks/artwork-price';
+import '../blocks/artwork-secondary-image';
 import '../blocks/current-exhibitions';
 import '../blocks/artwork-nav';
 import '../blocks/animated-button';

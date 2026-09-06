@@ -69,6 +69,32 @@ add_action('init', function () {
     ]);
 });
 
+// Secondary (companion) image meta for artwork — an explicit, deliberate
+// per-artwork choice via the "Sekundärbild" panel below, not something
+// parsed out of post_content (see context/current-feature.md for why
+// that earlier approach was reverted). Focal point defaults to dead
+// center; only meaningful once the frontend crops the image (fixed
+// aspect-ratio box + object-fit: cover).
+add_action('init', function () {
+    register_post_meta('artwork', 'secondary_image', [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'integer',
+    ]);
+    register_post_meta('artwork', 'secondary_image_focal_x', [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'number',
+        'default'      => 0.5,
+    ]);
+    register_post_meta('artwork', 'secondary_image_focal_y', [
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'number',
+        'default'      => 0.5,
+    ]);
+});
+
 // "Preis" sidebar panel on the Werk edit screen, so Claudia can set/change
 // a price without touching code. The artwork-price block that displays
 // this value lives in the single-artwork FSE template, which her Editor
@@ -86,6 +112,26 @@ add_action('admin_enqueue_scripts', function ($hook) {
         get_stylesheet_directory_uri() . '/build/js/artwork-price-panel.js',
         ['wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data'],
         filemtime(get_stylesheet_directory() . '/build/js/artwork-price-panel.js'),
+        true
+    );
+});
+
+// "Sekundärbild" sidebar panel on the Werk edit screen — same reasoning
+// as the "Preis" panel above, for the secondary_image(_focal_x/_focal_y)
+// meta registered above. wp-block-editor (MediaUpload) and wp-media-utils
+// are extra deps vs. the price panel, needed for the media picker itself.
+add_action('admin_enqueue_scripts', function ($hook) {
+    if (!in_array($hook, ['post.php', 'post-new.php'], true)) {
+        return;
+    }
+    if ('artwork' !== get_current_screen()->post_type) {
+        return;
+    }
+    wp_enqueue_script(
+        'cz-artwork-secondary-image-panel',
+        get_stylesheet_directory_uri() . '/build/js/artwork-secondary-image-panel.js',
+        ['wp-plugins', 'wp-editor', 'wp-block-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-core-data', 'wp-media-utils'],
+        filemtime(get_stylesheet_directory() . '/build/js/artwork-secondary-image-panel.js'),
         true
     );
 });
