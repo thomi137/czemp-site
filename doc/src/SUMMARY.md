@@ -24,4 +24,5 @@
 - [Handy & Tablet](mobile.md)
 - [Sicherheit & Datensicherung](sicherheit-backup.md)
 - [Deine Rückmeldungen (Ende August)](rueckmeldungen-august.md)
+- [Sekundärbild: zweites Bild pro Werk](sekundaerbild.md)
 - [Ausblick](ausblick.md)

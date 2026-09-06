@@ -21,25 +21,11 @@ Die runden Pfeil-Buttons wurden ausserdem optisch überarbeitet: statt eckiger, 
 es jetzt dezente Kreise mit Rand, die beim Darüberfahren mit der Maus zu satten Schwarz mit weissem Pfeil
 wechseln.
 
-## Sekundärbild: zweites Bild jetzt über ein eigenes Feld
+> Seit Anfang September gehört zum Blättern auch ein zweites Bild pro Werk zuverlässig dazu — siehe
+> [Sekundärbild: zweites Bild pro Werk](sekundaerbild.md).
 
-Ein zweites/drittes Foto zu einem Werk (z. B. bei "The Lovestory from Asakusa" oder "Blitzgedanken", siehe
-[Deine Rückmeldungen (Ende August)](rueckmeldungen-august.md)) lag bisher direkt im Beschreibungstext. Das hatte
-einen Nachteil beim neuen "Blättern ohne Neuladen" oben: da dieses Zusatzbild Teil des freien Textes war, wusste
-die Wechsel-Funktion nicht, dass sie es beim Blättern mit austauschen muss — im schlimmsten Fall blieb beim
-Wechsel zum nächsten Werk das Zusatzbild des vorherigen Werks stehen.
+## Bild randabschliessend
 
-Es gibt daher jetzt ein eigenes **"Sekundärbild"-Feld** in der Seitenleiste beim Bearbeiten eines Werks, genau wie
-beim Preis-Feld: Foto auswählen, fertig. Damit weiss die Seite immer genau, ob und welches Zusatzbild zu einem
-Werk gehört, und tauscht es beim Blättern zuverlässig mit aus.
-
-Alle 32 Werke, die bereits ein solches Zusatzbild im Text hatten, wurden automatisch auf das neue Feld
-umgestellt — für Besucher der Website sieht dabei nichts anders aus, nur die Technik dahinter ist robuster.
-
-## Bilder zeigen jetzt immer die volle Breite
-
-Haupt- und Sekundärbild eines Werks werden jetzt so gross wie möglich dargestellt: sie füllen immer die ganze
-verfügbare Breite aus, ohne Beschnitt. Vorher wurden hochformatige Fotos in der Höhe begrenzt, damit die Seite
-nicht zu lang wird — dafür blieb bei schmalen Fotos oft ungenutzter Platz übrig. Jetzt ist es umgekehrt: ein sehr
-hohes Foto kann die Seite etwas länger machen als vorher, dafür wird nie mehr etwas vom Bild abgeschnitten oder
-unnötig verkleinert.
+Das Hauptbild eines Werks lag ursprünglich nicht bündig mit Logo und Titel darüber — das wurde behoben. Wie das
+Bild seither generell dargestellt wird (Grösse, Lücken zur Textspalte) hat sich seit Anfang September nochmals
+geändert — siehe [Sekundärbild: zweites Bild pro Werk](sekundaerbild.md).
