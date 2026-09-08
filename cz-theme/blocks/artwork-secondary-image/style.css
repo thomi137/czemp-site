@@ -5,12 +5,14 @@
    height auto, whole photo always visible. No JS width-matching needed
    either, since both images just fill the same column at width:100%. */
 .cz-artwork-secondary-image {
+    max-width: 100%;
     margin-top: 1rem;
 }
 
 .cz-artwork-secondary-image img {
     display: block;
     width: 100%;
+    max-width: 100%;
     height: auto;
     border-radius: 0;
 }

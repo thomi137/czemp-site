@@ -15,6 +15,40 @@
     border-radius: 0;
 }
 
+/* Flexbox trap: a flex item's default min-width is `auto`, which resolves
+   against its content's *intrinsic* size — an <img width="1024" ...> can
+   force the column wider than its flex-basis regardless of a width:100%
+   rule on the image itself. The featured image is shielded from this by
+   WordPress core's own `:where(img){max-width:100%}` on
+   .wp-block-post-featured-image; the secondary image (blocks/
+   artwork-secondary-image) has no equivalent, and blew out the column's
+   width entirely on a large square photo (reported 07.09.2026). Fixing
+   it at the flex item itself, not per-child, so nothing else in this
+   column can trigger the same bug later either. */
+.single-artwork .wp-block-columns > .wp-block-column:first-child {
+    min-width: 0;
+}
+
+/* Claudia's explicit ask (07.09.2026): a narrower image column at 1024px+ specifically —
+   1/3 image, 2/3 text, instead of the template's default 55%/45% split. Since the image is
+   still width:100% of its (now narrower) column with height:auto, this also shrinks a tall
+   photo proportionally shorter in absolute pixels, which is the point: less need to scroll to
+   see the whole image, without reinstating the max-height cap/JS-measured approach removed
+   above (deliberately not brought back — narrowing the column is enough in practice).
+   Below 1024px the wider width-first column from above stays as shipped — less horizontal
+   room to spare for text there. !important for the same reason as every other inline-style
+   override in this file: templates/single-artwork.html sets flex-basis inline via the columns
+   block's own width attributes. */
+@include bp.lg {
+    .single-artwork .wp-block-columns > .wp-block-column:first-child {
+        flex-basis: 33.333% !important;
+    }
+
+    .single-artwork .wp-block-columns > .wp-block-column:last-child {
+        flex-basis: 66.667% !important;
+    }
+}
+
 /* Non-featured images inside post-content (e.g. a 2nd/3rd companion photo)
    had no consistent sizing at all — each rendered at its own native
    aspect ratio scaled to the text column's width, so a tall portrait shot

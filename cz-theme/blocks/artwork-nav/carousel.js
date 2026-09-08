@@ -288,6 +288,15 @@
 				syncHeadMeta(newDoc);
 				focusNewHeading();
 				preloadNeighborImages();
+
+				// Lets any listener (e.g. assets/js/artwork-lightbox.js)
+				// re-sync itself against the now-patched DOM. Needed
+				// because keyboard-arrow navigation isn't blocked by the
+				// lightbox overlay's stacking (unlike a click/swipe on the
+				// now-covered featured image) — without this, arrow keys
+				// still swapped the page underneath while the lightbox
+				// kept showing the artwork it was opened on.
+				document.dispatchEvent(new CustomEvent('cz:artwork-swapped'));
 			})
 			.catch(function (error) {
 				// An intentional cancellation of a now-stale request, not a

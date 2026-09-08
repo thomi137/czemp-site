@@ -1,0 +1,309 @@
+/* Click-to-enlarge lightbox (assets/js/artwork-lightbox.js) — full image, no
+   cropping, dedicated view. Compromise for keeping the inline page
+   width-first/height-uncapped (see _single-artwork-fit.scss): anyone who
+   wants the whole piece with zero layout compromise can click through to
+   this instead. */
+
+@use "../breakpoints" as bp;
+
+.cz-lightbox-trigger {
+    cursor: zoom-in;
+}
+
+.cz-lightbox-trigger:focus-visible {
+    outline: 2px solid #1a1a1a;
+    outline-offset: 2px;
+}
+
+body.cz-lightbox-open {
+    overflow: hidden;
+}
+
+.cz-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200; /* above the fixed header (20), sticky-nav (30) and its own spinner overlay (100) */
+    background: #3d3d3d; /* Photoshop-style neutral gray canvas surround, not a translucent overlay */
+    animation: cz-lightbox-fade-in 350ms ease both;
+}
+
+/* Added by artwork-lightbox.js's close() once a close is triggered — plays
+   the reverse of the entrance animation before the element actually gets
+   removed. Written as a compound selector (not just .cz-lightbox--closing)
+   so it reliably wins over the base .cz-lightbox animation regardless of
+   source order. */
+.cz-lightbox.cz-lightbox--closing {
+    animation: cz-lightbox-fade-out 350ms ease both;
+}
+
+.cz-lightbox__close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    /* Playful but restrained: a slight overshoot ("back-out") easing
+       instead of a linear/ease curve, same black/white palette as every
+       other button on the site (design-guidelines.md) — just a simple
+       invert, with a bit more flourish in the motion. */
+    transition: background-color 500ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                color 500ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cz-lightbox__close:hover,
+.cz-lightbox__close:focus-visible {
+    background-color: #fff;
+    color: #1a1a1a;
+    transform: rotate(180deg);
+}
+
+.cz-lightbox__close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Sit below the WP admin bar instead of being covered by it — same
+   pattern/property as .admin-bar .cz-header in _header.scss. */
+.admin-bar .cz-lightbox__close {
+    top: calc(1rem + var(--wp-admin--admin-bar--height, 32px));
+}
+
+.cz-lightbox__scroll {
+    /* Definite height (not min-height) is what actually makes
+       overflow-y:auto do anything — without it the box just grows to fit
+       its own content (featured slide + secondary image) instead of
+       clipping/scrolling it, and since .cz-lightbox (its fixed-position
+       parent) has no overflow/scroll behavior of its own either, that
+       left the secondary image genuinely unreachable, not just visually
+       off — this was the actual bug reported 07.09.2026, still present
+       after the "safe center" fix (which only addressed clipping, not
+       this — the box was never scrollable to begin with). */
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    animation: cz-lightbox-scale-in 450ms ease both;
+    /* Crossfade when navigating to another artwork while the lightbox is
+       open (assets/js/artwork-lightbox.js's cz:artwork-swapped handler) —
+       separate from the animation above (entrance/exit), since this one
+       toggles on/off repeatedly rather than playing once. */
+    transition: opacity 350ms ease;
+}
+
+.cz-lightbox.cz-lightbox--closing .cz-lightbox__scroll {
+    animation: cz-lightbox-scale-out 350ms ease both;
+}
+
+.cz-lightbox__scroll--transitioning {
+    opacity: 0;
+}
+
+/* Wraps the featured image so a scroll-hint can be absolutely positioned
+   over it — an <img> itself can't contain a child element. Fills the
+   initial viewport, letterboxed by the gray canvas wherever its aspect
+   ratio doesn't exactly match the viewport's, never cropped. `flex: 0 0
+   auto` so this fixed 100dvh reservation isn't shrunk/grown by flexbox;
+   it's what pushes the secondary image (if any) below the fold, exactly
+   the "scroll down to it" behavior asked for 07.09.2026.
+
+   Padding here (box-sizing:border-box, so 100dvh still bounds the whole
+   slide) is what keeps the image off the literal screen edges — an
+   earlier pass took "full screen" literally and left zero gray margin
+   whenever a photo's aspect ratio happened to be close to the viewport's,
+   which read as "no padding at all" (reported 08.09.2026) and fights the
+   sitewide whitespace-around-content rule (design-guidelines.md). The
+   `<img>` below is width/height:100% of this element's *content* box, so
+   it insets on every side automatically — no separate rule needed. */
+.cz-lightbox__slide {
+    position: relative;
+    flex: 0 0 auto;
+    width: 100%;
+    height: 100dvh;
+    box-sizing: border-box;
+    padding: 1.25rem;
+}
+
+@include bp.sm {
+    .cz-lightbox__slide {
+        padding: 2rem;
+    }
+}
+
+@include bp.lg {
+    .cz-lightbox__slide {
+        padding: 3rem;
+    }
+}
+
+.cz-lightbox__img--featured {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center; /* explicit, not just relying on the (already-default) implicit value */
+}
+
+/* Tells a visitor there's a second image below before they'd otherwise
+   have any reason to scroll — only added (assets/js/artwork-lightbox.js)
+   when a secondary image actually exists. Fades out once they've scrolled
+   past it, and back in if they scroll back up (08.09.2026 ask) — see the
+   JS's onScroll, which toggles this class both ways rather than a one-shot
+   fade. Same "chevron-track" icon as blocks/current-exhibitions /
+   animated-button's chevron-track option, reused here rather than a new
+   shape, plus the same gentle bounce animated-button's bounce-arrow uses
+   for its "there's more, scroll" cue. */
+.cz-lightbox__scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    color: #fff;
+    pointer-events: none;
+    opacity: 0.85;
+    transition: opacity 300ms ease;
+    animation: cz-lightbox-hint-bounce 1.6s ease-in-out infinite;
+}
+
+.cz-lightbox__scroll-hint--hidden {
+    opacity: 0;
+}
+
+.cz-lightbox__scroll-hint-icon {
+    display: block;
+}
+
+/* All three chevrons stay visible throughout — an opacity-only pulse
+   offset in time so brightness visibly runs top to bottom and loops,
+   exactly blocks/animated-button/style.css's chevron-track keyframes. */
+.cz-lightbox__chevron {
+    animation: cz-lightbox-chevron-track 1.6s ease-in-out infinite;
+}
+
+.cz-lightbox__chevron--middle {
+    animation-delay: 0.3s;
+}
+
+.cz-lightbox__chevron--bottom {
+    animation-delay: 0.6s;
+}
+
+@keyframes cz-lightbox-chevron-track {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* Its own padding (not just inherited from .cz-lightbox__scroll) since the
+   secondary image wants a taller bottom margin than the featured slide's
+   even padding — this is the "breathing room" asked for 07.09.2026.
+
+   Left/right MUST track .cz-lightbox__slide's own responsive side padding
+   exactly, not just be "some" padding: assets/js/artwork-lightbox.js caps
+   the secondary image's width at the featured image's actual rendered
+   width via inline max-width, but that's a ceiling, not a floor — if this
+   wrap's own content box is narrower than that ceiling (mismatched
+   padding), the wrap itself becomes the binding constraint and the
+   secondary image renders smaller than the featured one instead of
+   matching it (reported 08.09.2026, still happening after the width-match
+   JS landed 07.09.2026 — same bug, root cause was here, not the JS). */
+.cz-lightbox__secondary-wrap {
+    flex: 0 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3rem 1.25rem 5rem;
+    display: flex;
+    justify-content: center;
+}
+
+@include bp.sm {
+    .cz-lightbox__secondary-wrap {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+@include bp.lg {
+    .cz-lightbox__secondary-wrap {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+.cz-lightbox__img--secondary {
+    display: block;
+    /* Same flexbox trap as _single-artwork-fit.scss's min-width fix on the
+       main page's column: a flex item's default min-width is `auto`,
+       which resolves against the image's *intrinsic* size — without this,
+       a large photo ignored width:100% entirely, blew past
+       .cz-lightbox__secondary-wrap's padding, and touched the screen
+       edges (reported as "there is no padding" 07.09.2026). */
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    /* Fallback only — assets/js/artwork-lightbox.js sets this inline to
+       the featured image's own actual rendered width once measured (its
+       rendered width isn't a fixed value, since it's height-constrained
+       via object-fit:contain — plain CSS has no way to hand that off to
+       a sibling). 1200px (theme.json contentSize) covers the brief
+       moment before that measurement lands, or if it's unavailable. */
+    max-width: 1200px;
+}
+
+@keyframes cz-lightbox-fade-in {
+    from { opacity: 0; }
+}
+
+@keyframes cz-lightbox-fade-out {
+    to { opacity: 0; }
+}
+
+@keyframes cz-lightbox-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes cz-lightbox-scale-out {
+    to {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes cz-lightbox-hint-bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cz-lightbox,
+    .cz-lightbox.cz-lightbox--closing,
+    .cz-lightbox__scroll,
+    .cz-lightbox.cz-lightbox--closing .cz-lightbox__scroll,
+    .cz-lightbox__scroll-hint,
+    .cz-lightbox__chevron {
+        animation: none;
+    }
+
+    .cz-lightbox__chevron {
+        opacity: 1;
+    }
+
+    .cz-lightbox__close,
+    .cz-lightbox__scroll {
+        transition: none;
+    }
+}

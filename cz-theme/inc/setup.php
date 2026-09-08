@@ -92,6 +92,15 @@ add_action('wp_enqueue_scripts', function () {
         filemtime(get_stylesheet_directory() . '/build/js/header-height.js'),
         true
     );
+    if (is_singular('artwork')) {
+        wp_enqueue_script(
+            'cz-artwork-lightbox',
+            get_stylesheet_directory_uri() . '/build/js/artwork-lightbox.js',
+            [],
+            filemtime(get_stylesheet_directory() . '/build/js/artwork-lightbox.js'),
+            true
+        );
+    }
 });
 
 add_filter('script_loader_tag', function ($tag, $handle) {

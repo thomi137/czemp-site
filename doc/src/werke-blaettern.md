@@ -22,7 +22,8 @@ es jetzt dezente Kreise mit Rand, die beim Darüberfahren mit der Maus zu satten
 wechseln.
 
 > Seit Anfang September gehört zum Blättern auch ein zweites Bild pro Werk zuverlässig dazu — siehe
-> [Sekundärbild: zweites Bild pro Werk](sekundaerbild.md).
+> [Sekundärbild: zweites Bild pro Werk](sekundaerbild.md). Und das Hauptbild lässt sich jetzt anklicken, um es
+> bildschirmfüllend zu sehen — siehe [Vollbildansicht](vollbildansicht.md).
 
 ## Bild randabschliessend
 

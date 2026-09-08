@@ -72,21 +72,23 @@ add_filter('render_block', function (string $block_content, array $block) {
 
 // The single-artwork featured image's rendered box is capped by CSS to the
 // column width (see .single-artwork .wp-block-post-featured-image img in
-// global.css, added for the "fit between header and footer" viewport-fit
-// layout) — but WordPress computes the `sizes` attribute purely from the
-// image's own intrinsic width, with no idea that CSS shrank its actual
+// global.css) — but WordPress computes the `sizes` attribute purely from
+// the image's own intrinsic width, with no idea that CSS shrank its actual
 // layout box. Left alone, that told the browser it might need up to
 // 1066px/100vw and made it download the largest srcset candidate on
 // almost every screen, even though it's now displayed far narrower.
 // Approximates the column's real width per breakpoint (mobile stacks to
-// full width; tablet/desktop the column is 55% up to a 1200px content
-// cap) — not pixel-perfect, but close enough to make the browser pick a
-// meaningfully smaller candidate.
+// full width; tablet the column is 55%; 1024px+ it's 1/3 up to the
+// 1200px content cap, see _single-artwork-fit.scss) — not pixel-perfect,
+// but close enough to make the browser pick a meaningfully smaller
+// candidate. Deliberately NOT applied inside assets/js/artwork-lightbox.js
+// — that script overrides `sizes` to 100vw itself so the full-size
+// lightbox view can pick a larger candidate than this inline box needs.
 add_filter('wp_get_attachment_image_attributes', function ($attr, $attachment) {
     if (!is_singular('artwork') || (int) $attachment->ID !== (int) get_post_thumbnail_id()) {
         return $attr;
     }
-    $attr['sizes'] = '(max-width: 599px) calc(100vw - 40px), (max-width: 1279px) 55vw, 660px';
+    $attr['sizes'] = '(max-width: 599px) calc(100vw - 40px), (max-width: 1023px) 55vw, 400px';
     return $attr;
 }, 10, 2);
 

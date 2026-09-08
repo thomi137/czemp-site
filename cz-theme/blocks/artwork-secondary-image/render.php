@@ -20,5 +20,13 @@ if (!$image_url) {
 // panel for a possible future cropped treatment, just unused here.
 ?>
 <div <?php echo get_block_wrapper_attributes(['class' => 'cz-artwork-secondary-image']); ?>>
-    <?php echo wp_get_attachment_image($image_id, 'large'); ?>
+    <?php
+    // Same tuned `sizes` hint as the featured image (inc/frontend.php) —
+    // this block always renders in the same column, so it needs the same
+    // hint; without it, wp_get_attachment_image() falls back to a generic
+    // guess based on the attachment's own intrinsic width.
+    echo wp_get_attachment_image($image_id, 'large', false, [
+        'sizes' => '(max-width: 599px) calc(100vw - 40px), (max-width: 1023px) 55vw, 400px',
+    ]);
+    ?>
 </div>
